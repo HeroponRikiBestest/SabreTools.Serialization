@@ -1,3 +1,24 @@
 [submodule "SabreTools.Serialization/_EXTERNAL/stormlibsharp"]
 	path = SabreTools.Serialization/_EXTERNAL/stormlibsharp
 	url = https://github.com/robpaveza/stormlibsharp.git
+[submodule "SabreTools.ASN1"]
+	path = SabreTools.ASN1
+	url = https://github.com/SabreTools/SabreTools.ASN1.git
+[submodule "SabreTools.Hashing"]
+	path = SabreTools.Hashing
+	url = https://github.com/SabreTools/SabreTools.Hashing.git
+[submodule "SabreTools.Models"]
+	path = SabreTools.Models
+	url = https://github.com/SabreTools/SabreTools.Models.git
+[submodule "SabreTools.IO"]
+	path = SabreTools.IO
+	url = https://github.com/SabreTools/SabreTools.IO.git
+[submodule "SabreTools.Matching"]
+	path = SabreTools.Matching
+	url = https://github.com/SabreTools/SabreTools.Matching.git
+[submodule "sharpcompress"]
+	path = sharpcompress
+	url = https://github.com/adamhathcock/sharpcompress.git
+[submodule "SharpCompress"]
+	path = SharpCompress
+	url = https://github.com/adamhathcock/sharpcompress.git

@@ -63,12 +63,12 @@
 
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="SabreTools.ASN1" Version="1.6.0" />
-        <PackageReference Include="SabreTools.Hashing" Version="1.5.0" />
-        <PackageReference Include="SabreTools.IO" Version="1.7.1" />
-        <PackageReference Include="SabreTools.Models" Version="1.7.0" />
-        <PackageReference Include="SabreTools.Matching" Version="1.6.0" />
-        <PackageReference Include="SharpCompress" Version="0.40.0" Condition="!$(TargetFramework.StartsWith(`net2`)) AND !$(TargetFramework.StartsWith(`net3`)) AND !$(TargetFramework.StartsWith(`net40`)) AND !$(TargetFramework.StartsWith(`net452`))" />
+        <ProjectReference Include="..\SabreTools.ASN1\SabreTools.ASN1\SabreTools.ASN1.csproj" />
+        <ProjectReference Include="..\SabreTools.Hashing\SabreTools.Hashing\SabreTools.Hashing.csproj" />
+        <ProjectReference Include="..\SabreTools.IO\SabreTools.IO\SabreTools.IO.csproj" />
+        <ProjectReference Include="..\SabreTools.Models\SabreTools.Models\SabreTools.Models.csproj" />
+        <ProjectReference Include="..\SabreTools.Matching\SabreTools.Matching\SabreTools.Matching.csproj" />
+        <ProjectReference Include="..\SharpCompress\src\SharpCompress\SharpCompress.csproj" Condition="!$(TargetFramework.StartsWith(`net2`)) AND !$(TargetFramework.StartsWith(`net3`)) AND !$(TargetFramework.StartsWith(`net40`)) AND !$(TargetFramework.StartsWith(`net452`))" />
     </ItemGroup>
 
 </Project>
