@@ -193,8 +193,8 @@ namespace SabreTools.Serialization.Printers
             if (header.CertificateTable != null)
             {
                 builder.AppendLine("    Certificate Table (5)");
-                builder.AppendLine(header.CertificateTable.VirtualAddress, "      Virtual address");
-                builder.AppendLine(header.CertificateTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
+                builder.AppendLine("      Virtual address: N/A");
+                builder.AppendLine(header.CertificateTable.VirtualAddress, "      Physical address");
                 builder.AppendLine(header.CertificateTable.Size, "      Size");
             }
             if (header.BaseRelocationTable != null)
@@ -410,10 +410,10 @@ namespace SabreTools.Serialization.Printers
         private static void Print(StringBuilder builder, CLRTokenDefinition entry, int i)
         {
             builder.AppendLine($"  COFF Symbol Table Entry {i} (CLR Token Defintion)");
-            builder.AppendLine(entry.AuxFormat6AuxType, "    Aux type");
-            builder.AppendLine(entry.AuxFormat6Reserved1, "    Reserved");
-            builder.AppendLine(entry.AuxFormat6SymbolTableIndex, "    Symbol table index");
-            builder.AppendLine(entry.AuxFormat6Reserved2, "    Reserved");
+            builder.AppendLine(entry.AuxType, "    Aux type");
+            builder.AppendLine(entry.Reserved1, "    Reserved");
+            builder.AppendLine(entry.SymbolTableIndex, "    Symbol table index");
+            builder.AppendLine(entry.Reserved2, "    Reserved");
         }
 
         private static void Print(StringBuilder builder, COFFStringTable? stringTable)
@@ -543,12 +543,14 @@ namespace SabreTools.Serialization.Printers
                 builder.AppendLine(baseRelocationTableEntry.PageRVA, "    Page RVA");
                 builder.AppendLine(baseRelocationTableEntry.PageRVA.ConvertVirtualAddress(table), "    Page physical address");
                 builder.AppendLine(baseRelocationTableEntry.BlockSize, "    Block size");
+                builder.AppendLine();
 
                 builder.AppendLine($"    Base Relocation Table {i} Type and Offset Information:");
                 builder.AppendLine("    -------------------------");
                 if (baseRelocationTableEntry.TypeOffsetFieldEntries == null || baseRelocationTableEntry.TypeOffsetFieldEntries.Length == 0)
                 {
                     builder.AppendLine("    No base relocation table type and offset entries");
+                    builder.AppendLine();
                     continue;
                 }
 

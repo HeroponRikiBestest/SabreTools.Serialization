@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.IO.Extensions;
-using SabreTools.Matching;
 using SabreTools.Models.NewExecutable;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class NewExecutable : WrapperBase<Executable>, IExtractable
+    public partial class NewExecutable : WrapperBase<Executable>
     {
         #region Descriptive Properties
 
@@ -36,7 +34,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_overlayAddressLock)
                 {
                     // Use the cached data if possible
                     if (_overlayAddress != null)
@@ -65,10 +63,13 @@ namespace SabreTools.Serialization.Wrappers
                         if (entry.FlagWord.HasFlag(SegmentTableEntryFlag.RELOCINFO))
 #endif
                         {
-                            _dataSource.Seek(offset, SeekOrigin.Begin);
-                            var relocationData = Deserializers.NewExecutable.ParsePerSegmentData(_dataSource);
+                            lock (_dataSourceLock)
+                            {
+                                _dataSource.Seek(offset, SeekOrigin.Begin);
+                                var relocationData = Deserializers.NewExecutable.ParsePerSegmentData(_dataSource);
 
-                            offset = _dataSource.Position;
+                                offset = _dataSource.Position;
+                            }
                         }
 
                         if (offset > endOfSectionData)
@@ -94,6 +95,10 @@ namespace SabreTools.Serialization.Wrappers
                     if (endOfSectionData <= 0)
                         endOfSectionData = -1;
 
+                    // Adjust the position of the data by 705 bytes
+                    // TODO: Investigate what the byte data is
+                    endOfSectionData += 705;
+
                     // Cache and return the position
                     _overlayAddress = endOfSectionData;
                     return _overlayAddress.Value;
@@ -105,11 +110,11 @@ namespace SabreTools.Serialization.Wrappers
         /// Overlay data, if it exists
         /// </summary>
         /// <see href="https://codeberg.org/CYBERDEV/REWise/src/branch/master/src/exefile.c"/>
-        public byte[]? OverlayData
+        public byte[] OverlayData
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_overlayDataLock)
                 {
                     // Use the cached data if possible
                     if (_overlayData != null)
@@ -118,54 +123,27 @@ namespace SabreTools.Serialization.Wrappers
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
-                        return null;
+                    {
+                        _overlayData = [];
+                        return _overlayData;
+                    }
 
                     // If a required property is missing
                     if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
-                        return null;
-
-                    // Search through the segments table to find the furthest
-                    long endOfSectionData = -1;
-                    foreach (var entry in SegmentTable)
                     {
-                        // Get end of segment data
-                        long offset = (entry.Offset * (1 << Header.SegmentAlignmentShiftCount)) + entry.Length;
-
-                        // Read and find the end of the relocation data
-#if NET20 || NET35
-                        if ((entry.FlagWord & SegmentTableEntryFlag.RELOCINFO) != 0)
-#else
-                        if (entry.FlagWord.HasFlag(SegmentTableEntryFlag.RELOCINFO))
-#endif
-                        {
-                            _dataSource.Seek(offset, SeekOrigin.Begin);
-                            var relocationData = Deserializers.NewExecutable.ParsePerSegmentData(_dataSource);
-
-                            offset = _dataSource.Position;
-                        }
-
-                        if (offset > endOfSectionData)
-                            endOfSectionData = offset;
+                        _overlayData = [];
+                        return _overlayData;
                     }
 
-                    // Search through the resources table to find the furthest
-                    foreach (var entry in ResourceTable.ResourceTypes)
-                    {
-                        // Skip invalid entries
-                        if (entry.ResourceCount == 0 || entry.Resources == null || entry.Resources.Length == 0)
-                            continue;
-
-                        foreach (var resource in entry.Resources)
-                        {
-                            int offset = (resource.Offset << ResourceTable.AlignmentShiftCount) + resource.Length;
-                            if (offset > endOfSectionData)
-                                endOfSectionData = offset;
-                        }
-                    }
+                    // Get the overlay address if possible
+                    long endOfSectionData = OverlayAddress;
 
                     // If we didn't find the end of section data
                     if (endOfSectionData <= 0)
-                        return null;
+                    {
+                        _overlayData = [];
+                        return _overlayData;
+                    }
 
                     // If we're at the end of the file, cache an empty byte array
                     if (endOfSectionData >= dataLength)
@@ -176,7 +154,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Otherwise, cache and return the data
                     long overlayLength = dataLength - endOfSectionData;
-                    _overlayData = _dataSource.ReadFrom((int)endOfSectionData, (int)overlayLength, retainPosition: true);
+                    _overlayData = ReadRangeFromSource((int)endOfSectionData, (int)overlayLength);
                     return _overlayData;
                 }
             }
@@ -185,11 +163,11 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Overlay strings, if they exist
         /// </summary>
-        public List<string>? OverlayStrings
+        public List<string> OverlayStrings
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_overlayStringsLock)
                 {
                     // Use the cached data if possible
                     if (_overlayStrings != null)
@@ -198,57 +176,21 @@ namespace SabreTools.Serialization.Wrappers
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
-                        return null;
-
-                    // If a required property is missing
-                    if (Header == null || SegmentTable == null || ResourceTable?.ResourceTypes == null)
-                        return null;
-
-                    // Search through the segments table to find the furthest
-                    int endOfSectionData = -1;
-                    foreach (var entry in SegmentTable)
-                    {
-                        int offset = (entry.Offset << Header.SegmentAlignmentShiftCount) + entry.Length;
-                        if (offset > endOfSectionData)
-                            endOfSectionData = offset;
-                    }
-
-                    // Search through the resources table to find the furthest
-                    foreach (var entry in ResourceTable.ResourceTypes)
-                    {
-                        // Skip invalid entries
-                        if (entry.ResourceCount == 0 || entry.Resources == null || entry.Resources.Length == 0)
-                            continue;
-
-                        foreach (var resource in entry.Resources)
-                        {
-                            int offset = (resource.Offset << ResourceTable.AlignmentShiftCount) + resource.Length;
-                            if (offset > endOfSectionData)
-                                endOfSectionData = offset;
-                        }
-                    }
-
-                    // If we didn't find the end of section data
-                    if (endOfSectionData <= 0)
-                        return null;
-
-                    // Adjust the position of the data by 705 bytes
-                    // TODO: Investigate what the byte data is
-                    endOfSectionData += 705;
-
-                    // If we're at the end of the file, cache an empty list
-                    if (endOfSectionData >= dataLength)
                     {
                         _overlayStrings = [];
                         return _overlayStrings;
                     }
 
-                    // TODO: Revisit the 16 MiB limit
-                    // Cap the check for overlay strings to 16 MiB (arbitrary)
-                    long overlayLength = Math.Min(dataLength - endOfSectionData, 16 * 1024 * 1024);
+                    // Get the overlay data, if possible
+                    var overlayData = OverlayData;
+                    if (overlayData.Length == 0)
+                    {
+                        _overlayStrings = [];
+                        return _overlayStrings;
+                    }
 
                     // Otherwise, cache and return the strings
-                    _overlayStrings = _dataSource.ReadStringsFrom(endOfSectionData, (int)overlayLength, charLimit: 3);
+                    _overlayStrings = overlayData.ReadStringsFrom(charLimit: 3) ?? [];
                     return _overlayStrings;
                 }
             }
@@ -269,23 +211,26 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Stub executable data, if it exists
         /// </summary>
-        public byte[]? StubExecutableData
+        public byte[] StubExecutableData
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_stubExecutableDataLock)
                 {
                     // If we already have cached data, just use that immediately
                     if (_stubExecutableData != null)
                         return _stubExecutableData;
 
                     if (Stub?.Header?.NewExeHeaderAddr == null)
-                        return null;
+                    {
+                        _stubExecutableData = [];
+                        return _stubExecutableData;
+                    }
 
                     // Populate the raw stub executable data based on the source
                     int endOfStubHeader = 0x40;
                     int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
-                    _stubExecutableData = _dataSource.ReadFrom(endOfStubHeader, lengthOfStubExecutableData, retainPosition: true);
+                    _stubExecutableData = ReadRangeFromSource(endOfStubHeader, lengthOfStubExecutableData);
 
                     // Cache and return the stub executable data, even if null
                     return _stubExecutableData;
@@ -303,9 +248,19 @@ namespace SabreTools.Serialization.Wrappers
         private long? _overlayAddress = null;
 
         /// <summary>
+        /// Lock object for <see cref="_overlayAddress"/> 
+        /// </summary>
+        private readonly object _overlayAddressLock = new();
+
+        /// <summary>
         /// Overlay data, if it exists
         /// </summary>
         private byte[]? _overlayData = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_overlayData"/> 
+        /// </summary>
+        private readonly object _overlayDataLock = new();
 
         /// <summary>
         /// Overlay strings, if they exist
@@ -313,14 +268,19 @@ namespace SabreTools.Serialization.Wrappers
         private List<string>? _overlayStrings = null;
 
         /// <summary>
+        /// Lock object for <see cref="_overlayStrings"/> 
+        /// </summary>
+        private readonly object _overlayStringsLock = new();
+
+        /// <summary>
         /// Stub executable data, if it exists
         /// </summary>
         private byte[]? _stubExecutableData = null;
 
         /// <summary>
-        /// Lock object for reading from the source
+        /// Lock object for <see cref="_stubExecutableData"/> 
         /// </summary>
-        private readonly object _sourceDataLock = new();
+        private readonly object _stubExecutableDataLock = new();
 
         #endregion
 
@@ -392,205 +352,6 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Extraction
-
-        /// <inheritdoc/>
-        /// <remarks>
-        /// This extracts the following data:
-        /// - Archives and executables in the overlay
-        /// - Wise installers
-        /// </remarks>
-        public bool Extract(string outputDirectory, bool includeDebug)
-        {
-            bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
-            bool wise = ExtractWise(outputDirectory, includeDebug);
-
-            return overlay | wise;
-        }
-
-        /// <summary>
-        /// Extract data from the overlay
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        public bool ExtractFromOverlay(string outputDirectory, bool includeDebug)
-        {
-            try
-            {
-                // Cache the overlay data for easier reading
-                var overlayData = OverlayData;
-                if (overlayData == null || overlayData.Length == 0)
-                    return false;
-
-                // Set the output variables
-                int overlayOffset = 0;
-                string extension = string.Empty;
-
-                // Only process the overlay if it is recognized
-                for (; overlayOffset < 0x100 && overlayOffset < overlayData.Length; overlayOffset++)
-                {
-                    int temp = overlayOffset;
-                    byte[] overlaySample = overlayData.ReadBytes(ref temp, 0x10);
-
-                    if (overlaySample.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
-                    {
-                        extension = "7z";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith([0x3B, 0x21, 0x40, 0x49, 0x6E, 0x73, 0x74, 0x61, 0x6C, 0x6C]))
-                    {
-                        // 7-zip SFX script -- ";!@Install" to ";!@InstallEnd@!"
-                        overlayOffset = overlayData.FirstPosition([0x3B, 0x21, 0x40, 0x49, 0x6E, 0x73, 0x74, 0x61, 0x6C, 0x6C, 0x45, 0x6E, 0x64, 0x40, 0x21]);
-                        if (overlayOffset == -1)
-                            return false;
-
-                        overlayOffset += 15;
-                        extension = "7z";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
-                    {
-                        extension = "cab";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
-                    {
-                        extension = "zip";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
-                    {
-                        extension = "zip";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
-                    {
-                        extension = "zip";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
-                    {
-                        extension = "zip";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
-                    {
-                        extension = "rar";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
-                    {
-                        extension = "rar";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith(Models.MSDOS.Constants.SignatureBytes))
-                    {
-                        extension = "bin"; // exe/dll
-                        break;
-                    }
-                }
-
-                // If the extension is unset
-                if (extension.Length == 0)
-                    return false;
-
-                // Create the temp filename
-                string tempFile = $"embedded_overlay.{extension}";
-                if (Filename != null)
-                    tempFile = $"{Path.GetFileName(Filename)}-{tempFile}";
-
-                tempFile = Path.Combine(outputDirectory, tempFile);
-                var directoryName = Path.GetDirectoryName(tempFile);
-                if (directoryName != null && !Directory.Exists(directoryName))
-                    Directory.CreateDirectory(directoryName);
-
-                // Write the resource data to a temp file
-                using var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                tempStream?.Write(overlayData, overlayOffset, overlayData.Length - overlayOffset);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (includeDebug) Console.Error.WriteLine(ex);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Extract data from a Wise installer
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        public bool ExtractWise(string outputDirectory, bool includeDebug)
-        {
-            // Get the source data for reading
-            Stream source = _dataSource;
-            if (Filename != null)
-            {
-                // Try to open a multipart file
-                if (WiseOverlayHeader.OpenFile(Filename, includeDebug, out var temp) && temp != null)
-                    source = temp;
-            }
-
-            // Try to find the overlay header
-            long offset = FindWiseOverlayHeader();
-            if (offset > 0 && offset < Length)
-                return ExtractWiseOverlay(outputDirectory, includeDebug, source, offset);
-
-            // Everything else could not extract
-            return false;
-        }
-
-        /// <summary>
-        /// Extract using Wise overlay
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <param name="source">Potentially multi-part stream to read</param>
-        /// <param name="offset">Offset to the start of the overlay header</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        private bool ExtractWiseOverlay(string outputDirectory, bool includeDebug, Stream source, long offset)
-        {
-            // Seek to the overlay and parse
-            source.Seek(offset, SeekOrigin.Begin);
-            var header = WiseOverlayHeader.Create(source);
-            if (header == null)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not parse the overlay header");
-                return false;
-            }
-
-            // Extract the header-defined files
-            bool extracted = header.ExtractHeaderDefinedFiles(outputDirectory, includeDebug);
-            if (!extracted)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
-                return false;
-            }
-
-            // Open the script file from the output directory
-            var scriptStream = File.OpenRead(Path.Combine(outputDirectory, "WiseScript.bin"));
-            var script = WiseScript.Create(scriptStream);
-            if (script == null)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not parse WiseScript.bin");
-                return false;
-            }
-
-            // Get the source directory
-            string? sourceDirectory = null;
-            if (Filename != null)
-                sourceDirectory = Path.GetDirectoryName(Path.GetFullPath(Filename));
-
-            // Process the state machine
-            return script.ProcessStateMachine(header, sourceDirectory, outputDirectory, includeDebug);
-        }
-
-        #endregion
-
         #region Resources
 
         /// <summary>
@@ -605,28 +366,31 @@ namespace SabreTools.Serialization.Wrappers
             if (overlayOffset < 0 || overlayOffset >= Length)
                 return -1;
 
-            // Attempt to get the overlay header
-            _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-            var header = WiseOverlayHeader.Create(_dataSource);
-            if (header != null)
-                return overlayOffset;
-
-            // Align and loop to see if it can be found
-            _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-            _dataSource.AlignToBoundary(0x10);
-            overlayOffset = _dataSource.Position;
-            while (_dataSource.Position < Length)
+            lock (_dataSourceLock)
             {
+                // Attempt to get the overlay header
                 _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-                header = WiseOverlayHeader.Create(_dataSource);
+                var header = WiseOverlayHeader.Create(_dataSource);
                 if (header != null)
                     return overlayOffset;
 
-                overlayOffset += 0x10;
-            }
+                // Align and loop to see if it can be found
+                _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+                _dataSource.AlignToBoundary(0x10);
+                overlayOffset = _dataSource.Position;
+                while (_dataSource.Position < Length)
+                {
+                    _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+                    header = WiseOverlayHeader.Create(_dataSource);
+                    if (header != null)
+                        return overlayOffset;
 
-            header = null;
-            return -1;
+                    overlayOffset += 0x10;
+                }
+
+                header = null;
+                return -1;
+            }
         }
 
         /// <summary>
@@ -692,7 +456,7 @@ namespace SabreTools.Serialization.Wrappers
                 return [];
 
             // Read the resource data and return
-            return _dataSource.ReadFrom(offset, length, retainPosition: true);
+            return ReadRangeFromSource(offset, length);
         }
 
         /// <summary>
@@ -784,7 +548,7 @@ namespace SabreTools.Serialization.Wrappers
                 return [];
 
             // Read the segment data and return
-            return _dataSource.ReadFrom(offset, length, retainPosition: true);
+            return ReadRangeFromSource(offset, length);
         }
 
         /// <summary>
@@ -854,7 +618,7 @@ namespace SabreTools.Serialization.Wrappers
             if (length == -1)
                 length = Length;
 
-            return _dataSource.ReadFrom(rangeStart, (int)length, retainPosition: true);
+            return ReadRangeFromSource(rangeStart, (int)length);
         }
 
         #endregion

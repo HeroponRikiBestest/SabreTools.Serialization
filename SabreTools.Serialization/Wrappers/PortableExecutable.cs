@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using SabreTools.IO.Compression.zlib;
 using SabreTools.IO.Extensions;
 using SabreTools.Matching;
 using SabreTools.Models.PortableExecutable.ResourceEntries;
-using SabreTools.Serialization.Interfaces;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public class PortableExecutable : WrapperBase<Models.PortableExecutable.Executable>, IExtractable
+    public partial class PortableExecutable : WrapperBase<Models.PortableExecutable.Executable>
     {
         #region Descriptive Properties
 
@@ -27,19 +25,19 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Dictionary of debug data
         /// </summary>
-        public Dictionary<int, object>? DebugData
+        public Dictionary<int, object> DebugData
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_debugDataLock)
                 {
                     // Use the cached data if possible
-                    if (_debugData != null && _debugData.Count != 0)
+                    if (_debugData.Count != 0)
                         return _debugData;
 
                     // If we have no resource table, just return
                     if (DebugDirectoryTable == null || DebugDirectoryTable.Length == 0)
-                        return null;
+                        return _debugData;
 
                     // Otherwise, build and return the cached dictionary
                     ParseDebugTable();
@@ -55,38 +53,48 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Entry point data, if it exists
         /// </summary>
-        public byte[]? EntryPointData
+        public byte[] EntryPointData
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_entryPointDataLock)
                 {
-                    // If the section table is missing
-                    if (SectionTable == null)
-                        return null;
-
-                    // If the address is missing
-                    if (OptionalHeader?.AddressOfEntryPoint == null)
-                        return null;
-
-                    // If we have no entry point
-                    int entryPointAddress = (int)OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(SectionTable);
-                    if (entryPointAddress == 0)
-                        return null;
-
-                    // If the entry point matches with the start of a section, use that
-                    int entryPointSection = FindEntryPointSectionIndex();
-                    if (entryPointSection >= 0 && OptionalHeader.AddressOfEntryPoint == SectionTable[entryPointSection]?.VirtualAddress)
-                        return GetSectionData(entryPointSection);
-
                     // If we already have cached data, just use that immediately
                     if (_entryPointData != null)
                         return _entryPointData;
 
-                    // Read the first 128 bytes of the entry point
-                    _entryPointData = _dataSource.ReadFrom(entryPointAddress, length: 128, retainPosition: true);
+                    // If the section table is missing
+                    if (SectionTable == null)
+                    {
+                        _entryPointData = [];
+                        return _entryPointData;
+                    }
 
-                    // Cache and return the entry point padding data, even if null
+                    // If the address is missing
+                    if (OptionalHeader?.AddressOfEntryPoint == null)
+                    {
+                        _entryPointData = [];
+                        return _entryPointData;
+                    }
+
+                    // If we have no entry point
+                    int entryPointAddress = (int)OptionalHeader.AddressOfEntryPoint.ConvertVirtualAddress(SectionTable);
+                    if (entryPointAddress == 0)
+                    {
+                        _entryPointData = [];
+                        return _entryPointData;
+                    }
+
+                    // If the entry point matches with the start of a section, use that
+                    int entryPointSection = FindEntryPointSectionIndex();
+                    if (entryPointSection >= 0 && OptionalHeader.AddressOfEntryPoint == SectionTable[entryPointSection]?.VirtualAddress)
+                    {
+                        _entryPointData = GetSectionData(entryPointSection) ?? [];
+                        return _entryPointData;
+                    }
+
+                    // Read the first 128 bytes of the entry point
+                    _entryPointData = ReadRangeFromSource(entryPointAddress, length: 128) ?? [];
                     return _entryPointData;
                 }
             }
@@ -98,11 +106,11 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Header padding data, if it exists
         /// </summary>
-        public byte[]? HeaderPaddingData
+        public byte[] HeaderPaddingData
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_headerPaddingDataLock)
                 {
                     // If we already have cached data, just use that immediately
                     if (_headerPaddingData != null)
@@ -111,10 +119,11 @@ namespace SabreTools.Serialization.Wrappers
                     // TODO: Don't scan the known header data as well
 
                     // If any required pieces are missing
-                    if (Stub?.Header == null)
-                        return [];
-                    if (SectionTable == null)
-                        return [];
+                    if (Stub?.Header == null || SectionTable == null)
+                    {
+                        _headerPaddingData = [];
+                        return _headerPaddingData;
+                    }
 
                     // Populate the raw header padding data based on the source
                     uint headerStartAddress = Stub.Header.NewExeHeaderAddr;
@@ -133,11 +142,12 @@ namespace SabreTools.Serialization.Wrappers
                     // Check if the header length is more than 0 before reading data
                     int headerLength = (int)(firstSectionAddress - headerStartAddress);
                     if (headerLength <= 0)
+                    {
                         _headerPaddingData = [];
-                    else
-                        _headerPaddingData = _dataSource.ReadFrom((int)headerStartAddress, headerLength, retainPosition: true);
+                        return _headerPaddingData;
+                    }
 
-                    // Cache and return the header padding data, even if null
+                    _headerPaddingData = ReadRangeFromSource((int)headerStartAddress, headerLength) ?? [];
                     return _headerPaddingData;
                 }
             }
@@ -146,46 +156,26 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Header padding strings, if they exist
         /// </summary>
-        public List<string>? HeaderPaddingStrings
+        public List<string> HeaderPaddingStrings
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_headerPaddingStringsLock)
                 {
                     // If we already have cached data, just use that immediately
                     if (_headerPaddingStrings != null)
                         return _headerPaddingStrings;
 
-                    // TODO: Don't scan the known header data as well
-
-                    // If any required pieces are missing
-                    if (Stub?.Header == null)
-                        return [];
-                    if (SectionTable == null)
-                        return [];
-
-                    // Populate the header padding strings based on the source
-                    uint headerStartAddress = Stub.Header.NewExeHeaderAddr;
-                    uint firstSectionAddress = uint.MaxValue;
-                    foreach (var s in SectionTable)
+                    // Get the header padding data, if possible
+                    byte[] headerPaddingData = HeaderPaddingData;
+                    if (headerPaddingData.Length == 0)
                     {
-                        if (s == null || s.PointerToRawData == 0)
-                            continue;
-                        if (s.PointerToRawData < headerStartAddress)
-                            continue;
-
-                        if (s.PointerToRawData < firstSectionAddress)
-                            firstSectionAddress = s.PointerToRawData;
+                        _headerPaddingStrings = [];
+                        return _headerPaddingStrings;
                     }
 
-                    // Check if the header length is more than 0 before reading strings
-                    int headerLength = (int)(firstSectionAddress - headerStartAddress);
-                    if (headerLength <= 0)
-                        _headerPaddingStrings = [];
-                    else
-                        _headerPaddingStrings = _dataSource.ReadStringsFrom((int)headerStartAddress, headerLength, charLimit: 3);
-
-                    // Cache and return the header padding data, even if null
+                    // Otherwise, cache and return the strings
+                    _headerPaddingStrings = headerPaddingData.ReadStringsFrom(charLimit: 3) ?? [];
                     return _headerPaddingStrings;
                 }
             }
@@ -205,7 +195,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_overlayAddressLock)
                 {
                     // Use the cached data if possible
                     if (_overlayAddress != null)
@@ -223,7 +213,7 @@ namespace SabreTools.Serialization.Wrappers
                     // If we have certificate data, use that as the end
                     if (OptionalHeader?.CertificateTable != null)
                     {
-                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress;
                         if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
                             dataLength = certificateTableAddress;
                     }
@@ -257,6 +247,10 @@ namespace SabreTools.Serialization.Wrappers
                     if (endOfSectionData <= 0)
                         endOfSectionData = -1;
 
+                    // If the section data is followed by the end of the data
+                    if (endOfSectionData >= dataLength)
+                        endOfSectionData = -1;
+
                     // Cache and return the position
                     _overlayAddress = endOfSectionData;
                     return _overlayAddress.Value;
@@ -268,11 +262,11 @@ namespace SabreTools.Serialization.Wrappers
         /// Overlay data, if it exists
         /// </summary>
         /// <see href="https://www.autoitscript.com/forum/topic/153277-pe-file-overlay-extraction/"/>
-        public byte[]? OverlayData
+        public byte[] OverlayData
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_overlayDataLock)
                 {
                     // Use the cached data if possible
                     if (_overlayData != null)
@@ -281,48 +275,27 @@ namespace SabreTools.Serialization.Wrappers
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
-                        return null;
+                    {
+                        _overlayData = [];
+                        return _overlayData;
+                    }
 
                     // If the section table is missing
                     if (SectionTable == null)
-                        return null;
-
-                    // If we have certificate data, use that as the end
-                    if (OptionalHeader?.CertificateTable != null)
                     {
-                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                        if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
-                            dataLength = certificateTableAddress;
+                        _overlayData = [];
+                        return _overlayData;
                     }
 
-                    // Search through all sections and find the furthest a section goes
-                    int endOfSectionData = -1;
-                    foreach (var section in SectionTable)
-                    {
-                        // If we have an invalid section
-                        if (section == null)
-                            continue;
-
-                        // If we have an invalid section address
-                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                        if (sectionAddress == 0)
-                            continue;
-
-                        // If we have an invalid section size
-                        if (section.SizeOfRawData == 0 && section.VirtualSize == 0)
-                            continue;
-
-                        // Get the real section size
-                        int sectionSize = (int)section.SizeOfRawData;
-
-                        // Compare and set the end of section data
-                        if (sectionAddress + sectionSize > endOfSectionData)
-                            endOfSectionData = sectionAddress + sectionSize;
-                    }
+                    // Get the overlay address if possible
+                    long endOfSectionData = OverlayAddress;
 
                     // If we didn't find the end of section data
                     if (endOfSectionData <= 0)
-                        return null;
+                    {
+                        _overlayData = [];
+                        return _overlayData;
+                    }
 
                     // If we're at the end of the file, cache an empty byte array
                     if (endOfSectionData >= dataLength)
@@ -333,7 +306,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Otherwise, cache and return the data
                     long overlayLength = dataLength - endOfSectionData;
-                    _overlayData = _dataSource.ReadFrom(endOfSectionData, (int)overlayLength, retainPosition: true);
+                    _overlayData = ReadRangeFromSource(endOfSectionData, (int)overlayLength) ?? [];
                     return _overlayData;
                 }
             }
@@ -342,79 +315,26 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Overlay strings, if they exist
         /// </summary>
-        public List<string>? OverlayStrings
+        public List<string> OverlayStrings
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_overlayStringsLock)
                 {
                     // Use the cached data if possible
                     if (_overlayStrings != null)
                         return _overlayStrings;
 
-                    // Get the available source length, if possible
-                    long dataLength = Length;
-                    if (dataLength == -1)
-                        return null;
-
-                    // If the section table is missing
-                    if (SectionTable == null)
-                        return null;
-
-                    // If we have certificate data, use that as the end
-                    if (OptionalHeader?.CertificateTable != null)
-                    {
-                        int certificateTableAddress = (int)OptionalHeader.CertificateTable.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                        if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
-                            dataLength = certificateTableAddress;
-                    }
-
-                    // Search through all sections and find the furthest a section goes
-                    int endOfSectionData = -1;
-                    foreach (var section in SectionTable)
-                    {
-                        // If we have an invalid section
-                        if (section == null)
-                            continue;
-
-                        // If we have an invalid section address
-                        int sectionAddress = (int)section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                        if (sectionAddress == 0)
-                            continue;
-
-                        // If we have an invalid section size
-                        if (section.SizeOfRawData == 0 && section.VirtualSize == 0)
-                            continue;
-
-                        // Get the real section size
-                        int sectionSize;
-                        if (section.SizeOfRawData < section.VirtualSize)
-                            sectionSize = (int)section.VirtualSize;
-                        else
-                            sectionSize = (int)section.SizeOfRawData;
-
-                        // Compare and set the end of section data
-                        if (sectionAddress + sectionSize > endOfSectionData)
-                            endOfSectionData = sectionAddress + sectionSize;
-                    }
-
-                    // If we didn't find the end of section data
-                    if (endOfSectionData <= 0)
-                        return null;
-
-                    // If we're at the end of the file, cache an empty list
-                    if (endOfSectionData >= dataLength)
+                    // Get the overlay data, if possible
+                    var overlayData = OverlayData;
+                    if (overlayData.Length == 0)
                     {
                         _overlayStrings = [];
                         return _overlayStrings;
                     }
 
-                    // TODO: Revisit the 16 MiB limit
-                    // Cap the check for overlay strings to 16 MiB (arbitrary)
-                    long overlayLength = Math.Min(dataLength - endOfSectionData, 16 * 1024 * 1024);
-
                     // Otherwise, cache and return the strings
-                    _overlayStrings = _dataSource.ReadStringsFrom(endOfSectionData, (int)overlayLength, charLimit: 3);
+                    _overlayStrings = overlayData.ReadStringsFrom(charLimit: 3) ?? [];
                     return _overlayStrings;
                 }
             }
@@ -426,11 +346,11 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Sanitized section names
         /// </summary>
-        public string[]? SectionNames
+        public string[] SectionNames
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_sectionNamesLock)
                 {
                     // Use the cached data if possible
                     if (_sectionNames != null)
@@ -438,7 +358,10 @@ namespace SabreTools.Serialization.Wrappers
 
                     // If there are no sections
                     if (SectionTable == null)
-                        return null;
+                    {
+                        _sectionNames = [];
+                        return _sectionNames;
+                    }
 
                     // Otherwise, build and return the cached array
                     _sectionNames = new string[SectionTable.Length];
@@ -465,29 +388,73 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Models.PortableExecutable.Executable.SectionTable"/>
         public Models.PortableExecutable.SectionHeader[]? SectionTable => Model.SectionTable;
 
+        /// <summary>
+        /// Data after the section table, if it exists
+        /// </summary>
+        public byte[] SectionTableTrailerData
+        {
+            get
+            {
+                lock (_sectionTableTrailerDataLock)
+                {
+                    // If we already have cached data, just use that immediately
+                    if (_sectionTableTrailerData != null)
+                        return _sectionTableTrailerData;
+
+                    if (Stub?.Header?.NewExeHeaderAddr == null)
+                    {
+                        _sectionTableTrailerData = [];
+                        return _sectionTableTrailerData;
+                    }
+                    if (COFFFileHeader == null)
+                    {
+                        _sectionTableTrailerData = [];
+                        return _sectionTableTrailerData;
+                    }
+
+                    // Get the offset from the end of the section table
+                    long endOfSectionTable = Stub.Header.NewExeHeaderAddr
+                        + 24 // Signature size + COFF file header size
+                        + COFFFileHeader.SizeOfOptionalHeader
+                        + (COFFFileHeader.NumberOfSections * 40); // Size of a section header
+
+                    // Assume the extra data aligns to 512-byte segments
+                    int alignment = (int)(OptionalHeader?.FileAlignment ?? 0x200);
+                    int trailerDataSize = alignment - (int)(endOfSectionTable % alignment);
+
+                    // Cache and return the section table trailer data, even if null
+                    _sectionTableTrailerData = ReadRangeFromSource(endOfSectionTable, trailerDataSize);
+                    return _sectionTableTrailerData;
+                }
+            }
+        }
+
         /// <inheritdoc cref="Models.PortableExecutable.Executable.Stub"/>
         public Models.MSDOS.Executable? Stub => Model.Stub;
 
         /// <summary>
         /// Stub executable data, if it exists
         /// </summary>
-        public byte[]? StubExecutableData
+        public byte[] StubExecutableData
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_stubExecutableDataLock)
                 {
                     // If we already have cached data, just use that immediately
                     if (_stubExecutableData != null)
                         return _stubExecutableData;
 
                     if (Stub?.Header?.NewExeHeaderAddr == null)
-                        return null;
+                    {
+                        _stubExecutableData = [];
+                        return _stubExecutableData;
+                    }
 
                     // Populate the raw stub executable data based on the source
                     int endOfStubHeader = 0x40;
                     int lengthOfStubExecutableData = (int)Stub.Header.NewExeHeaderAddr - endOfStubHeader;
-                    _stubExecutableData = _dataSource.ReadFrom(endOfStubHeader, lengthOfStubExecutableData, retainPosition: true);
+                    _stubExecutableData = ReadRangeFromSource(endOfStubHeader, lengthOfStubExecutableData);
 
                     // Cache and return the stub executable data, even if null
                     return _stubExecutableData;
@@ -498,21 +465,23 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Dictionary of resource data
         /// </summary>
-        public Dictionary<string, object?>? ResourceData
+        public Dictionary<string, object?> ResourceData
         {
             get
             {
-                lock (_sourceDataLock)
+                lock (_resourceDataLock)
                 {
                     // Use the cached data if possible
-                    if (_resourceData != null && _resourceData.Count != 0)
+                    if (_resourceData.Count != 0)
                         return _resourceData;
 
                     // If we have no resource table, just return
                     if (OptionalHeader?.ResourceTable == null
                         || OptionalHeader.ResourceTable.VirtualAddress == 0
                         || ResourceDirectoryTable == null)
-                        return null;
+                    {
+                        return _resourceData;
+                    }
 
                     // Otherwise, build and return the cached dictionary
                     ParseResourceDirectoryTable(ResourceDirectoryTable, types: []);
@@ -667,6 +636,25 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
+        /// Name as derived from the assembly manifest
+        /// </summary>
+        /// <remarks>
+        /// If there are multiple identities included in the manifest,
+        /// this will only retrieve the value from the first that doesn't
+        /// have a null or empty name.
+        /// </remarks>
+        public string? AssemblyName
+        {
+            get
+            {
+                var manifest = GetAssemblyManifest();
+                var identities = manifest?.AssemblyIdentities ?? [];
+                var nameIdentity = Array.Find(identities, ai => !string.IsNullOrEmpty(ai?.Name));
+                return nameIdentity?.Name;
+            }
+        }
+
+        /// <summary>
         /// Version as derived from the assembly manifest
         /// </summary>
         /// <remarks>
@@ -692,14 +680,14 @@ namespace SabreTools.Serialization.Wrappers
         #region Instance Variables
 
         /// <summary>
-        /// Header padding data, if it exists
+        /// Cached debug data
         /// </summary>
-        private byte[]? _headerPaddingData = null;
+        private readonly Dictionary<int, object> _debugData = [];
 
         /// <summary>
-        /// Header padding strings, if they exist
+        /// Lock object for <see cref="_debugData"/> 
         /// </summary>
-        private List<string>? _headerPaddingStrings = null;
+        private readonly object _debugDataLock = new();
 
         /// <summary>
         /// Entry point data, if it exists and isn't aligned to a section
@@ -707,9 +695,39 @@ namespace SabreTools.Serialization.Wrappers
         private byte[]? _entryPointData = null;
 
         /// <summary>
+        /// Lock object for <see cref="_entryPointData"/> 
+        /// </summary>
+        private readonly object _entryPointDataLock = new();
+
+        /// <summary>
+        /// Header padding data, if it exists
+        /// </summary>
+        private byte[]? _headerPaddingData = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_headerPaddingData"/> 
+        /// </summary>
+        private readonly object _headerPaddingDataLock = new();
+
+        /// <summary>
+        /// Header padding strings, if they exist
+        /// </summary>
+        private List<string>? _headerPaddingStrings = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_headerPaddingStrings"/> 
+        /// </summary>
+        private readonly object _headerPaddingStringsLock = new();
+
+        /// <summary>
         /// Address of the overlay, if it exists
         /// </summary>
         private int? _overlayAddress = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_overlayAddress"/> 
+        /// </summary>
+        private readonly object _overlayAddressLock = new();
 
         /// <summary>
         /// Overlay data, if it exists
@@ -717,19 +735,39 @@ namespace SabreTools.Serialization.Wrappers
         private byte[]? _overlayData = null;
 
         /// <summary>
+        /// Lock object for <see cref="_overlayData"/> 
+        /// </summary>
+        private readonly object _overlayDataLock = new();
+
+        /// <summary>
         /// Overlay strings, if they exist
         /// </summary>
         private List<string>? _overlayStrings = null;
 
         /// <summary>
-        /// Stub executable data, if it exists
+        /// Lock object for <see cref="_overlayStrings"/> 
         /// </summary>
-        private byte[]? _stubExecutableData = null;
+        private readonly object _overlayStringsLock = new();
+
+        /// <summary>
+        /// Cached resource data
+        /// </summary>
+        private readonly Dictionary<string, object?> _resourceData = [];
+
+        /// <summary>
+        /// Lock object for <see cref="_resourceData"/> 
+        /// </summary>
+        private readonly object _resourceDataLock = new();
 
         /// <summary>
         /// Sanitized section names
         /// </summary>
         private string[]? _sectionNames = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_sectionNames"/> 
+        /// </summary>
+        private readonly object _sectionNamesLock = new();
 
         /// <summary>
         /// Cached raw section data
@@ -739,42 +777,60 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Cached found string data in sections
         /// </summary>
-        private List<string>[]? _sectionStringData = null;
+        private List<string>?[]? _sectionStringData = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_sectionStringData"/> 
+        /// </summary>
+        private readonly object _sectionStringDataLock = new();
+
+        /// <summary>
+        /// Data after the section table, if it exists
+        /// </summary>
+        private byte[]? _sectionTableTrailerData = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_sectionTableTrailerData"/> 
+        /// </summary>
+        private readonly object _sectionTableTrailerDataLock = new();
+
+        /// <summary>
+        /// Stub executable data, if it exists
+        /// </summary>
+        private byte[]? _stubExecutableData = null;
+
+        /// <summary>
+        /// Lock object for <see cref="_stubExecutableData"/> 
+        /// </summary>
+        private readonly object _stubExecutableDataLock = new();
 
         /// <summary>
         /// Cached raw table data
         /// </summary>
-        private byte[][]? _tableData = null;
+        private readonly byte[][] _tableData = new byte[16][];
 
         /// <summary>
         /// Cached found string data in tables
         /// </summary>
-        private List<string>[]? _tableStringData = null;
+        private readonly List<string>?[] _tableStringData = new List<string>?[16];
 
-        /// <summary>
-        /// Cached debug data
-        /// </summary>
-        private readonly Dictionary<int, object> _debugData = [];
-
-        /// <summary>
-        /// Cached resource data
-        /// </summary>
-        private readonly Dictionary<string, object?> _resourceData = [];
+        #region Version Information
 
         /// <summary>
         /// Cached version info data
         /// </summary>
         private VersionInfo? _versionInfo = null;
 
+        #endregion
+
+        #region Manifest Information
+
         /// <summary>
         /// Cached assembly manifest data
         /// </summary>
         private AssemblyManifest? _assemblyManifest = null;
 
-        /// <summary>
-        /// Lock object for reading from the source
-        /// </summary>
-        private readonly object _sourceDataLock = new();
+        #endregion
 
         #endregion
 
@@ -866,10 +922,6 @@ namespace SabreTools.Serialization.Wrappers
             if (string.IsNullOrEmpty(key))
                 return null;
 
-            // Ensure that we have the resource data cached
-            if (ResourceData == null)
-                return null;
-
             // If we don't have string version info in this executable
             var stringTable = _versionInfo?.StringFileInfo?.Children;
             if (stringTable == null || stringTable.Length == 0)
@@ -901,8 +953,9 @@ namespace SabreTools.Serialization.Wrappers
             if (_assemblyManifest != null)
                 return _assemblyManifest;
 
-            // Ensure that we have the resource data cached
-            if (ResourceData == null)
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
                 return null;
 
             // Return the now-cached assembly manifest
@@ -920,12 +973,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>List of matching debug data</returns>
         public List<object?> FindCodeViewDebugTableByPath(string path)
         {
-            // Ensure that we have the debug data cached
-            if (DebugData == null)
+            // Cache the debug data for easier reading
+            var debugData = DebugData;
+            if (debugData.Count == 0)
                 return [];
 
             var debugFound = new List<object?>();
-            foreach (var data in DebugData.Values)
+            foreach (var data in debugData.Values)
             {
                 if (data == null)
                     continue;
@@ -956,12 +1010,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>List of matching debug data</returns>
         public List<byte[]?> FindGenericDebugTableByValue(string value)
         {
-            // Ensure that we have the resource data cached
-            if (DebugData == null)
+            // Cache the debug data for easier reading
+            var debugData = DebugData;
+            if (debugData.Count == 0)
                 return [];
 
             var table = new List<byte[]?>();
-            foreach (var data in DebugData.Values)
+            foreach (var data in debugData.Values)
             {
                 if (data == null)
                     continue;
@@ -1029,7 +1084,7 @@ namespace SabreTools.Serialization.Wrappers
                 byte[]? entryData;
                 try
                 {
-                    entryData = _dataSource.ReadFrom((int)address, (int)size, retainPosition: true);
+                    entryData = ReadRangeFromSource((int)address, (int)size);
                     if (entryData == null || entryData.Length < 4)
                         continue;
                 }
@@ -1079,482 +1134,6 @@ namespace SabreTools.Serialization.Wrappers
 
         #endregion
 
-        #region Extraction
-
-        /// <inheritdoc/>
-        /// <remarks>
-        /// This extracts the following data:
-        /// - Archives and executables in the overlay
-        /// - Archives and executables in resource data
-        /// - CExe-compressed resource data
-        /// - SFX archives (7z, MS-CAB, PKZIP, RAR)
-        /// - Wise installers
-        /// </remarks>
-        public bool Extract(string outputDirectory, bool includeDebug)
-        {
-            bool cexe = ExtractCExe(outputDirectory, includeDebug);
-            bool overlay = ExtractFromOverlay(outputDirectory, includeDebug);
-            bool resources = ExtractFromResources(outputDirectory, includeDebug);
-            bool wise = ExtractWise(outputDirectory, includeDebug);
-
-            return cexe || overlay || resources | wise;
-        }
-
-        /// <summary>
-        /// Extract a CExe-compressed executable
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        public bool ExtractCExe(string outputDirectory, bool includeDebug)
-        {
-            try
-            {
-                // Get all resources of type 99 with index 2
-                var resources = FindResourceByNamedType("99, 2");
-                if (resources == null || resources.Count == 0)
-                    return false;
-
-                // Get the first resource of type 99 with index 2
-                var resource = resources[0];
-                if (resource == null || resource.Length == 0)
-                    return false;
-
-                // Create the output data buffer
-                byte[]? data = [];
-
-                // If we had the decompression DLL included, it's zlib
-                if (FindResourceByNamedType("99, 1").Count > 0)
-                    data = DecompressCExeZlib(resource);
-                else
-                    data = DecompressCExeLZ(resource);
-
-                // If we have no data
-                if (data == null)
-                    return false;
-
-                // Create the temp filename
-                string tempFile = string.IsNullOrEmpty(Filename) ? "temp.sxe" : $"{Path.GetFileNameWithoutExtension(Filename)}.sxe";
-                tempFile = Path.Combine(outputDirectory, tempFile);
-                var directoryName = Path.GetDirectoryName(tempFile);
-                if (directoryName != null && !Directory.Exists(directoryName))
-                    Directory.CreateDirectory(directoryName);
-
-                // Write the file data to a temp file
-                var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                tempStream.Write(data, 0, data.Length);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (includeDebug) Console.Error.WriteLine(ex);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Extract data from the overlay
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        public bool ExtractFromOverlay(string outputDirectory, bool includeDebug)
-        {
-            try
-            {
-                // Cache the overlay data for easier reading
-                var overlayData = OverlayData;
-                if (overlayData == null || overlayData.Length == 0)
-                    return false;
-
-                // Set the output variables
-                int overlayOffset = 0;
-                string extension = string.Empty;
-
-                // Only process the overlay if it is recognized
-                for (; overlayOffset < 0x100 && overlayOffset < overlayData.Length - 0x10; overlayOffset++)
-                {
-                    int temp = overlayOffset;
-                    byte[] overlaySample = overlayData.ReadBytes(ref temp, 0x10);
-
-                    if (overlaySample.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
-                    {
-                        extension = "7z";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith([0x3B, 0x21, 0x40, 0x49, 0x6E, 0x73, 0x74, 0x61, 0x6C, 0x6C]))
-                    {
-                        // 7-zip SFX script -- ";!@Install" to ";!@InstallEnd@!"
-                        overlayOffset = overlayData.FirstPosition([0x3B, 0x21, 0x40, 0x49, 0x6E, 0x73, 0x74, 0x61, 0x6C, 0x6C, 0x45, 0x6E, 0x64, 0x40, 0x21]);
-                        if (overlayOffset == -1)
-                            return false;
-
-                        overlayOffset += 15;
-                        extension = "7z";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
-                    {
-                        extension = "cab";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
-                    {
-                        extension = "zip";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
-                    {
-                        extension = "zip";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
-                    {
-                        extension = "zip";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
-                    {
-                        extension = "zip";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
-                    {
-                        extension = "rar";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
-                    {
-                        extension = "rar";
-                        break;
-                    }
-                    else if (overlaySample.StartsWith(Models.MSDOS.Constants.SignatureBytes))
-                    {
-                        extension = "bin"; // exe/dll
-                        break;
-                    }
-                }
-
-                // If the extension is unset
-                if (extension.Length == 0)
-                    return false;
-
-                // Create the temp filename
-                string tempFile = $"embedded_overlay.{extension}";
-                if (Filename != null)
-                    tempFile = $"{Path.GetFileName(Filename)}-{tempFile}";
-
-                tempFile = Path.Combine(outputDirectory, tempFile);
-                var directoryName = Path.GetDirectoryName(tempFile);
-                if (directoryName != null && !Directory.Exists(directoryName))
-                    Directory.CreateDirectory(directoryName);
-
-                // Write the resource data to a temp file
-                using var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                tempStream?.Write(overlayData, overlayOffset, overlayData.Length - overlayOffset);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (includeDebug) Console.Error.WriteLine(ex);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Extract data from the resources
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        public bool ExtractFromResources(string outputDirectory, bool includeDebug)
-        {
-            try
-            {
-                // Cache the resource data for easier reading
-                var resourceData = ResourceData;
-                if (resourceData == null)
-                    return false;
-
-                // Get the resources that have an archive signature
-                int i = 0;
-                foreach (var value in resourceData.Values)
-                {
-                    if (value == null || value is not byte[] ba || ba.Length == 0)
-                        continue;
-
-                    // Set the output variables
-                    int resourceOffset = 0;
-                    string extension = string.Empty;
-
-                    // Only process the resource if it a recognized signature
-                    for (; resourceOffset < 0x100 && resourceOffset < ba.Length - 0x10; resourceOffset++)
-                    {
-                        int temp = resourceOffset;
-                        byte[] resourceSample = ba.ReadBytes(ref temp, 0x10);
-
-                        if (resourceSample.StartsWith([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]))
-                        {
-                            extension = "7z";
-                            break;
-                        }
-                        else if (resourceSample.StartsWith(Models.MicrosoftCabinet.Constants.SignatureBytes))
-                        {
-                            extension = "cab";
-                            break;
-                        }
-                        else if (resourceSample.StartsWith(Models.PKZIP.Constants.LocalFileHeaderSignatureBytes))
-                        {
-                            extension = "zip";
-                            break;
-                        }
-                        else if (resourceSample.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecordSignatureBytes))
-                        {
-                            extension = "zip";
-                            break;
-                        }
-                        else if (resourceSample.StartsWith(Models.PKZIP.Constants.EndOfCentralDirectoryRecord64SignatureBytes))
-                        {
-                            extension = "zip";
-                            break;
-                        }
-                        else if (resourceSample.StartsWith(Models.PKZIP.Constants.DataDescriptorSignatureBytes))
-                        {
-                            extension = "zip";
-                            break;
-                        }
-                        else if (resourceSample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x00]))
-                        {
-                            extension = "rar";
-                            break;
-                        }
-                        else if (resourceSample.StartsWith([0x52, 0x61, 0x72, 0x21, 0x1A, 0x07, 0x01, 0x00]))
-                        {
-                            extension = "rar";
-                            break;
-                        }
-                        else if (resourceSample.StartsWith(Models.MSDOS.Constants.SignatureBytes))
-                        {
-                            extension = "bin"; // exe/dll
-                            break;
-                        }
-                    }
-
-                    // If the extension is unset
-                    if (extension.Length == 0)
-                        continue;
-
-                    try
-                    {
-                        // Create the temp filename
-                        string tempFile = $"embedded_resource_{i++}.{extension}";
-                        if (Filename != null)
-                            tempFile = $"{Path.GetFileName(Filename)}-{tempFile}";
-
-                        tempFile = Path.Combine(outputDirectory, tempFile);
-                        var directoryName = Path.GetDirectoryName(tempFile);
-                        if (directoryName != null && !Directory.Exists(directoryName))
-                            Directory.CreateDirectory(directoryName);
-
-                        // Write the resource data to a temp file
-                        using var tempStream = File.Open(tempFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                        tempStream?.Write(ba, resourceOffset, ba.Length - resourceOffset);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (includeDebug) Console.Error.WriteLine(ex);
-                    }
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (includeDebug) Console.Error.WriteLine(ex);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Extract data from a Wise installer
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        public bool ExtractWise(string outputDirectory, bool includeDebug)
-        {
-            // Get the source data for reading
-            Stream source = _dataSource;
-            if (Filename != null)
-            {
-                // Try to open a multipart file
-                if (WiseOverlayHeader.OpenFile(Filename, includeDebug, out var temp) && temp != null)
-                    source = temp;
-            }
-
-            // Try to find the overlay header
-            long offset = FindWiseOverlayHeader();
-            if (offset > 0 && offset < Length)
-                return ExtractWiseOverlay(outputDirectory, includeDebug, source, offset);
-
-            // Try to find the section header
-            var section = FindWiseSection();
-            if (section != null)
-                return ExtractWiseSection(outputDirectory, includeDebug, source, section);
-
-            // Everything else could not extract
-            return false;
-        }
-
-        /// <summary>
-        /// Decompress CExe data compressed with LZ
-        /// </summary>
-        /// <param name="resource">Resource data to inflate</param>
-        /// <returns>Inflated data on success, null otherwise</returns>
-        private static byte[]? DecompressCExeLZ(byte[] resource)
-        {
-            try
-            {
-                var decompressor = IO.Compression.SZDD.Decompressor.CreateSZDD(resource);
-                using var dataStream = new MemoryStream();
-                decompressor.CopyTo(dataStream);
-                return dataStream.ToArray();
-            }
-            catch
-            {
-                // Reset the data
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Decompress CExe data compressed with zlib
-        /// </summary>
-        /// <param name="resource">Resource data to inflate</param>
-        /// <returns>Inflated data on success, null otherwise</returns>
-        private static byte[]? DecompressCExeZlib(byte[] resource)
-        {
-            try
-            {
-                // Inflate the data into the buffer
-                var zstream = new ZLib.z_stream_s();
-                byte[] data = new byte[resource.Length * 4];
-                unsafe
-                {
-                    fixed (byte* payloadPtr = resource)
-                    fixed (byte* dataPtr = data)
-                    {
-                        zstream.next_in = payloadPtr;
-                        zstream.avail_in = (uint)resource.Length;
-                        zstream.total_in = (uint)resource.Length;
-                        zstream.next_out = dataPtr;
-                        zstream.avail_out = (uint)data.Length;
-                        zstream.total_out = 0;
-
-                        ZLib.inflateInit_(zstream, ZLib.zlibVersion(), resource.Length);
-                        int zret = ZLib.inflate(zstream, 1);
-                        ZLib.inflateEnd(zstream);
-                    }
-                }
-
-                // Trim the buffer to the proper size
-                uint read = zstream.total_out;
-#if NETFRAMEWORK
-                var temp = new byte[read];
-                Array.Copy(data, temp, read);
-                data = temp;
-#else
-                data = new ReadOnlySpan<byte>(data, 0, (int)read).ToArray();
-#endif
-                return data;
-            }
-            catch
-            {
-                // Reset the data
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Extract using Wise overlay
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <param name="source">Potentially multi-part stream to read</param>
-        /// <param name="offset">Offset to the start of the overlay header</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        private bool ExtractWiseOverlay(string outputDirectory, bool includeDebug, Stream source, long offset)
-        {
-            // Seek to the overlay and parse
-            source.Seek(offset, SeekOrigin.Begin);
-            var header = WiseOverlayHeader.Create(source);
-            if (header == null)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not parse the overlay header");
-                return false;
-            }
-
-            // Extract the header-defined files
-            bool extracted = header.ExtractHeaderDefinedFiles(outputDirectory, includeDebug);
-            if (!extracted)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not extract header-defined files");
-                return false;
-            }
-
-            // Open the script file from the output directory
-            var scriptStream = File.OpenRead(Path.Combine(outputDirectory, "WiseScript.bin"));
-            var script = WiseScript.Create(scriptStream);
-            if (script == null)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not parse WiseScript.bin");
-                return false;
-            }
-
-            // Get the source directory
-            string? sourceDirectory = null;
-            if (Filename != null)
-                sourceDirectory = Path.GetDirectoryName(Path.GetFullPath(Filename));
-
-            // Process the state machine
-            return script.ProcessStateMachine(header, sourceDirectory, outputDirectory, includeDebug);
-        }
-
-        /// <summary>
-        /// Extract using Wise section
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <param name="source">Potentially multi-part stream to read</param>
-        /// <param name="section">Wise section information</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        private bool ExtractWiseSection(string outputDirectory, bool includeDebug, Stream source, Models.PortableExecutable.SectionHeader section)
-        {
-            // Get the offset
-            long offset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-            if (offset < 0 || offset >= source.Length)
-                return false;
-
-            // Read the section into a local array
-            int sectionLength = (int)section.VirtualSize;
-            byte[]? sectionData = source.ReadFrom(offset, sectionLength, retainPosition: true);
-
-            // Parse the section header
-            var header = WiseSectionHeader.Create(sectionData, 0);
-            if (header == null)
-            {
-                if (includeDebug) Console.Error.WriteLine("Could not parse the section header");
-                return false;
-            }
-
-            // Attempt to extract section
-            return header.Extract(outputDirectory, includeDebug);
-        }
-
-        #endregion
-
         #region Resource Data
 
         /// <summary>
@@ -1564,12 +1143,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>List of matching resources</returns>
         public List<DialogBoxResource?> FindDialogByTitle(string title)
         {
-            // Ensure that we have the resource data cached
-            if (ResourceData == null)
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
                 return [];
 
             var resources = new List<DialogBoxResource?>();
-            foreach (var resource in ResourceData.Values)
+            foreach (var resource in resourceData.Values)
             {
                 if (resource == null)
                     continue;
@@ -1592,12 +1172,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>List of matching resources</returns>
         public List<DialogBoxResource?> FindDialogBoxByItemTitle(string title)
         {
-            // Ensure that we have the resource data cached
-            if (ResourceData == null)
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
                 return [];
 
             var resources = new List<DialogBoxResource?>();
-            foreach (var resource in ResourceData.Values)
+            foreach (var resource in resourceData.Values)
             {
                 if (resource == null)
                     continue;
@@ -1628,12 +1209,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>List of matching resources</returns>
         public List<Dictionary<int, string?>?> FindStringTableByEntry(string entry)
         {
-            // Ensure that we have the resource data cached
-            if (ResourceData == null)
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
                 return [];
 
             var stringTables = new List<Dictionary<int, string?>?>();
-            foreach (var resource in ResourceData.Values)
+            foreach (var resource in resourceData.Values)
             {
                 if (resource == null)
                     continue;
@@ -1664,12 +1246,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>List of matching resources</returns>
         public List<byte[]?> FindResourceByNamedType(string typeName)
         {
-            // Ensure that we have the resource data cached
-            if (ResourceData == null)
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
                 return [];
 
             var resources = new List<byte[]?>();
-            foreach (var kvp in ResourceData)
+            foreach (var kvp in resourceData)
             {
                 if (!kvp.Key.Contains(typeName))
                     continue;
@@ -1689,12 +1272,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>List of matching resources</returns>
         public List<byte[]?> FindGenericResource(string value)
         {
-            // Ensure that we have the resource data cached
-            if (ResourceData == null)
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
                 return [];
 
             var resources = new List<byte[]?>();
-            foreach (var resource in ResourceData.Values)
+            foreach (var resource in resourceData.Values)
             {
                 if (resource == null)
                     continue;
@@ -1747,55 +1331,63 @@ namespace SabreTools.Serialization.Wrappers
             // Get the overlay offset
             long overlayOffset = OverlayAddress;
 
-            // Attempt to get the overlay header
-            if (overlayOffset >= 0 && overlayOffset < Length)
+            lock (_dataSourceLock)
             {
-                _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
-                var header = WiseOverlayHeader.Create(_dataSource);
-                if (header != null)
-                    return overlayOffset;
-            }
-
-            // Check section data
-            foreach (var section in SectionTable ?? [])
-            {
-                string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
-                long sectionOffset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-                _dataSource.Seek(sectionOffset, SeekOrigin.Begin);
-
-                var header = WiseOverlayHeader.Create(_dataSource);
-                if (header != null)
-                    return sectionOffset;
-
-                // Check after the resource table
-                if (sectionName == ".rsrc")
+                // Attempt to get the overlay header
+                if (overlayOffset >= 0 && overlayOffset < Length)
                 {
-                    // Data immediately following
-                    long afterResourceOffset = sectionOffset + section.SizeOfRawData;
-                    _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
-
-                    header = WiseOverlayHeader.Create(_dataSource);
+                    _dataSource.Seek(overlayOffset, SeekOrigin.Begin);
+                    var header = WiseOverlayHeader.Create(_dataSource);
                     if (header != null)
-                        return afterResourceOffset;
+                        return overlayOffset;
+                }
 
-                    // Data following padding data
-                    _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
-                    _ = _dataSource.ReadNullTerminatedAnsiString();
+                // Check section data
+                foreach (var section in SectionTable ?? [])
+                {
+                    string sectionName = Encoding.ASCII.GetString(section.Name ?? []).TrimEnd('\0');
+                    long sectionOffset = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
+                    _dataSource.Seek(sectionOffset, SeekOrigin.Begin);
 
-                    afterResourceOffset = _dataSource.Position;
-                    header = WiseOverlayHeader.Create(_dataSource);
+                    var header = WiseOverlayHeader.Create(_dataSource);
                     if (header != null)
-                        return afterResourceOffset;
+                        return sectionOffset;
+
+                    // Check after the resource table
+                    if (sectionName == ".rsrc")
+                    {
+                        // Data immediately following
+                        long afterResourceOffset = sectionOffset + section.SizeOfRawData;
+                        _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
+
+                        header = WiseOverlayHeader.Create(_dataSource);
+                        if (header != null)
+                            return afterResourceOffset;
+
+                        // Data following padding data
+                        _dataSource.Seek(afterResourceOffset, SeekOrigin.Begin);
+                        _ = _dataSource.ReadNullTerminatedAnsiString();
+
+                        afterResourceOffset = _dataSource.Position;
+                        header = WiseOverlayHeader.Create(_dataSource);
+                        if (header != null)
+                            return afterResourceOffset;
+                    }
                 }
             }
 
             // If there are no resources
-            if (OptionalHeader?.ResourceTable == null || ResourceData == null)
+            if (OptionalHeader?.ResourceTable == null)
+                return -1;
+
+            // Cache the resource data for easier reading
+            var resourceData = ResourceData;
+            if (resourceData.Count == 0)
                 return -1;
 
             // Get the resources that have an executable signature
             bool exeResources = false;
-            foreach (var kvp in ResourceData)
+            foreach (var kvp in resourceData)
             {
                 if (kvp.Value == null || kvp.Value is not byte[] ba)
                     continue;
@@ -1815,32 +1407,35 @@ namespace SabreTools.Serialization.Wrappers
             if (resourceTableOffset <= 0)
                 return -1;
 
-            // Search the resource table data for the offset
-            long resourceOffset = -1;
-            _dataSource.Seek(resourceTableOffset, SeekOrigin.Begin);
-            while (_dataSource.Position < resourceTableOffset + OptionalHeader.ResourceTable.Size && _dataSource.Position < _dataSource.Length)
+            lock (_dataSourceLock)
             {
-                ushort possibleSignature = _dataSource.ReadUInt16();
-                if (possibleSignature == Models.MSDOS.Constants.SignatureUInt16)
+                // Search the resource table data for the offset
+                long resourceOffset = -1;
+                _dataSource.Seek(resourceTableOffset, SeekOrigin.Begin);
+                while (_dataSource.Position < resourceTableOffset + OptionalHeader.ResourceTable.Size && _dataSource.Position < _dataSource.Length)
                 {
-                    resourceOffset = _dataSource.Position - 2;
-                    break;
+                    ushort possibleSignature = _dataSource.ReadUInt16();
+                    if (possibleSignature == Models.MSDOS.Constants.SignatureUInt16)
+                    {
+                        resourceOffset = _dataSource.Position - 2;
+                        break;
+                    }
+
+                    _dataSource.Seek(-1, SeekOrigin.Current);
                 }
 
-                _dataSource.Seek(-1, SeekOrigin.Current);
+                // If there was no valid offset, somehow
+                if (resourceOffset == -1)
+                    return -1;
+
+                // Parse the executable and recurse
+                _dataSource.Seek(resourceOffset, SeekOrigin.Begin);
+                var resourceExe = WrapperFactory.CreateExecutableWrapper(_dataSource);
+                if (resourceExe is not PortableExecutable resourcePex)
+                    return -1;
+
+                return resourcePex.FindWiseOverlayHeader();
             }
-
-            // If there was no valid offset, somehow
-            if (resourceOffset == -1)
-                return -1;
-
-            // Parse the executable and recurse
-            _dataSource.Seek(resourceOffset, SeekOrigin.Begin);
-            var resourceExe = WrapperFactory.CreateExecutableWrapper(_dataSource);
-            if (resourceExe is not PortableExecutable resourcePex)
-                return -1;
-
-            return resourcePex.FindWiseOverlayHeader();
         }
 
         /// <summary>
@@ -2032,7 +1627,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // Get all section names first
-            if (SectionNames == null)
+            if (SectionNames.Length == 0)
                 return false;
 
             // If we're checking exactly, return only exact matches
@@ -2075,7 +1670,7 @@ namespace SabreTools.Serialization.Wrappers
         public Models.PortableExecutable.SectionHeader? GetFirstSection(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2100,7 +1695,7 @@ namespace SabreTools.Serialization.Wrappers
         public Models.PortableExecutable.SectionHeader? GetLastSection(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2144,7 +1739,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetFirstSectionData(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2165,7 +1760,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetLastSectionData(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2185,7 +1780,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetSectionData(int index)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2203,22 +1798,20 @@ namespace SabreTools.Serialization.Wrappers
 
             // Set the section size
             uint size = section.SizeOfRawData;
-            lock (_sourceDataLock)
-            {
-                // Create the section data array if we have to
-                _sectionData ??= new byte[SectionNames.Length][];
 
-                // If we already have cached data, just use that immediately
-                if (_sectionData[index] != null && _sectionData[index].Length > 0)
-                    return _sectionData[index];
+            // Create the section data array if we have to
+            _sectionData ??= new byte[SectionNames.Length][];
 
-                // Populate the raw section data based on the source
-                byte[]? sectionData = _dataSource.ReadFrom((int)address, (int)size, retainPosition: true);
+            // If we already have cached data, just use that immediately
+            if (_sectionData[index] != null && _sectionData[index].Length > 0)
+                return _sectionData[index];
 
-                // Cache and return the section data, even if null
-                _sectionData[index] = sectionData ?? [];
-                return sectionData;
-            }
+            // Populate the raw section data based on the source
+            byte[]? sectionData = ReadRangeFromSource((int)address, (int)size);
+
+            // Cache and return the section data, even if null
+            _sectionData[index] = sectionData ?? [];
+            return sectionData;
         }
 
         /// <summary>
@@ -2230,7 +1823,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetFirstSectionStrings(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2251,7 +1844,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetLastSectionStrings(string? name, bool exact = false)
         {
             // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+            if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
                 return null;
 
             // If the section doesn't exist
@@ -2270,40 +1863,37 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Section strings on success, null on error</returns>
         public List<string>? GetSectionStrings(int index)
         {
-            // If we have no sections
-            if (SectionNames == null || SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
-                return null;
-
-            // If the section doesn't exist
-            if (index < 0 || index >= SectionTable.Length)
-                return null;
-
-            // Get the section data from the table
-            var section = SectionTable[index];
-            if (section == null)
-                return null;
-
-            uint address = section.VirtualAddress.ConvertVirtualAddress(SectionTable);
-            if (address == 0)
-                return null;
-
-            // Set the section size
-            uint size = section.SizeOfRawData;
-            lock (_sourceDataLock)
+            lock (_sectionStringDataLock)
             {
+                // If we have no sections
+                if (SectionNames.Length == 0 || SectionTable == null || SectionTable.Length == 0)
+                {
+                    _sectionStringData = [];
+                    return null;
+                }
+
                 // Create the section string array if we have to
-                _sectionStringData ??= new List<string>[SectionNames.Length];
+                _sectionStringData ??= new List<string>?[SectionNames.Length];
+
+                // If the section doesn't exist
+                if (index < 0 || index >= SectionTable.Length)
+                    return null;
 
                 // If we already have cached data, just use that immediately
-                if (_sectionStringData[index] != null && _sectionStringData[index].Count > 0)
+                if (_sectionStringData[index] != null)
                     return _sectionStringData[index];
 
-                // Populate the section string data based on the source
-                List<string>? sectionStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
+                // Get the section data, if possible
+                byte[]? sectionData = GetSectionData(index);
+                if (sectionData == null || sectionData.Length == 0)
+                {
+                    _sectionStringData[index] = [];
+                    return _sectionStringData[index];
+                }
 
-                // Cache and return the section string data, even if null
-                _sectionStringData[index] = sectionStringData ?? [];
-                return sectionStringData;
+                // Otherwise, cache and return the strings
+                _sectionStringData[index] = sectionData.ReadStringsFrom(charLimit: 3) ?? [];
+                return _sectionStringData[index];
             }
         }
 
@@ -2357,6 +1947,10 @@ namespace SabreTools.Serialization.Wrappers
             if (OptionalHeader == null || index < 0 || index > 16)
                 return null;
 
+            // If we already have cached data, just use that immediately
+            if (_tableData[index] != null && _tableData[index].Length > 0)
+                return _tableData[index];
+
             // Get the table from the optional header
             var table = GetTable(index);
 
@@ -2373,22 +1967,12 @@ namespace SabreTools.Serialization.Wrappers
             if (address == 0 || size == 0)
                 return null;
 
-            lock (_sourceDataLock)
-            {
-                // Create the table data array if we have to
-                _tableData ??= new byte[16][];
+            // Populate the raw table data based on the source
+            byte[]? tableData = ReadRangeFromSource((int)address, (int)size);
 
-                // If we already have cached data, just use that immediately
-                if (_tableData[index] != null && _tableData[index].Length > 0)
-                    return _tableData[index];
-
-                // Populate the raw table data based on the source
-                byte[]? tableData = _dataSource.ReadFrom((int)address, (int)size, retainPosition: true);
-
-                // Cache and return the table data, even if null
-                _tableData[index] = tableData ?? [];
-                return tableData;
-            }
+            // Cache and return the table data, even if null
+            _tableData[index] = tableData ?? [];
+            return tableData;
         }
 
         /// <summary>
@@ -2399,41 +1983,24 @@ namespace SabreTools.Serialization.Wrappers
         public List<string>? GetTableStrings(int index)
         {
             // If the table doesn't exist
-            if (OptionalHeader == null || index < 0 || index > 16)
+            if (index < 0 || index > 16)
                 return null;
 
-            // Get the table from the optional header
-            var table = GetTable(index);
+            // If we already have cached data, just use that immediately
+            if (_tableStringData[index] != null)
+                return _tableStringData[index];
 
-            // Get the virtual address and size from the entries
-            uint virtualAddress = table?.VirtualAddress ?? 0;
-            uint size = table?.Size ?? 0;
-
-            // If there is  no section table
-            if (SectionTable == null)
-                return null;
-
-            // Get the physical address from the virtual one
-            uint address = virtualAddress.ConvertVirtualAddress(SectionTable);
-            if (address == 0 || size == 0)
-                return null;
-
-            lock (_sourceDataLock)
+            // Get the table data, if possible
+            byte[]? tableData = GetTableData(index);
+            if (tableData == null || tableData.Length == 0)
             {
-                // Create the table string array if we have to
-                _tableStringData ??= new List<string>[16];
-
-                // If we already have cached data, just use that immediately
-                if (_tableStringData[index] != null && _tableStringData[index].Count > 0)
-                    return _tableStringData[index];
-
-                // Populate the table string data based on the source
-                List<string>? tableStringData = _dataSource.ReadStringsFrom((int)address, (int)size);
-
-                // Cache and return the table string data, even if null
-                _tableStringData[index] = tableStringData ?? [];
-                return tableStringData;
+                _tableStringData[index] = [];
+                return _tableStringData[index];
             }
+
+            // Otherwise, cache and return the strings
+            _tableStringData[index] = tableData.ReadStringsFrom(charLimit: 5) ?? [];
+            return _tableStringData[index];
         }
 
         #endregion
