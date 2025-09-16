@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Deserializers
                 if (matroschka.EntryCount == 0)
                     return null; // TODO: This should never occur, log output should happen even without debug.
                 
-                // Check if matrosch section is a longer header one or not based on whether the next uint is 0 or 1. Anything
+                // Check if "matrosch" section is a longer header one or not based on whether the next uint is 0 or 1. Anything
                 // else will just already be starting the filename string, which is never going to start with this.
                 // Previously thought that the longer header was correlated with RC, but at least one executable
                 // (NecroVisioN.exe from the GamersGate patch NecroVisioN_Patch1.2_GG.exe) isn't RC and still has it.
