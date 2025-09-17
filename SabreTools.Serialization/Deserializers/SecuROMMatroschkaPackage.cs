@@ -136,7 +136,7 @@ namespace SabreTools.Serialization.Deserializers
                     entry.Size = data.ReadUInt32LittleEndian();
                     entry.Offset = data.ReadUInt32LittleEndian();
                     
-                    // Check for unknown 4-byte 0x00 value. Not correlated with 256 vs 512-byte gaps.
+                    // Check for unknown 4-byte 0x00 value. Isn't correlated with 256 vs 512-byte gaps.
                     if (matHasUnknown == MatroschkaHasUnknown.Error)
                     {
                         tempPosition = data.Position;
