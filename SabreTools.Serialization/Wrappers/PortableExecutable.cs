@@ -1943,14 +1943,16 @@ namespace SabreTools.Serialization.Wrappers
             {
                 lock (_matroschkaPackageLock)
                 {
+                    // Check to see if creation has already been attempted
+                    // Running first as this is probably most common.
+                    if (_matroschkaPackageFailed)
+                        return null;
+                    
                     // Use the cached data if possible
                     if (_matroschkaPackage != null)
                         return _matroschkaPackage;
                     
-                    // Check to see if creation has already been attempted
-                    if (_matroschkaPackageFailed)
-                        return null;
-                    
+
                     // Get the available source length, if possible
                     long dataLength = Length;
                     if (dataLength == -1)
