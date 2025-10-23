@@ -2,6 +2,19 @@ using System.IO;
 using SabreTools.Data.Models.InstallShieldExecutable;
 using SabreTools.IO.Extensions;
 
+// According to ISx source, there are two categories of installshield executables, plain and encrypted. Encrypted has
+// two different "types" it can be, specified by a header. "InstallShield" and a newer format from 2015?-onwards called
+// "ISSetupStream". Plain executables have no central file entry header, and each file is unencrypted. Files in 
+// "InstallShield" encrypted executables have encryption applied over block sizes of 1024 bytes, and files in
+// "ISSetupStream" encrypted executables are encrypted per-file. There's also something about leading data that
+// isn't explained, (at least not clearly), and these encrypted executables can also additionally have their files
+// compressed with inflate.
+// While not stated in ISx, from experience, executables with "InstallShield" often (if not always?) mainly consist of
+// a singular, large MSI installer along with some helper files, wheras plain executables often (if not always?) mainly
+// consist of regular installshield cabinets within.
+// At the moment, this code only supports and documents the plain variant. Clearer naming and seperation between the
+// types is yet to come.
+
 namespace SabreTools.Serialization.Readers
 {
     public class InstallShieldExecutableFile : BaseBinaryReader<ExtractableFile>
