@@ -181,7 +181,7 @@ namespace SabreTools.Serialization.Wrappers
                 _dataSource.Seek(overlayAddress, SeekOrigin.Begin);
 
                 var streamLength = _dataSource.Length;
-                const int chunkSize = 65536;
+                const int chunkSize = 65536; // Arbitrary, can be changed to whatever's fastest.
                 var deserializer = new Readers.InstallShieldExecutableFile();
                 
                 while (_dataSource.Position < streamLength)
