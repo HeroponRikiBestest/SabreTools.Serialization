@@ -4,7 +4,7 @@ using SabreTools.IO.Extensions;
 
 // According to ISx source, there are two categories of installshield executables, plain and encrypted. Encrypted has
 // two different "types" it can be, specified by a header. "InstallShield" and a newer format from 2015?-onwards called
-// "ISSetupStream". Plain executables have no central file entry header, and each file is unencrypted. Files in 
+// "ISSetupStream". Plain executables have no central header, and each file is unencrypted. Files in 
 // "InstallShield" encrypted executables have encryption applied over block sizes of 1024 bytes, and files in
 // "ISSetupStream" encrypted executables are encrypted per-file. There's also something about leading data that
 // isn't explained, (at least not clearly), and these encrypted executables can also additionally have their files
