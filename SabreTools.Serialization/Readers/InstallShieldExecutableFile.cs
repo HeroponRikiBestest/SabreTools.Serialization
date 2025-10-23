@@ -9,7 +9,7 @@ using SabreTools.IO.Extensions;
 // "ISSetupStream" encrypted executables are encrypted per-file. There's also something about leading data that
 // isn't explained, (at least not clearly), and these encrypted executables can also additionally have their files
 // compressed with inflate.
-// While not stated in ISx, from experience, executables with "InstallShield" often (if not always?) mainly consist of
+// While not stated in ISx; from experience, executables with "InstallShield" often (if not always?) mainly consist of
 // a singular, large MSI installer along with some helper files, wheras plain executables often (if not always?) mainly
 // consist of regular installshield cabinets within.
 // At the moment, this code only supports and documents the plain variant. Clearer naming and seperation between the
