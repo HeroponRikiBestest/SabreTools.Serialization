@@ -5,9 +5,9 @@ using SabreTools.IO.Extensions;
 namespace SabreTools.Serialization.Readers
 {
     // TODO: This should parse an entire SFX, not just a single entry
-    public class InstallShieldExecutableFile : BaseBinaryReader<FileEntry>
+    public class PlainInstallShieldExecutableFile : BaseBinaryReader<PlainFileEntry>
     {
-        public override FileEntry? Deserialize(Stream? data)
+        public override PlainFileEntry? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -37,9 +37,9 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled FileEntry on success, null on error</returns>
-        public static FileEntry? ParseFileEntry(Stream? data)
+        public static PlainFileEntry? ParseFileEntry(Stream? data)
         {
-            var obj = new FileEntry();
+            var obj = new PlainFileEntry();
 
             obj.Name = data.ReadNullTerminatedAnsiString();
             if (obj.Name == null)

@@ -32,11 +32,11 @@ namespace SabreTools.Data.Models.InstallShieldExecutable
     ///
     /// It will need to be made very apparent that the dictionary
     /// does not directly represent the structure.
-    public class SFX
+    public class PlainSFX
     {
         /// <summary>
         /// Set of file entries
         /// </summary>
-        public FileEntry[]? Entries { get; set; }
+        public PlainFileEntry[]? Entries { get; set; }
     }
 }

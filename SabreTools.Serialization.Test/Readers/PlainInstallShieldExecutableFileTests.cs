@@ -5,14 +5,14 @@ using Xunit;
 
 namespace SabreTools.Serialization.Test.Readers
 {
-    public class InstallShieldExecutableFileTests
+    public class PlainInstallShieldExecutableFileTests
     {
         [Fact]
         public void NullArray_Null()
         {
             byte[]? data = null;
             int offset = 0;
-            var deserializer = new InstallShieldExecutableFile();
+            var deserializer = new PlainInstallShieldExecutableFile();
 
             var actual = deserializer.Deserialize(data, offset);
             Assert.Null(actual);
@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             byte[]? data = [];
             int offset = 0;
-            var deserializer = new InstallShieldExecutableFile();
+            var deserializer = new PlainInstallShieldExecutableFile();
 
             var actual = deserializer.Deserialize(data, offset);
             Assert.Null(actual);
@@ -34,7 +34,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             byte[]? data = [.. Enumerable.Repeat<byte>(0xFF, 1024)];
             int offset = 0;
-            var deserializer = new InstallShieldExecutableFile();
+            var deserializer = new PlainInstallShieldExecutableFile();
 
             var actual = deserializer.Deserialize(data, offset);
             Assert.Null(actual);
@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Test.Readers
         public void NullStream_Null()
         {
             Stream? data = null;
-            var deserializer = new InstallShieldExecutableFile();
+            var deserializer = new PlainInstallShieldExecutableFile();
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
@@ -54,7 +54,7 @@ namespace SabreTools.Serialization.Test.Readers
         public void EmptyStream_Null()
         {
             Stream? data = new MemoryStream([]);
-            var deserializer = new InstallShieldExecutableFile();
+            var deserializer = new PlainInstallShieldExecutableFile();
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);
@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.Test.Readers
         public void InvalidStream_Null()
         {
             Stream? data = new MemoryStream([.. Enumerable.Repeat<byte>(0xFF, 1024)]);
-            var deserializer = new InstallShieldExecutableFile();
+            var deserializer = new PlainInstallShieldExecutableFile();
 
             var actual = deserializer.Deserialize(data);
             Assert.Null(actual);

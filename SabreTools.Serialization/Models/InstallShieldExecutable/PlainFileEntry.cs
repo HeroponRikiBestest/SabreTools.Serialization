@@ -1,6 +1,6 @@
 namespace SabreTools.Data.Models.InstallShieldExecutable
 {
-    public class FileEntry
+    public class PlainFileEntry
     {
         /// <summary>
         /// Name of the file
