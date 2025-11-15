@@ -26,7 +26,7 @@ namespace ExtractionTool
                 return;
             }
 
-            // Cache the first argument and starting index
+            // Cache the first argument and starting index,
             string featureName = args[0];
 
             // Try processing the standalone arguments
