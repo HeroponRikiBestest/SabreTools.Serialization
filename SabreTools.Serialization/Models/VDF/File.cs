@@ -11,7 +11,7 @@ namespace SabreTools.Data.Models.VDF
     public class File
     {   
         /// <summary>
-        /// A byte array representing the signature/top level item
+        /// A byte array representing the signature/top level item.
         /// </summary>
         public byte[]? Signature { get; set; }
         
