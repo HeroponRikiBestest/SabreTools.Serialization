@@ -216,6 +216,11 @@ namespace SabreTools.Serialization.Wrappers
         /// Redumper skeleton (Wiped ISO9660 disc image)
         /// </summary>
         Skeleton,
+        
+        /// <summary>
+        /// Steam SKU sis file
+        /// </summary>
+        SkuSis,
 
         /// <summary>
         /// Tape archive
