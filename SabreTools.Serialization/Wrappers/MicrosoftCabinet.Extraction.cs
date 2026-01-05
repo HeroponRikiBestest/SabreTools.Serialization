@@ -178,19 +178,18 @@ namespace SabreTools.Serialization.Wrappers
                         if (f == 0 && (cabinet.Files[0].FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT
                             || cabinet.Files[0].FolderIndex == FolderIndex.CONTINUED_FROM_PREV))
                             continue;
-                        
+
                         var folder = cabinet.Folders[f];
                         allExtracted &= cabinet.ExtractFolder(Filename, outputDirectory, folder, f, ignorePrev, includeDebug);
                     }
 
                     // Move to the next cabinet, if possible
                     Array.ForEach(cabinet.Folders, folder => folder.DataBlocks = []);
-                    
+
                     cabinet = cabinet.Next;
                     cabinet?.Prev = null;
-                    
+
                     // TODO: already-extracted data isn't being cleared from memory, at least not nearly enough.
-                    
                     if (cabinet?.Folders == null || cabinet.Folders.Length == 0)
                         break;
                 }
@@ -203,7 +202,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Extract the contents of a single folder
         /// </summary>
@@ -242,22 +241,21 @@ namespace SabreTools.Serialization.Wrappers
                     // debug output for inconsistencies would go here
                     continue;
                 }
-                
+
                 fileList.Add(file);
             }
-            
+
             CFFILE[] files = fileList.ToArray();
             blockStream.SeekIfPossible(0, SeekOrigin.Begin);
             for (int i = 0; i < files.Length; i++)
             {
                 var file = files[i];
-                
                 allExtracted &= ExtractFiles(outputDirectory, blockStream, file, includeDebug);
             }
 
             return allExtracted;
         }
-        
+
         // TODO: this will apparently improve memory usage/performance, but it's not clear if this implementation is enough for that to happen
         /// <summary>
         /// Extract the contents of a single file, intended to be used with all files in a straight shot

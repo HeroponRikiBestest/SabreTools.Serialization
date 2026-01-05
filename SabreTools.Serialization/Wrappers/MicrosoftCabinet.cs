@@ -363,7 +363,7 @@ namespace SabreTools.Serialization.Wrappers
             // Return all found blocks in order
             return [.. prevBlocks, .. folder.DataBlocks, .. nextBlocks];
         }
-        
+
         /// <summary>
         /// Loads in all the datablocks for the current folder.
         /// </summary>
@@ -390,9 +390,8 @@ namespace SabreTools.Serialization.Wrappers
                     offset += folder.DataBlocks[i].CompressedSize;
                 }
             }
-            
         }
-        
+
         /// <summary>
         /// Get all files for the current folder, plus connected spanned folders.
         /// </summary>
@@ -423,7 +422,7 @@ namespace SabreTools.Serialization.Wrappers
                 int fileFolder = GetFolderIndex(f);
                 return fileFolder == folderIndex;
             });
-            
+
             // Check if the folder spans in either direction
             bool spanPrev = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
             bool spanNext = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_TO_NEXT || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
@@ -443,7 +442,7 @@ namespace SabreTools.Serialization.Wrappers
                     prevFiles = Prev.GetSpannedFiles(filename, prevFolderIndex, skipNext: true) ?? [];
                 }
             }
-            
+
             // If the folder spans forward and Next is not being skipped
             CFFILE[] nextFiles = [];
             if (!skipNext && spanNext)
@@ -459,7 +458,7 @@ namespace SabreTools.Serialization.Wrappers
                     nextFiles = Next.GetSpannedFiles(filename, 0, skipPrev: true) ?? [];
                 }
             }
-            
+
             // Return all found files in order
             return [.. prevFiles, .. files, .. nextFiles];
         }
