@@ -175,8 +175,8 @@ namespace SabreTools.Serialization.Wrappers
                     // Loop through the current folders
                     for (int f = 0; f < cabinet.Folders.Length; f++)
                     {
-                        if (f == 0 && (cabinet.Files[0].FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT ||
-                                       cabinet.Files[0].FolderIndex == FolderIndex.CONTINUED_FROM_PREV))
+                        if (f == 0 && (cabinet.Files[0].FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT
+                            || cabinet.Files[0].FolderIndex == FolderIndex.CONTINUED_FROM_PREV))
                             continue;
                         
                         var folder = cabinet.Folders[f];
@@ -184,10 +184,8 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Move to the next cabinet, if possible
-                    foreach (var folder in cabinet.Folders)
-                    {
-                        folder.DataBlocks = [];
-                    }
+                    Array.ForEach(cabinet.Folders, folder => folder.DataBlocks = []);
+                    
                     cabinet = cabinet.Next;
                     cabinet?.Prev = null;
                     

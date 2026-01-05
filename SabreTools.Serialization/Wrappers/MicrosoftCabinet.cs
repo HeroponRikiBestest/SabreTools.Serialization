@@ -363,29 +363,33 @@ namespace SabreTools.Serialization.Wrappers
             return [.. prevBlocks, .. folder.DataBlocks, .. nextBlocks];
         }
         
+        /// <summary>
+        /// Loads in all the datablocks for the current folder.
+        /// </summary>
+        /// <param name="folder">The folder to have the datablocks loaded for</param>
         public void GetData(CFFOLDER folder)
         {
-            if (folder.CabStartOffset > 0)
+            if (folder.CabStartOffset <= 0)
+                return;
+
+            uint offset = folder.CabStartOffset;
+            for (int i = 0; i < folder.DataCount; i++)
             {
-                uint offset = folder.CabStartOffset;
+                offset += 8;
 
-                for (int i = 0; i < folder.DataCount; i++)
+                if (Header.DataReservedSize > 0)
                 {
-                    offset += 8;
+                    folder.DataBlocks[i].ReservedData = ReadRangeFromSource(offset, Header.DataReservedSize);
+                    offset += Header.DataReservedSize;
+                }
 
-                    if (Header.DataReservedSize > 0)
-                    {
-                        folder.DataBlocks[i].ReservedData = ReadRangeFromSource(offset, Header.DataReservedSize);
-                        offset += Header.DataReservedSize;
-                    }
-
-                    if (folder.DataBlocks[i].CompressedSize > 0)
-                    {
-                        folder.DataBlocks[i].CompressedData = ReadRangeFromSource(offset, folder.DataBlocks[i].CompressedSize);
-                        offset += folder.DataBlocks[i].CompressedSize;
-                    }
+                if (folder.DataBlocks[i].CompressedSize > 0)
+                {
+                    folder.DataBlocks[i].CompressedData = ReadRangeFromSource(offset, folder.DataBlocks[i].CompressedSize);
+                    offset += folder.DataBlocks[i].CompressedSize;
                 }
             }
+            
         }
         
         /// <summary>

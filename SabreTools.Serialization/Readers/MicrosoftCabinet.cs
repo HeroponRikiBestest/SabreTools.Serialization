@@ -205,10 +205,10 @@ namespace SabreTools.Serialization.Readers
             dataBlock.UncompressedSize = data.ReadUInt16LittleEndian();
             
             if (dataReservedSize > 0)
-                data.SeekIfPossible(data.Position + dataReservedSize, SeekOrigin.Begin);
+                data.SeekIfPossible(dataReservedSize, SeekOrigin.Current);
 
             if (dataBlock.CompressedSize > 0)
-                data.SeekIfPossible(data.Position + dataBlock.CompressedSize, SeekOrigin.Begin);
+                data.SeekIfPossible(dataBlock.CompressedSize, SeekOrigin.Current);
             
             return dataBlock;
         }
