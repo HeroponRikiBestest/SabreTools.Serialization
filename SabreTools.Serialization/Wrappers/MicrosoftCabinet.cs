@@ -2,6 +2,7 @@
 using System.IO;
 using SabreTools.Data.Models.MicrosoftCabinet;
 using SabreTools.IO.Compression.MSZIP;
+using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -401,7 +402,7 @@ namespace SabreTools.Serialization.Wrappers
         private CFFILE[] GetSpannedFiles(string? filename, int folderIndex, bool ignorePrev = false, bool skipPrev = false, bool skipNext = false)
         {
             // Ignore invalid archives
-            if (Files == null)
+            if (Files.IsNullOrEmpty())
                 return [];
 
             // Get all files with a name and matching index
