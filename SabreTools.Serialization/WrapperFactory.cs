@@ -53,9 +53,7 @@ namespace SabreTools.Serialization
                 WrapperType.SecuROMDFA => SecuROMDFA.Create(data),
                 WrapperType.SevenZip => SevenZip.Create(data),
                 WrapperType.Skeleton => Skeleton.Create(data),
-#if NET6_0_OR_GREATER
                 WrapperType.SkuSis => SkuSis.Create(data),
-#endif
                 WrapperType.SFFS => SFFS.Create(data),
                 WrapperType.SGA => SGA.Create(data),
                 WrapperType.TapeArchive => TapeArchive.Create(data),

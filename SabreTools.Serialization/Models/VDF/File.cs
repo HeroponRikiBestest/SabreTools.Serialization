@@ -1,5 +1,4 @@
-#if NET6_0_OR_GREATER
-using System.Text.Json.Nodes;
+using Newtonsoft.Json.Linq;
 
 namespace SabreTools.Data.Models.VDF
 {
@@ -18,7 +17,6 @@ namespace SabreTools.Data.Models.VDF
         /// <summary>
         /// A JSON Object representing the VDF structure.
         /// </summary>
-        public JsonObject? VDFObject { get; set; }
+        public JObject? VDFObject { get; set; }
     }
 }
-#endif
