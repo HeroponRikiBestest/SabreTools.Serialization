@@ -1,6 +1,5 @@
-#if NET6_0_OR_GREATER
 using System.IO;
-using System.Text.Json.Nodes;
+using Newtonsoft.Json.Linq;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -19,7 +18,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? Signature => Model.Signature;
         
         /// <inheritdoc cref="Models.VDF.File.VDFObject"/>
-        public JsonObject? VDFObject => Model.VDFObject;
+        public JObject? VDFObject => Model.VDFObject;
 
         #endregion
 
@@ -98,4 +97,3 @@ namespace SabreTools.Serialization.Wrappers
         #endregion
     }
 }
-#endif

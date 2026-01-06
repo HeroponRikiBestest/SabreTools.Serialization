@@ -1,12 +1,10 @@
-#if NET6_0_OR_GREATER
 using System;
 using System.IO;
 using SabreTools.IO.Extensions;
 using File = SabreTools.Data.Models.VDF.File;
 using static SabreTools.Data.Models.VDF.Constants;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
+using Newtonsoft.Json.Linq;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -96,11 +94,9 @@ namespace SabreTools.Serialization.Readers
             }
             
             json += "\n}";
-            var options = new JsonDocumentOptions { AllowTrailingCommas = true};
-            obj.VDFObject = JsonNode.Parse(json, null, options)?.AsObject();
+            obj.VDFObject = JObject.Parse(json);
 
             return obj;
         }
     }
 }
-#endif
