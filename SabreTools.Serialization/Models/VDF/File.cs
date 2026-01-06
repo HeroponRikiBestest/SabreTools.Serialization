@@ -5,6 +5,9 @@ namespace SabreTools.Data.Models.VDF
     /// <summary>
     /// Valve Data File
     /// </summary>
+    /// <remarks>
+    /// Valve's json-like format, used for a variety of things across Steam.
+    /// </remarks>
     /// <see href="https://github.com/ValveResourceFormat/ValveKeyValue"/>
     /// <see href="https://developer.valvesoftware.com/wiki/VDF"/>
     public class File
