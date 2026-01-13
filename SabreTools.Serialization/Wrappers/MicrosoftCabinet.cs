@@ -184,7 +184,7 @@ namespace SabreTools.Serialization.Wrappers
         public Stream? DecompressBlocks(string? filename, CFFOLDER? folder, int folderIndex, bool includeDebug)
         {
             // Ensure data blocks
-            var dataBlocks = GetDataBlocks(filename, folder, folderIndex);
+            var dataBlocks = GetFolders(filename, folder, folderIndex);
             if (dataBlocks == null || dataBlocks.Length == 0)
                 return null;
 
@@ -310,14 +310,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="skipPrev">Indicates if previous cabinets should be ignored</param>
         /// <param name="skipNext">Indicates if next cabinets should be ignored</param>
         /// <returns>Array of data blocks on success, null otherwise</returns>
-        private CFDATA[]? GetDataBlocks(string? filename, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
+        private Tuple<string, CFFOLDER, int>[]? GetFolders(string? filename, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
         {
             // Skip invalid folders
-            if (folder?.DataBlocks == null || folder.DataBlocks.Length == 0)
+            if (folder == null || folder.DataCount == 0)
                 return null;
-
-            GetData(folder);
-
+            
             // Get all files for the folder
             var files = GetFiles(folderIndex);
             if (files.Length == 0)
@@ -340,7 +338,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     int prevFolderIndex = Prev.FolderCount - 1;
                     var prevFolder = Prev.Folders[prevFolderIndex - 1];
-                    prevBlocks = Prev.GetDataBlocks(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
+                    prevBlocks = Prev.GetFolders(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
                 }
             }
 
@@ -356,40 +354,12 @@ namespace SabreTools.Serialization.Wrappers
                 if (Next?.Header != null && Next.Folders != null)
                 {
                     var nextFolder = Next.Folders[0];
-                    nextBlocks = Next.GetDataBlocks(filename, nextFolder, 0, skipPrev: true) ?? [];
+                    nextBlocks = Next.GetFolders(filename, nextFolder, 0, skipPrev: true) ?? [];
                 }
             }
 
             // Return all found blocks in order
             return [.. prevBlocks, .. folder.DataBlocks, .. nextBlocks];
-        }
-
-        /// <summary>
-        /// Loads in all the datablocks for the current folder.
-        /// </summary>
-        /// <param name="folder">The folder to have the datablocks loaded for</param>
-        public void GetData(CFFOLDER folder)
-        {
-            if (folder.CabStartOffset <= 0)
-                return;
-
-            uint offset = folder.CabStartOffset;
-            for (int i = 0; i < folder.DataCount; i++)
-            {
-                offset += 8;
-
-                if (Header.DataReservedSize > 0)
-                {
-                    folder.DataBlocks[i].ReservedData = ReadRangeFromSource(offset, Header.DataReservedSize);
-                    offset += Header.DataReservedSize;
-                }
-
-                if (folder.DataBlocks[i].CompressedSize > 0)
-                {
-                    folder.DataBlocks[i].CompressedData = ReadRangeFromSource(offset, folder.DataBlocks[i].CompressedSize);
-                    offset += folder.DataBlocks[i].CompressedSize;
-                }
-            }
         }
 
         /// <summary>
