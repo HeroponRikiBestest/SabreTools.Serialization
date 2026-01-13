@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.MicrosoftCabinet;
 using SabreTools.IO.Extensions;
+using SabreTools.IO.Compression.MSZIP;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -161,6 +162,8 @@ namespace SabreTools.Serialization.Wrappers
                 cabinet = OpenSet(Filename);
                 ignorePrev = true;
             }
+            
+            // TODO: first folder idk
 
             // If the archive is invalid
             if (cabinet?.Folders == null || cabinet.Folders.Length == 0)
@@ -184,10 +187,13 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Move to the next cabinet, if possible
+
+                    /*
                     Array.ForEach(cabinet.Folders, folder => folder.DataBlocks = []);
+                    */
 
                     cabinet = cabinet.Next;
-                    cabinet?.Prev = null;
+                    /*cabinet?.Prev = null;*/
 
                     // TODO: already-extracted data isn't being cleared from memory, at least not nearly enough.
                     if (cabinet?.Folders == null || cabinet.Folders.Length == 0)
@@ -220,10 +226,6 @@ namespace SabreTools.Serialization.Wrappers
             bool ignorePrev,
             bool includeDebug)
         {
-            // Decompress the blocks, if possible
-            using var blockStream = DecompressBlocks(filename, folder, folderIndex, includeDebug);
-            if (blockStream == null || blockStream.Length == 0)
-                return false;
 
             // Loop through the files
             bool allExtracted = true;
@@ -246,11 +248,15 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             CFFILE[] files = fileList.ToArray();
-            blockStream.SeekIfPossible(0, SeekOrigin.Begin);
+            byte[] leftoverBytes = [];
+            if (folder == null) // TODO: this should never happen
+                return false;
+            
+            this._dataSource.SeekIfPossible(folder.CabStartOffset, SeekOrigin.Begin);
             for (int i = 0; i < files.Length; i++)
             {
                 var file = files[i];
-                allExtracted &= ExtractFiles(outputDirectory, blockStream, file, includeDebug);
+                allExtracted &= ExtractFiles(outputDirectory, folder, file, ref leftoverBytes, includeDebug);
             }
 
             return allExtracted;
@@ -265,11 +271,11 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="file">File information</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the file extracted, false otherwise</returns>
-        private static bool ExtractFiles(string outputDirectory, Stream blockStream, CFFILE file, bool includeDebug)
+        private bool ExtractFiles(string outputDirectory, CFFOLDER? folder, CFFILE file, ref byte[] leftoverBytes, bool includeDebug)
         {
             try
             {
-                byte[] fileData = blockStream.ReadBytes((int)file.FileSize);
+                // byte[] fileData = blockStream.ReadBytes((int)file.FileSize);
 
                 // Ensure directory separators are consistent
                 string filename = file.Name;
@@ -286,7 +292,173 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Open the output file for writing
                 using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-                fs.Write(fileData, 0, fileData.Length);
+                
+#region workregion
+
+                // Ensure folder contains data
+                // TODO: does this ever fail on spanned only folders or something
+                if (folder == null || folder.DataCount == 0)
+                    return false;
+
+                // Get the compression type
+                var compressionType = GetCompressionType(folder!);
+
+                // Setup decompressors
+                var mszip = Decompressor.Create();
+                //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
+
+                // Loop through the data blocks
+
+                MicrosoftCabinet cabinet = this;
+                
+                int cabinetCount = 1;
+                if (this.Files[this.FileCount - 1].FolderIndex == FolderIndex.CONTINUED_TO_NEXT)
+                {
+                    cabinetCount++;
+                    MicrosoftCabinet? tempCabinet = this.Next;  // TODO: what do you do if this is null, it shouldn't be
+                    while (tempCabinet?.Files[0].FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT)
+                    {
+                        cabinetCount++;
+                        tempCabinet = tempCabinet.Next;
+                    }
+                }
+                
+                // TODO: do continued spanned folders ever contain another file beyond the one spanned one
+
+                
+                CFFOLDER currentFolder = folder;
+                int currentCabinetCount = 0;
+                bool continuedBlock = false;
+                bool fileFinished = false;
+                CFDATA continuedDataBlock = new CFDATA(); // TODO: this wont work because it resets i think. Another ref? do in main buffer
+                // TODO: these probably dont need to be longs, they were ints before
+                int filesize = (int)file.FileSize;
+                int extractedSize = 0;
+                while (currentCabinetCount < cabinetCount)
+                {
+                    lock (cabinet._dataSourceLock)
+                    {
+                        if (currentFolder.CabStartOffset <= 0)
+                            return false;   // TODO: why is a CabStartOffset of 0 not acceptable? header? 
+                        
+                        /*long currentPosition = cabinet._dataSource.Position;*/
+
+                        for (int i = 0; i < currentFolder.DataCount; i++)
+                        {
+                            if (leftoverBytes.Length > 0)
+                            {
+                                int writeSize = Math.Min(leftoverBytes.Length, filesize - extractedSize);
+                                byte[] tempLeftoverBytes = (byte[])leftoverBytes.Clone();
+                                if (writeSize < leftoverBytes.Length)
+                                {
+                                    leftoverBytes = new byte[leftoverBytes.Length - writeSize];
+                                    Array.Copy(tempLeftoverBytes, writeSize, leftoverBytes, 0, leftoverBytes.Length);
+                                }
+                                else
+                                {
+                                    leftoverBytes = [];
+                                }
+                                fs.Write(tempLeftoverBytes, 0, writeSize);
+                                extractedSize += tempLeftoverBytes.Length;
+                                if (extractedSize >= filesize)
+                                {
+                                    fileFinished = true;
+                                    break;
+                                }
+                            }
+                            // TODO: wire up
+                            var db = new CFDATA();
+                            
+                            var dataReservedSize = cabinet.Header.DataReservedSize;
+
+                            db.Checksum = cabinet._dataSource.ReadUInt32LittleEndian();
+                            db.CompressedSize = cabinet._dataSource.ReadUInt16LittleEndian();
+                            db.UncompressedSize = cabinet._dataSource.ReadUInt16LittleEndian();
+
+                            if (dataReservedSize > 0)
+                                db.ReservedData = cabinet._dataSource.ReadBytes(dataReservedSize);
+
+                            if (db.CompressedSize > 0)
+                                db.CompressedData = cabinet._dataSource.ReadBytes(db.CompressedSize);
+                            
+                            /*data.SeekIfPossible(currentPosition, SeekOrigin.Begin);*/
+
+                            // Get the data to be processed
+                            byte[] blockData = db.CompressedData;
+
+                            // If the block is continued, append
+                            if (db.UncompressedSize == 0)
+                            {
+                                // TODO: is this a correct assumption at all
+
+                                continuedBlock = true;
+                                continuedDataBlock = db;
+                            }
+                            else
+                            {
+                                if (continuedBlock)
+                                {
+                                    // TODO: why was there a continue if compressed data is null here
+                                    continuedBlock = false;
+                                    db.CompressedData = [.. continuedDataBlock.CompressedData, .. blockData];
+                                    db.CompressedSize += continuedDataBlock.CompressedSize;
+                                    db.UncompressedSize = continuedDataBlock.UncompressedSize;
+                                    continuedDataBlock = new CFDATA();
+                                }
+                                
+                                // Get the uncompressed data block
+                                byte[] data = compressionType switch
+                                {
+                                    CompressionType.TYPE_NONE => blockData,
+                                    CompressionType.TYPE_MSZIP => DecompressMSZIPBlock(currentCabinetCount, mszip, i, db, blockData,
+                                        includeDebug),
+
+                                    // TODO: Unsupported
+                                    CompressionType.TYPE_QUANTUM => [],
+                                    CompressionType.TYPE_LZX => [],
+
+                                    // Should be impossible
+                                    _ => [],
+                                };
+                                int writeSize = Math.Min(data.Length, filesize - extractedSize );
+                                if (writeSize < data.Length)
+                                {
+                                    leftoverBytes = new byte[data.Length - writeSize];
+                                    Array.Copy(data, writeSize, leftoverBytes, 0, leftoverBytes.Length);
+                                }
+                                fs.Write(data, 0, writeSize);
+                                extractedSize += data.Length;
+                                if (extractedSize >= filesize)
+                                {
+                                    fileFinished = true;
+                                    break;
+                                }
+                                // TODO: do i ever need to flush before the end of the file?
+                            }
+                        }
+                    }
+
+                    if (fileFinished)
+                        break;
+                    
+                    // TODO: does this running unnecessarily on unspanned folders cause issues
+                    // TODO: spanned folders are only across cabs and never within cabs, right
+
+                    if (cabinet.Next == null) 
+                        break;
+
+                    if (currentCabinetCount == cabinetCount - 1)
+                        break;
+                    
+                    cabinet = cabinet.Next;
+                    cabinet._dataSource.SeekIfPossible(currentFolder.CabStartOffset, SeekOrigin.Begin);
+                    currentFolder = cabinet.Folders[0];
+                    currentCabinetCount++;
+                }
+
+#endregion
+                
+                //fs.Write(fileData, 0, fileData.Length);
                 fs.Flush();
             }
             catch (Exception ex)

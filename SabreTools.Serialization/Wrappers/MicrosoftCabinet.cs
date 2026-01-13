@@ -174,78 +174,6 @@ namespace SabreTools.Serialization.Wrappers
         #region Folders
 
         /// <summary>
-        /// Decompress all blocks for a folder
-        /// </summary>
-        /// <param name="filename">Filename for one cabinet in the set, if available</param>
-        /// <param name="folder">Folder containing the blocks to decompress</param>
-        /// <param name="folderIndex">Index of the folder in the cabinet</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>Stream representing the decompressed data on success, null otherwise</returns>
-        public Stream? DecompressBlocks(string? filename, CFFOLDER? folder, int folderIndex, bool includeDebug)
-        {
-            // Ensure data blocks
-            var dataBlocks = GetDataBlocks(filename, folder, folderIndex);
-            if (dataBlocks == null || dataBlocks.Length == 0)
-                return null;
-
-            // Get the compression type
-            var compressionType = GetCompressionType(folder!);
-
-            // Setup decompressors
-            var mszip = Decompressor.Create();
-            //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
-
-            // Loop through the data blocks
-            var ms = new MemoryStream();
-            for (int i = 0; i < dataBlocks.Length; i++)
-            {
-                // TODO: wire up
-                var db = dataBlocks[i];
-
-                // Get the data to be processed
-                byte[] blockData = db.CompressedData;
-
-                // If the block is continued, append
-                bool continuedBlock = false;
-                if (db.UncompressedSize == 0)
-                {
-                    var nextBlock = dataBlocks[i + 1];
-                    byte[]? nextData = nextBlock.CompressedData;
-                    if (nextData == null)
-                        continue;
-
-                    continuedBlock = true;
-                    blockData = [.. blockData, .. nextData];
-                    db.CompressedSize += nextBlock.CompressedSize;
-                    db.UncompressedSize = nextBlock.UncompressedSize;
-                }
-
-                // Get the uncompressed data block
-                byte[] data = compressionType switch
-                {
-                    CompressionType.TYPE_NONE => blockData,
-                    CompressionType.TYPE_MSZIP => DecompressMSZIPBlock(folderIndex, mszip, i, db, blockData, includeDebug),
-
-                    // TODO: Unsupported
-                    CompressionType.TYPE_QUANTUM => [],
-                    CompressionType.TYPE_LZX => [],
-
-                    // Should be impossible
-                    _ => [],
-                };
-
-                // Write the uncompressed data block
-                ms.Write(data, 0, data.Length);
-                ms.Flush();
-
-                // Increment additionally if we had a continued block
-                if (continuedBlock) i++;
-            }
-
-            return ms;
-        }
-
-        /// <summary>
         /// Decompress an MS-ZIP block using an existing decompressor
         /// </summary>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
@@ -311,7 +239,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="skipPrev">Indicates if previous cabinets should be ignored</param>
         /// <param name="skipNext">Indicates if next cabinets should be ignored</param>
         /// <returns>Array of data blocks on success, null otherwise</returns>
-        private FolderTuple?[] GetDataBlocks(string? filename, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
+        private FolderTuple?[] GetFolders(string? filename, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
         {
             // Skip invalid folders
             if (folder?.DataBlocks == null || folder.DataBlocks.Length == 0)
@@ -352,7 +280,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     int prevFolderIndex = Prev.FolderCount - 1;
                     var prevFolder = Prev.Folders[prevFolderIndex - 1];
-                    prevFolderTuples = Prev.GetDataBlocks(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
+                    prevFolderTuples = Prev.GetFolders(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
                 }
             }
 
@@ -368,7 +296,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (Next?.Header != null && Next.Folders != null)
                 {
                     var nextFolder = Next.Folders[0];
-                    nextFolderTuples = Next.GetDataBlocks(filename, nextFolder, 0, skipPrev: true) ?? [];
+                    nextFolderTuples = Next.GetFolders(filename, nextFolder, 0, skipPrev: true) ?? [];
                 }
             }
 
