@@ -184,7 +184,7 @@ namespace SabreTools.Serialization.Wrappers
         public Stream? DecompressBlocks(string? filename, CFFOLDER? folder, int folderIndex, bool includeDebug)
         {
             // Ensure data blocks
-            var dataBlocks = GetFolders(filename, folder, folderIndex);
+            var dataBlocks = GetDataBlocks(filename, folder, folderIndex);
             if (dataBlocks == null || dataBlocks.Length == 0)
                 return null;
 
@@ -199,6 +199,7 @@ namespace SabreTools.Serialization.Wrappers
             var ms = new MemoryStream();
             for (int i = 0; i < dataBlocks.Length; i++)
             {
+                // TODO: wire up
                 var db = dataBlocks[i];
 
                 // Get the data to be processed
@@ -310,23 +311,36 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="skipPrev">Indicates if previous cabinets should be ignored</param>
         /// <param name="skipNext">Indicates if next cabinets should be ignored</param>
         /// <returns>Array of data blocks on success, null otherwise</returns>
-        private Tuple<string, CFFOLDER, int>[]? GetFolders(string? filename, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
+        private FolderTuple?[] GetDataBlocks(string? filename, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
         {
             // Skip invalid folders
-            if (folder == null || folder.DataCount == 0)
-                return null;
+            if (folder?.DataBlocks == null || folder.DataBlocks.Length == 0)
+                return [];
             
             // Get all files for the folder
             var files = GetFiles(folderIndex);
             if (files.Length == 0)
-                return folder.DataBlocks;
+                return [];
+            
+            FolderTuple?[] folderTuple = new FolderTuple[1];
+            folderTuple[0] = null;
 
+            if (filename != null && folder != null)
+            {
+                folderTuple[0] = new FolderTuple
+                {
+                    Filename = filename,
+                    Folder = folder,
+                    FolderIndex = folderIndex
+                };
+            }
+            
             // Check if the folder spans in either direction
             bool spanPrev = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
             bool spanNext = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_TO_NEXT || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
 
             // If the folder spans backward and Prev is not being skipped
-            CFDATA[] prevBlocks = [];
+            FolderTuple?[] prevFolderTuples = [];
             if (!skipPrev && spanPrev)
             {
                 // Try to get Prev if it doesn't exist
@@ -338,12 +352,12 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     int prevFolderIndex = Prev.FolderCount - 1;
                     var prevFolder = Prev.Folders[prevFolderIndex - 1];
-                    prevBlocks = Prev.GetFolders(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
+                    prevFolderTuples = Prev.GetDataBlocks(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
                 }
             }
 
             // If the folder spans forward and Next is not being skipped
-            CFDATA[] nextBlocks = [];
+            FolderTuple?[] nextFolderTuples = [];
             if (!skipNext && spanNext)
             {
                 // Try to get Next if it doesn't exist
@@ -354,12 +368,12 @@ namespace SabreTools.Serialization.Wrappers
                 if (Next?.Header != null && Next.Folders != null)
                 {
                     var nextFolder = Next.Folders[0];
-                    nextBlocks = Next.GetFolders(filename, nextFolder, 0, skipPrev: true) ?? [];
+                    nextFolderTuples = Next.GetDataBlocks(filename, nextFolder, 0, skipPrev: true) ?? [];
                 }
             }
 
             // Return all found blocks in order
-            return [.. prevBlocks, .. folder.DataBlocks, .. nextBlocks];
+            return [.. prevFolderTuples, .. folderTuple, .. nextFolderTuples];
         }
 
         /// <summary>
