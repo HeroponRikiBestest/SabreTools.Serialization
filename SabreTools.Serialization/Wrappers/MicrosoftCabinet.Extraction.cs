@@ -253,10 +253,12 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
             
             this._dataSource.SeekIfPossible(folder.CabStartOffset, SeekOrigin.Begin);
+            // Setup decompressors
+            var mszip = Decompressor.Create();
             for (int i = 0; i < files.Length; i++)
             {
                 var file = files[i];
-                allExtracted &= ExtractFiles(outputDirectory, folder, file, ref leftoverBytes, includeDebug);
+                allExtracted &= ExtractFiles(outputDirectory, folder, file, ref leftoverBytes, mszip, includeDebug);
             }
 
             return allExtracted;
@@ -271,7 +273,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="file">File information</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if the file extracted, false otherwise</returns>
-        private bool ExtractFiles(string outputDirectory, CFFOLDER? folder, CFFILE file, ref byte[] leftoverBytes, bool includeDebug)
+        private bool ExtractFiles(string outputDirectory, CFFOLDER? folder, CFFILE file, ref byte[] leftoverBytes, Decompressor mszip, bool includeDebug)
         {
             try
             {
@@ -303,8 +305,6 @@ namespace SabreTools.Serialization.Wrappers
                 // Get the compression type
                 var compressionType = GetCompressionType(folder!);
 
-                // Setup decompressors
-                var mszip = Decompressor.Create();
                 //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
 
                 // Loop through the data blocks
@@ -393,16 +393,31 @@ namespace SabreTools.Serialization.Wrappers
 
                                 continuedBlock = true;
                                 continuedDataBlock = db;
+                                
+                                // TODO: these really need to never happen
+                                if (cabinet.Next == null) 
+                                    break;
+
+                                if (currentCabinetCount == cabinetCount - 1)
+                                    break;
+                    
+                                cabinet = cabinet.Next;
+                                cabinet._dataSource.SeekIfPossible(currentFolder.CabStartOffset, SeekOrigin.Begin);
+                                currentFolder = cabinet.Folders[0];
+                                currentCabinetCount++;
                             }
                             else
                             {
                                 if (continuedBlock)
                                 {
+                                    var nextBlock = db;
+                                    db = continuedDataBlock;
                                     // TODO: why was there a continue if compressed data is null here
                                     continuedBlock = false;
-                                    db.CompressedData = [.. continuedDataBlock.CompressedData, .. blockData];
-                                    db.CompressedSize += continuedDataBlock.CompressedSize;
-                                    db.UncompressedSize = continuedDataBlock.UncompressedSize;
+                                    byte[]? nextData = nextBlock.CompressedData;
+                                    blockData = [.. blockData, .. nextData];
+                                    db.CompressedSize += nextBlock.CompressedSize;
+                                    db.UncompressedSize = nextBlock.UncompressedSize;
                                     continuedDataBlock = new CFDATA();
                                 }
                                 
