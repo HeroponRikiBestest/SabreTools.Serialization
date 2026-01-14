@@ -203,6 +203,13 @@ namespace SabreTools.Serialization.Wrappers
             return cabinet.ExtractSet(Filename, outputDirectory, ignorePrev, includeDebug);
         }
 
+        /// <summary>
+        /// Get filtered array of spanned files for a folder
+        /// </summary>
+        /// <param name="filename">Filename for one cabinet in the set, if available</param>
+        /// <param name="f">Index of the folder in the cabinet</param>
+        /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
+        /// <returns>Filtered array of files</returns>
         private CFFILE[] GetSpannedFilesArray(string? filename, int f, bool ignorePrev)
         {
             // Loop through the files
@@ -227,10 +234,14 @@ namespace SabreTools.Serialization.Wrappers
             return fileList.ToArray();
         }
 
+        /// <summary>
+        /// Get filestream for a file to be extracted to
+        /// </summary>
+        /// <param name="filename">Filename for the file that will be extracted to</param>
+        /// <param name="outputDirectory">Path to the output directory</param>
+        /// <returns>Filestream for the file to be extracted to</returns>
         private FileStream GetFileStream(string filename, string outputDirectory)
         {
-            // byte[] fileData = blockStream.ReadBytes((int)file.FileSize);
-
             // Ensure directory separators are consistent
             if (Path.DirectorySeparatorChar == '\\')
                 filename = filename.Replace('/', '\\');
@@ -247,6 +258,11 @@ namespace SabreTools.Serialization.Wrappers
             return File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
         }
 
+        /// <summary>
+        /// Read a datablock from a cabinet
+        /// </summary>
+        /// <param name="cabinet">Cabinet to be read from</param>
+        /// <returns>Read datablock</returns>
         private CFDATA ReadBlock(MicrosoftCabinet cabinet)
         {
             var db = new CFDATA();
