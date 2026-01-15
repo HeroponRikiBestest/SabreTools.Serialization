@@ -159,6 +159,23 @@ namespace SabreTools.Serialization.Wrappers
                 cabinet = OpenSet(Filename);
                 ignorePrev = true;
                 
+                // TOOD: reenable after confirming rollback is good
+                /*
+                if (cabinet == null) // TODO: handle better
+                    return false;
+                
+                // If we have anything but the first file, avoid extraction to avoid repeat extracts
+                // TODO: handle partial sets
+                // TODO: is there any way for this to not spam the logs on large sets? probably not, but idk
+                if (this.Filename != cabinet.Filename)
+                {
+                    string firstCabName = Path.GetFileName(cabinet.Filename) ?? string.Empty;
+                    if (includeDebug) Console.WriteLine($"Only the first cabinet {firstCabName} will be extracted!");
+                    return false;
+                }
+                */
+
+                
                 // Display warning in debug runs
                 if (includeDebug && cabinet != null)
                 {
@@ -388,10 +405,24 @@ namespace SabreTools.Serialization.Wrappers
                                         // Should be impossible
                                         _ => [],
                                     };
+                                    
+                                    // TODO: will 0 byte files mess things up
                                     if (bytesLeft > 0 && bytesLeft >= data.Length)
                                     {
                                         fs.Write(data);
                                         bytesLeft -= data.Length;
+                                        if (bytesLeft == 0)  // Edge case on http://redump.org/disc/107833/
+                                        {
+                                            fs.Close();
+
+                                            // reached end of folder
+                                            if (fileCounter + 1 == files.Length)
+                                                break;
+
+                                            file = files[++fileCounter];
+                                            bytesLeft = (int)file.FileSize;
+                                            fs = GetFileStream(file.Name, outputDirectory);
+                                        }
                                     }
                                     else if (bytesLeft > 0 && bytesLeft < data.Length)
                                     {
@@ -425,7 +456,17 @@ namespace SabreTools.Serialization.Wrappers
                                         fs.Write(data, tempBytesLeft, data.Length - tempBytesLeft);
                                         bytesLeft -= (data.Length - tempBytesLeft);
                                         if (bytesLeft == 0) // Edge case on the final file of the final cab of https://dbox.tools/titles/pc/57520FA0/ 
+                                        {
                                             fs.Close();
+
+                                            // reached end of folder
+                                            if (fileCounter + 1 == files.Length)
+                                                break;
+
+                                            file = files[++fileCounter];
+                                            bytesLeft = (int)file.FileSize;
+                                            fs = GetFileStream(file.Name, outputDirectory);
+                                        }
                                     }
                                     else // TODO: find something that can actually trigger this case
                                     {
@@ -452,12 +493,22 @@ namespace SabreTools.Serialization.Wrappers
                                             file = files[++fileCounter];
                                             bytesLeft = (int)file.FileSize;
                                             fs = GetFileStream(file.Name, outputDirectory);
-                                            if (bytesLeft == 0) // This case is not currently observed, but presumably it can also happen like above 
-                                                fs.Close();
                                         }
 
                                         fs.Write(data, tempBytesLeft, data.Length - tempBytesLeft);
                                         bytesLeft -= (data.Length - tempBytesLeft);
+                                        if (bytesLeft == 0) // This case is not currently observed, but presumably it can also happen like above 
+                                        {
+                                            fs.Close();
+
+                                            // reached end of folder
+                                            if (fileCounter + 1 == files.Length)
+                                                break;
+
+                                            file = files[++fileCounter];
+                                            bytesLeft = (int)file.FileSize;
+                                            fs = GetFileStream(file.Name, outputDirectory);
+                                        }
                                     }
 
                                     // TODO: do i ever need to flush before the end of the file?
