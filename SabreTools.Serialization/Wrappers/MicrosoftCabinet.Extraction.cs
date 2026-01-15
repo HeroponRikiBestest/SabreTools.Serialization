@@ -184,7 +184,7 @@ namespace SabreTools.Serialization.Wrappers
                     while (true) // this feels unsafe, but the existing code already did it
                     {
                         for (int i = 0; i < tempCabinet.FolderCount; i++)
-                            compressionTypes.Add(tempCabinet.Folders[i].CompressionType & CompressionType.MASK_TYPE); // TODO: what is this mask for?
+                            compressionTypes.Add(GetCompressionType(tempCabinet.Folders[i]));
                         
                         tempCabinet = tempCabinet.Next;
                         
@@ -335,15 +335,17 @@ namespace SabreTools.Serialization.Wrappers
                         var mszip = Decompressor.Create();
                         try
                         {
-                            var fs = GetFileStream(file.Name, outputDirectory);
-                            
                             // Ensure folder contains data
                             // TODO: does this fail on spanned only folders or something? when would this happen
                             if (folder.DataCount == 0)
                                 return false;
 
-                            // Get the compression type
+                            // Skip unsupported compression types to avoid opening a blank filestream. This can be altered/removed if these types are ever supported.
                             var compressionType = GetCompressionType(folder);
+                            if (compressionType == CompressionType.TYPE_QUANTUM || compressionType == CompressionType.TYPE_LZX)
+                                continue;
+                            
+                            var fs = GetFileStream(file.Name, outputDirectory);
 
                             // TODO: what is this comment here for
                             //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
@@ -374,7 +376,8 @@ namespace SabreTools.Serialization.Wrappers
                                         tempCabinet = tempCabinet.Next;
                                         if (tempCabinet == null) // TODO: handle better?
                                             return false;
-
+                                        
+                                        // Compressiontype not updated because there's no way it's possible that it can swap on continued blocks
                                         folder = tempCabinet.Folders[0];
                                         lock (tempCabinet._dataSourceLock)
                                         {
