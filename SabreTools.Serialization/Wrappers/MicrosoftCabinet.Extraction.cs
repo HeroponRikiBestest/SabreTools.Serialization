@@ -411,18 +411,6 @@ namespace SabreTools.Serialization.Wrappers
                                     {
                                         fs.Write(data);
                                         bytesLeft -= data.Length;
-                                        if (bytesLeft == 0)  // Edge case on http://redump.org/disc/107833/
-                                        {
-                                            fs.Close();
-
-                                            // reached end of folder
-                                            if (fileCounter + 1 == files.Length)
-                                                break;
-
-                                            file = files[++fileCounter];
-                                            bytesLeft = (int)file.FileSize;
-                                            fs = GetFileStream(file.Name, outputDirectory);
-                                        }
                                     }
                                     else if (bytesLeft > 0 && bytesLeft < data.Length)
                                     {
@@ -455,18 +443,6 @@ namespace SabreTools.Serialization.Wrappers
 
                                         fs.Write(data, tempBytesLeft, data.Length - tempBytesLeft);
                                         bytesLeft -= (data.Length - tempBytesLeft);
-                                        if (bytesLeft == 0) // Edge case on the final file of the final cab of https://dbox.tools/titles/pc/57520FA0/ 
-                                        {
-                                            fs.Close();
-
-                                            // reached end of folder
-                                            if (fileCounter + 1 == files.Length)
-                                                break;
-
-                                            file = files[++fileCounter];
-                                            bytesLeft = (int)file.FileSize;
-                                            fs = GetFileStream(file.Name, outputDirectory);
-                                        }
                                     }
                                     else // TODO: find something that can actually trigger this case
                                     {
@@ -497,18 +473,20 @@ namespace SabreTools.Serialization.Wrappers
 
                                         fs.Write(data, tempBytesLeft, data.Length - tempBytesLeft);
                                         bytesLeft -= (data.Length - tempBytesLeft);
-                                        if (bytesLeft == 0) // This case is not currently observed, but presumably it can also happen like above 
-                                        {
-                                            fs.Close();
+                                    }
+                                    
+                                    // Top if block occurs on http://redump.org/disc/107833/ , middle on https://dbox.tools/titles/pc/57520FA0 , bottom still unobserved
+                                    while (bytesLeft == 0)
+                                    {
+                                        fs.Close();
 
-                                            // reached end of folder
-                                            if (fileCounter + 1 == files.Length)
-                                                break;
+                                        // reached end of folder
+                                        if (fileCounter + 1 == files.Length)
+                                            break;
 
-                                            file = files[++fileCounter];
-                                            bytesLeft = (int)file.FileSize;
-                                            fs = GetFileStream(file.Name, outputDirectory);
-                                        }
+                                        file = files[++fileCounter];
+                                        bytesLeft = (int)file.FileSize;
+                                        fs = GetFileStream(file.Name, outputDirectory);
                                     }
 
                                     // TODO: do i ever need to flush before the end of the file?
