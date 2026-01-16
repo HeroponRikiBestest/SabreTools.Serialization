@@ -477,7 +477,8 @@ namespace SabreTools.Serialization.Wrappers
                                     }
                                     
                                     // Top if block occurs on http://redump.org/disc/107833/ , middle on https://dbox.tools/titles/pc/57520FA0 , bottom still unobserved
-                                    // While loop since this also handles 0 byte files.
+                                    // While loop since this also handles 0 byte files. Example file seen in http://redump.org/disc/93312/ , cab Group17.cab, file TRACKSLOC6DYNTEX_BIN
+                                    // TODO: make sure that file is actually supposed to be 0 bytes. 7z also extracts it as 0 bytes, so it probably is, but it's good to make sure.
                                     while (bytesLeft == 0)
                                     {
                                         fs.Close();
