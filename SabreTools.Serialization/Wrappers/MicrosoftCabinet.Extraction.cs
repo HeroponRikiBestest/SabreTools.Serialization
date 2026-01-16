@@ -31,8 +31,9 @@ namespace SabreTools.Serialization.Wrappers
         /// Open a cabinet set for reading, if possible
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set</param>
+        /// <param name="includeDebug"></param>
         /// <returns>Wrapper representing the set, null on error</returns>
-        private static MicrosoftCabinet? OpenSet(string? filename)
+        private static MicrosoftCabinet? OpenSet(string? filename, bool includeDebug)
         {
             // If the file is invalid
             if (string.IsNullOrEmpty(filename))
@@ -53,7 +54,7 @@ namespace SabreTools.Serialization.Wrappers
             while (current.CabinetPrev != null)
             {
                 // Attempt to open the previous cabinet
-                var prev = current.OpenPrevious(filename);
+                var prev = current.OpenPrevious(filename, includeDebug);
                 if (prev?.Header == null)
                     break;
 
@@ -72,7 +73,7 @@ namespace SabreTools.Serialization.Wrappers
                     break;
 
                 // Open the next cabinet and try to parse
-                var next = current.OpenNext(filename);
+                var next = current.OpenNext(filename, includeDebug);
                 if (next?.Header == null)
                     break;
 
@@ -90,7 +91,8 @@ namespace SabreTools.Serialization.Wrappers
         /// Open the next archive, if possible
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set</param>
-        private MicrosoftCabinet? OpenNext(string? filename)
+        /// <param name="includeDebug"></param>
+        private MicrosoftCabinet? OpenNext(string? filename, bool includeDebug)
         {
             // Ignore invalid archives
             if (string.IsNullOrEmpty(filename))
@@ -104,21 +106,33 @@ namespace SabreTools.Serialization.Wrappers
             if (string.IsNullOrEmpty(next))
                 return null;
 
+            string baseNext = next!;
+            
             // Get the full next path
             string? folder = Path.GetDirectoryName(filename);
             if (folder != null)
                 next = Path.Combine(folder, next);
 
             // Open and return the next cabinet
-            var fs = File.Open(next, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            return Create(fs);
+            // Catch exceptions due to file not existing, etc
+            try
+            {
+                var fs = File.Open(next, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                return Create(fs);
+            }
+            catch
+            {
+                if (includeDebug) Console.WriteLine($"Error: Cabinet set part {baseNext} could not be opened!");
+                return null;
+            }
         }
 
         /// <summary>
         /// Open the previous archive, if possible
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set</param>
-        private MicrosoftCabinet? OpenPrevious(string? filename)
+        /// <param name="includeDebug"></param>
+        private MicrosoftCabinet? OpenPrevious(string? filename, bool includeDebug)
         {
             // Ignore invalid archives
             if (string.IsNullOrEmpty(filename))
@@ -132,14 +146,25 @@ namespace SabreTools.Serialization.Wrappers
             if (string.IsNullOrEmpty(prev))
                 return null;
 
+            string basePrev = prev!;
+            
             // Get the full next path
             string? folder = Path.GetDirectoryName(filename);
             if (folder != null)
                 prev = Path.Combine(folder, prev);
 
             // Open and return the previous cabinet
-            var fs = File.Open(prev, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            return Create(fs);
+            // Catch exceptions due to file not existing, etc
+            try
+            {
+                var fs = File.Open(prev, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                return Create(fs);
+            }
+            catch
+            {
+                if (includeDebug) Console.WriteLine($"Error: Cabinet set part {basePrev} could not be opened!");
+                return null;
+            }
         }
 
         #endregion
@@ -156,7 +181,7 @@ namespace SabreTools.Serialization.Wrappers
             var cabinet = this;
             if (Filename != null)
             {
-                cabinet = OpenSet(Filename);
+                cabinet = OpenSet(Filename, includeDebug);
                 ignorePrev = true;
                 
                 // TOOD: reenable after confirming rollback is good
@@ -225,11 +250,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="filename">Filename for one cabinet in the set, if available</param>
         /// <param name="f">Index of the folder in the cabinet</param>
         /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
+        /// <param name="includeDebug"></param>
         /// <returns>Filtered array of files</returns>
-        private CFFILE[] GetSpannedFilesArray(string? filename, int f, bool ignorePrev)
+        private CFFILE[] GetSpannedFilesArray(string? filename, int f, bool ignorePrev, bool includeDebug)
         {
             // Loop through the files
-            var filterFiles = GetSpannedFiles(filename, f, ignorePrev);
+            var filterFiles = GetSpannedFiles(filename, f, includeDebug, ignorePrev);
             List<CFFILE> fileList = [];
 
             // Filtering, add debug output eventually
@@ -279,23 +305,34 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="cabinet">Cabinet to be read from</param>
         /// <returns>Read datablock</returns>
-        private CFDATA ReadBlock(MicrosoftCabinet cabinet)
+        private CFDATA? ReadBlock(MicrosoftCabinet cabinet)
         {
-            var db = new CFDATA();
+            // Should only ever occur if it tries to read more than the file, but good to catch in general
+            // TODO: does putting this in a try-catch block slow things down? Thousands of readblocks will get called for any cab
+            // TODO: Since the file is certainly messed up in some way if this fails, should it be deleted in case it causes cascading issues for BOS? Probably not, but idk
+            try 
+            {
+                var db = new CFDATA();
 
-            var dataReservedSize = cabinet.Header.DataReservedSize;
+                var dataReservedSize = cabinet.Header.DataReservedSize;
 
-            db.Checksum = cabinet._dataSource.ReadUInt32LittleEndian();
-            db.CompressedSize = cabinet._dataSource.ReadUInt16LittleEndian();
-            db.UncompressedSize = cabinet._dataSource.ReadUInt16LittleEndian();
+                db.Checksum = cabinet._dataSource.ReadUInt32LittleEndian();
+                db.CompressedSize = cabinet._dataSource.ReadUInt16LittleEndian();
+                db.UncompressedSize = cabinet._dataSource.ReadUInt16LittleEndian();
 
-            if (dataReservedSize > 0)
-                db.ReservedData = cabinet._dataSource.ReadBytes(dataReservedSize);
+                if (dataReservedSize > 0)
+                    db.ReservedData = cabinet._dataSource.ReadBytes(dataReservedSize);
 
-            if (db.CompressedSize > 0)
-                db.CompressedData = cabinet._dataSource.ReadBytes(db.CompressedSize);
+                if (db.CompressedSize > 0)
+                    db.CompressedData = cabinet._dataSource.ReadBytes(db.CompressedSize);
 
-            return db;
+                return db;           
+            }
+            catch
+            {
+                return null;
+            }
+            
         }
 
         // TODO: cab stepping, folder stepping (I think?), 0 size continued blocks, find something that triggers exact data size
@@ -325,7 +362,7 @@ namespace SabreTools.Serialization.Wrappers
                             continue;
 
                         var folder = cabinet.Folders[f];
-                        CFFILE[] files = cabinet.GetSpannedFilesArray(currentCabFilename, f, ignorePrev);
+                        CFFILE[] files = cabinet.GetSpannedFilesArray(currentCabFilename, f, ignorePrev, includeDebug);
                         var file = files[0];
                         int bytesLeft = (int)file.FileSize;
                         int fileCounter = 0;
@@ -363,6 +400,11 @@ namespace SabreTools.Serialization.Wrappers
                                 lock (tempCabinet._dataSourceLock)
                                 {
                                     var db = ReadBlock(tempCabinet);
+                                    if (db == null)
+                                    {
+                                        if (includeDebug) Console.Error.WriteLine($"Error extracting file {file.Name}");
+                                        break;
+                                    }
 
                                     // Get the data to be processed
                                     byte[] blockData = db.CompressedData;
@@ -373,8 +415,8 @@ namespace SabreTools.Serialization.Wrappers
                                     if (db.UncompressedSize == 0)
                                     {
                                         tempCabinet = tempCabinet.Next;
-                                        if (tempCabinet == null) // TODO: handle better?
-                                            return false;
+                                        if (tempCabinet == null)
+                                            break; // Next cab is missing, continue
                                         
                                         // Compressiontype not updated because there's no way it's possible that it can swap on continued blocks
                                         folder = tempCabinet.Folders[0];
@@ -383,6 +425,12 @@ namespace SabreTools.Serialization.Wrappers
                                             // TODO: make sure this spans?
                                             tempCabinet._dataSource.SeekIfPossible(folder.CabStartOffset, SeekOrigin.Begin);
                                             var nextBlock = ReadBlock(tempCabinet);
+                                            if (nextBlock == null)
+                                            {
+                                                if (includeDebug) Console.Error.WriteLine($"Error extracting file {file.Name}");
+                                                break;
+                                            }
+                                            
                                             byte[] nextData = nextBlock.CompressedData;
                                             if (nextData.Length == 0) // TODO: null cant happen, is it meant to be if it's empty?
                                                 continue;
@@ -510,7 +558,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Move to the next cabinet, if possible
                     cabinet = cabinet.Next;
-                    if (cabinet == null) // TODO: handle better
+                    if (cabinet == null) // If the next cabinet is missing, there's no better way to handle this
                         return false;
 
                     currentCabFilename = cabinet.Filename;

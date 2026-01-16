@@ -231,86 +231,17 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Get the set of data blocks for a folder
-        /// </summary>
-        /// <param name="filename">Filename for one cabinet in the set, if available</param>
-        /// <param name="folder">Folder containing the blocks to decompress</param>
-        /// <param name="folderIndex">Index of the folder in the cabinet</param>
-        /// <param name="skipPrev">Indicates if previous cabinets should be ignored</param>
-        /// <param name="skipNext">Indicates if next cabinets should be ignored</param>
-        /// <returns>Array of data blocks on success, null otherwise</returns>
-        private FolderTuple?[] GetFolders(string? filename, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
-        {
-            // Skip invalid folders
-            if (folder?.DataBlocks == null || folder.DataBlocks.Length == 0)
-                return [];
-            
-            // Get all files for the folder
-            var files = GetFiles(folderIndex);
-            if (files.Length == 0)
-                return [];
-            
-            FolderTuple?[] folderTuple = new FolderTuple[1];
-            folderTuple[0] = null;
-
-            if (filename != null && folder != null)
-            {
-                folderTuple[0] = new FolderTuple
-                {
-                    Filename = filename,
-                    Folder = folder,
-                    FolderIndex = folderIndex
-                };
-            }
-            
-            // Check if the folder spans in either direction
-            bool spanPrev = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
-            bool spanNext = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_TO_NEXT || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
-
-            // If the folder spans backward and Prev is not being skipped
-            FolderTuple?[] prevFolderTuples = [];
-            if (!skipPrev && spanPrev)
-            {
-                // Try to get Prev if it doesn't exist
-                if (Prev?.Header == null)
-                    Prev = OpenPrevious(filename);
-
-                // Get all blocks from Prev
-                if (Prev?.Header != null && Prev.Folders != null)
-                {
-                    int prevFolderIndex = Prev.FolderCount - 1;
-                    var prevFolder = Prev.Folders[prevFolderIndex - 1];
-                    prevFolderTuples = Prev.GetFolders(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
-                }
-            }
-
-            // If the folder spans forward and Next is not being skipped
-            FolderTuple?[] nextFolderTuples = [];
-            if (!skipNext && spanNext)
-            {
-                // Try to get Next if it doesn't exist
-                if (Next?.Header == null)
-                    Next = OpenNext(filename);
-
-                // Get all blocks from Prev
-                if (Next?.Header != null && Next.Folders != null)
-                {
-                    var nextFolder = Next.Folders[0];
-                    nextFolderTuples = Next.GetFolders(filename, nextFolder, 0, skipPrev: true) ?? [];
-                }
-            }
-
-            // Return all found blocks in order
-            return [.. prevFolderTuples, .. folderTuple, .. nextFolderTuples];
-        }
-
-        /// <summary>
         /// Get all files for the current folder, plus connected spanned folders.
         /// </summary>
+        /// <param name="filename"></param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
+        /// <param name="includeDebug"></param>
         /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
+        /// <param name="skipPrev"></param>
+        /// <param name="skipNext"></param>
         /// <returns>Array of all files for the folder</returns>
-        private CFFILE[] GetSpannedFiles(string? filename, int folderIndex, bool ignorePrev = false, bool skipPrev = false, bool skipNext = false)
+        private CFFILE[] GetSpannedFiles(string? filename, int folderIndex, bool includeDebug, bool ignorePrev = false,
+            bool skipPrev = false, bool skipNext = false)
         {
             // Ignore invalid archives
             if (Files.IsNullOrEmpty())
@@ -345,13 +276,13 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Try to get Prev if it doesn't exist
                 if (Prev?.Header == null)
-                    Prev = OpenPrevious(filename);
+                    Prev = OpenPrevious(filename, includeDebug);
 
                 // Get all files from Prev
                 if (Prev?.Header != null && Prev.Folders != null)
                 {
                     int prevFolderIndex = Prev.FolderCount - 1;
-                    prevFiles = Prev.GetSpannedFiles(filename, prevFolderIndex, skipNext: true) ?? [];
+                    prevFiles = Prev.GetSpannedFiles(filename, prevFolderIndex, includeDebug, skipNext: true) ?? [];
                 }
             }
 
@@ -361,13 +292,13 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Try to get Next if it doesn't exist
                 if (Next?.Header == null)
-                    Next = OpenNext(filename);
+                    Next = OpenNext(filename, false); // Debug ignored here since if it's enabled, this will get output earlier anyways
 
                 // Get all files from Prev
                 if (Next?.Header != null && Next.Folders != null)
                 {
                     var nextFolder = Next.Folders[0];
-                    nextFiles = Next.GetSpannedFiles(filename, 0, skipPrev: true) ?? [];
+                    nextFiles = Next.GetSpannedFiles(filename, 0, includeDebug, skipPrev: true) ?? [];
                 }
             }
 
