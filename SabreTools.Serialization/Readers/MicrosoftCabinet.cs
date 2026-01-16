@@ -174,26 +174,6 @@ namespace SabreTools.Serialization.Readers
 
             return folder;
         }
-        
-        /// <summary>
-        /// Parse a Stream into a folder
-        /// </summary>
-        /// <param name="data">Stream to parse</param>
-        /// <param name="header">Cabinet header to get flags and sizes from</param>
-        /// <returns>Filled folder on success, null on error</returns>
-        private static CFFOLDER ParseFolderData(Stream data, CFHEADER header)
-        {
-            var folder = new CFFOLDER();
-
-            folder.CabStartOffset = data.ReadUInt32LittleEndian();
-            folder.DataCount = data.ReadUInt16LittleEndian();
-            folder.CompressionType = (CompressionType)data.ReadUInt16LittleEndian();
-
-            if (header.FolderReservedSize > 0)
-                folder.ReservedData = data.ReadBytes(header.FolderReservedSize);
-
-            return folder;
-        }
 
         /// <summary>
         /// Parse a Stream into a file

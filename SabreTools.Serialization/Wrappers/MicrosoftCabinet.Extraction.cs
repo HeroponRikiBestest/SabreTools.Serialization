@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Open a cabinet set for reading, if possible
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set</param>
-        /// <param name="includeDebug"></param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Wrapper representing the set, null on error</returns>
         private static MicrosoftCabinet? OpenSet(string? filename, bool includeDebug)
         {
@@ -91,7 +91,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Open the next archive, if possible
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set</param>
-        /// <param name="includeDebug"></param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         private MicrosoftCabinet? OpenNext(string? filename, bool includeDebug)
         {
             // Ignore invalid archives
@@ -131,7 +131,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Open the previous archive, if possible
         /// </summary>
         /// <param name="filename">Filename for one cabinet in the set</param>
-        /// <param name="includeDebug"></param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         private MicrosoftCabinet? OpenPrevious(string? filename, bool includeDebug)
         {
             // Ignore invalid archives
@@ -185,12 +185,10 @@ namespace SabreTools.Serialization.Wrappers
                 ignorePrev = true;
                 
                 // TOOD: reenable after confirming rollback is good
-                if (cabinet == null) // TODO: handle better
+                if (cabinet == null) 
                     return false;
                 
                 // If we have anything but the first file, avoid extraction to avoid repeat extracts
-                // TODO: handle partial sets
-                // TODO: is there any way for this to not spam the logs on large sets? probably not, but idk
                 // TODO: if/when full msi support is added, somehow this is going to have to take that into account, while also still handling partial sets
                 if (this.Filename != cabinet.Filename)
                 {
@@ -212,7 +210,7 @@ namespace SabreTools.Serialization.Wrappers
                         
                         tempCabinet = tempCabinet.Next;
                         
-                        if (tempCabinet == null) // TODO: handle better
+                        if (tempCabinet == null)
                             break;
                         
                         if (tempCabinet.Folders.Length == 0)
@@ -250,7 +248,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="filename">Filename for one cabinet in the set, if available</param>
         /// <param name="f">Index of the folder in the cabinet</param>
         /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
-        /// <param name="includeDebug"></param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Filtered array of files</returns>
         private CFFILE[] GetSpannedFilesArray(string? filename, int f, bool ignorePrev, bool includeDebug)
         {
@@ -308,8 +306,6 @@ namespace SabreTools.Serialization.Wrappers
         private CFDATA? ReadBlock(MicrosoftCabinet cabinet)
         {
             // Should only ever occur if it tries to read more than the file, but good to catch in general
-            // TODO: does putting this in a try-catch block slow things down? Thousands of readblocks will get called for any cab
-            // TODO: Since the file is certainly messed up in some way if this fails, should it be deleted in case it causes cascading issues for BOS? Probably not, but idk
             try 
             {
                 var db = new CFDATA();
@@ -335,7 +331,6 @@ namespace SabreTools.Serialization.Wrappers
             
         }
 
-        // TODO: cab stepping, folder stepping (I think?), 0 size continued blocks, find something that triggers exact data size
         /// <summary>
         /// Extract the contents of a cabinet set
         /// </summary>
@@ -372,7 +367,6 @@ namespace SabreTools.Serialization.Wrappers
                         try
                         {
                             // Ensure folder contains data
-                            // TODO: does this fail on spanned only folders or something? when would this happen
                             if (folder.DataCount == 0)
                                 return false;
 
@@ -383,11 +377,10 @@ namespace SabreTools.Serialization.Wrappers
                             
                             var fs = GetFileStream(file.Name, outputDirectory);
 
-                            // TODO: what is this comment here for
                             //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
 
                             if (folder.CabStartOffset <= 0)
-                                return false; // TODO: why is a CabStartOffset of 0 not acceptable? header? 
+                                return false; 
 
                             var tempCabinet = cabinet;
                             int j = 0;
@@ -396,7 +389,6 @@ namespace SabreTools.Serialization.Wrappers
                             // Has to be a while loop instead of a for loop due to cab spanning continue blocks
                             while (j < folder.DataCount)
                             {
-                                // TODO: since i need lock state to be maintained the whole loop, do i need to cache and reset position to be safe?
                                 lock (tempCabinet._dataSourceLock)
                                 {
                                     var db = ReadBlock(tempCabinet);
@@ -410,7 +402,6 @@ namespace SabreTools.Serialization.Wrappers
                                     byte[] blockData = db.CompressedData;
 
                                     // If the block is continued, append
-                                    // TODO: this is specifically if and only if it's jumping between cabs on a spanned folder, I think?
                                     bool continuedBlock = false;
                                     if (db.UncompressedSize == 0)
                                     {
@@ -422,7 +413,6 @@ namespace SabreTools.Serialization.Wrappers
                                         folder = tempCabinet.Folders[0];
                                         lock (tempCabinet._dataSourceLock)
                                         {
-                                            // TODO: make sure this spans?
                                             tempCabinet._dataSource.SeekIfPossible(folder.CabStartOffset, SeekOrigin.Begin);
                                             var nextBlock = ReadBlock(tempCabinet);
                                             if (nextBlock == null)
@@ -432,7 +422,7 @@ namespace SabreTools.Serialization.Wrappers
                                             }
                                             
                                             byte[] nextData = nextBlock.CompressedData;
-                                            if (nextData.Length == 0) // TODO: null cant happen, is it meant to be if it's empty?
+                                            if (nextData.Length == 0) 
                                                 continue;
 
                                             continuedBlock = true;
@@ -456,7 +446,6 @@ namespace SabreTools.Serialization.Wrappers
                                         _ => [],
                                     };
                                     
-                                    // TODO: will 0 byte files mess things up
                                     if (bytesLeft > 0 && bytesLeft >= data.Length)
                                     {
                                         fs.Write(data);
@@ -475,7 +464,6 @@ namespace SabreTools.Serialization.Wrappers
                                         file = files[++fileCounter];
                                         bytesLeft = (int)file.FileSize;
                                         fs = GetFileStream(file.Name, outputDirectory);
-                                        // TODO: can I deduplicate this? probably not since I need breaks
                                         while (bytesLeft < data.Length - tempBytesLeft)
                                         {
                                             fs.Write(data, tempBytesLeft, bytesLeft);
@@ -494,7 +482,7 @@ namespace SabreTools.Serialization.Wrappers
                                         fs.Write(data, tempBytesLeft, data.Length - tempBytesLeft);
                                         bytesLeft -= (data.Length - tempBytesLeft);
                                     }
-                                    else // TODO: find something that can actually trigger this case
+                                    else
                                     {
                                         int tempBytesLeft = bytesLeft;
                                         fs.Close();
@@ -527,7 +515,6 @@ namespace SabreTools.Serialization.Wrappers
                                     
                                     // Top if block occurs on http://redump.org/disc/107833/ , middle on https://dbox.tools/titles/pc/57520FA0 , bottom still unobserved
                                     // While loop since this also handles 0 byte files. Example file seen in http://redump.org/disc/93312/ , cab Group17.cab, file TRACKSLOC6DYNTEX_BIN
-                                    // TODO: make sure that file is actually supposed to be 0 bytes. 7z also extracts it as 0 bytes, so it probably is, but it's good to make sure.
                                     while (bytesLeft == 0)
                                     {
                                         fs.Close();
@@ -541,7 +528,6 @@ namespace SabreTools.Serialization.Wrappers
                                         fs = GetFileStream(file.Name, outputDirectory);
                                     }
 
-                                    // TODO: do i ever need to flush before the end of the file?
                                     if (continuedBlock)
                                         j = 0;
                                     
@@ -563,7 +549,6 @@ namespace SabreTools.Serialization.Wrappers
 
                     currentCabFilename = cabinet.Filename;
 
-                    // TODO: already-extracted data isn't being cleared from memory, at least not nearly enough.
                     if (cabinet.Folders.Length == 0)
                         break;
                 }
