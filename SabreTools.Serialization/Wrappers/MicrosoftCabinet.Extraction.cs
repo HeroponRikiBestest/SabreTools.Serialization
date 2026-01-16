@@ -494,9 +494,10 @@ namespace SabreTools.Serialization.Wrappers
                                     }
 
                                     // TODO: do i ever need to flush before the end of the file?
-                                    j++;
                                     if (continuedBlock)
                                         j = 0;
+                                    
+                                    j++;
                                 }
                             }
                         }
