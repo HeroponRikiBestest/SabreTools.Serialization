@@ -184,7 +184,6 @@ namespace SabreTools.Serialization.Wrappers
                 cabinet = OpenSet(Filename, includeDebug);
                 ignorePrev = true;
                 
-                // TOOD: reenable after confirming rollback is good
                 if (cabinet == null) 
                     return false;
                 
