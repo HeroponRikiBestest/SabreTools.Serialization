@@ -166,6 +166,7 @@ namespace SabreTools.Serialization.Wrappers
                 // If we have anything but the first file, avoid extraction to avoid repeat extracts
                 // TODO: handle partial sets
                 // TODO: is there any way for this to not spam the logs on large sets? probably not, but idk
+                // TODO: if/when full msi support is added, somehow this is going to have to take that into account, while also still handling partial sets
                 if (this.Filename != cabinet.Filename)
                 {
                     string firstCabName = Path.GetFileName(cabinet.Filename) ?? string.Empty;
