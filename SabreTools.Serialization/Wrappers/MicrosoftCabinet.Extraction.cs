@@ -160,7 +160,6 @@ namespace SabreTools.Serialization.Wrappers
                 ignorePrev = true;
                 
                 // TOOD: reenable after confirming rollback is good
-                /*
                 if (cabinet == null) // TODO: handle better
                     return false;
                 
@@ -173,7 +172,6 @@ namespace SabreTools.Serialization.Wrappers
                     if (includeDebug) Console.WriteLine($"Only the first cabinet {firstCabName} will be extracted!");
                     return false;
                 }
-                */
 
                 
                 // Display warning in debug runs
