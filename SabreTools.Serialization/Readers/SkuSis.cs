@@ -32,8 +32,8 @@ namespace SabreTools.Serialization.Readers
 
                 // Check if file contains the top level sku value, otherwise return null
                 var signatureBytes = data.ReadBytes(5);
-                if (!signatureBytes.EqualsExactly(Steam2SisSignatureBytes)
-                    && !signatureBytes.EqualsExactly(Steam3SisSignatureBytes))
+                if (!signatureBytes.EqualsExactly(SteamSimSidSisSignatureBytes)
+                    && !signatureBytes.EqualsExactly(SteamCsmCsdSisSignatureBytes))
                     return null;
                 
                 data.SeekIfPossible(initialOffset, SeekOrigin.Begin);
