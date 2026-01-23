@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.MicrosoftCabinet;
-using SabreTools.IO.Extensions;
 using SabreTools.IO.Compression.MSZIP;
+using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
 {
@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Wrappers
             // If the file is invalid
             if (string.IsNullOrEmpty(filename))
                 return null;
-            else if (!File.Exists(filename))
+            else if (!File.Exists(filename!))
                 return null;
 
             // Get the full file path and directory
@@ -105,8 +105,6 @@ namespace SabreTools.Serialization.Wrappers
             string? next = CabinetNext;
             if (string.IsNullOrEmpty(next))
                 return null;
-
-            string baseNext = next!;
             
             // Get the full next path
             string? folder = Path.GetDirectoryName(filename);
@@ -122,7 +120,7 @@ namespace SabreTools.Serialization.Wrappers
             }
             catch
             {
-                if (includeDebug) Console.WriteLine($"Error: Cabinet set part {baseNext} could not be opened!");
+                if (includeDebug) Console.WriteLine($"Error: Cabinet set part {filename} could not be opened!");
                 return null;
             }
         }
@@ -145,8 +143,6 @@ namespace SabreTools.Serialization.Wrappers
             string? prev = CabinetPrev;
             if (string.IsNullOrEmpty(prev))
                 return null;
-
-            string basePrev = prev!;
             
             // Get the full next path
             string? folder = Path.GetDirectoryName(filename);
@@ -162,7 +158,7 @@ namespace SabreTools.Serialization.Wrappers
             }
             catch
             {
-                if (includeDebug) Console.WriteLine($"Error: Cabinet set part {basePrev} could not be opened!");
+                if (includeDebug) Console.WriteLine($"Error: Cabinet set part {filename} could not be opened!");
                 return null;
             }
         }
@@ -174,6 +170,9 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
+            // Display warning in debug runs
+            if (includeDebug) Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
+            
             // Do not ignore previous links by default
             bool ignorePrev = false;
 
@@ -194,43 +193,6 @@ namespace SabreTools.Serialization.Wrappers
                     string firstCabName = Path.GetFileName(cabinet.Filename) ?? string.Empty;
                     if (includeDebug) Console.WriteLine($"Only the first cabinet {firstCabName} will be extracted!");
                     return false;
-                }
-
-                
-                // Display warning in debug runs
-                if (includeDebug && cabinet != null)
-                {
-                    var tempCabinet = cabinet;
-                    HashSet<CompressionType> compressionTypes = new HashSet<CompressionType>();
-                    while (true) // this feels unsafe, but the existing code already did it
-                    {
-                        for (int i = 0; i < tempCabinet.FolderCount; i++)
-                            compressionTypes.Add(GetCompressionType(tempCabinet.Folders[i]));
-                        
-                        tempCabinet = tempCabinet.Next;
-                        
-                        if (tempCabinet == null)
-                            break;
-                        
-                        if (tempCabinet.Folders.Length == 0)
-                            break;   
-                    }
-                    
-                    string firstLine = "Mscab contains compression:";
-                    bool firstFence = true;
-                    foreach (CompressionType compressionType in compressionTypes)
-                    {
-                            if (firstFence)
-                                firstFence = false;
-                            else
-                                firstLine += ",";
-
-                            firstLine += $" {compressionType}";
-                    }
-                    
-                    Console.WriteLine(firstLine);
-                    if (compressionTypes.Contains(CompressionType.TYPE_QUANTUM) || compressionTypes.Contains(CompressionType.TYPE_LZX))
-                        Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
                 }
             }
             
@@ -353,7 +315,9 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         if (f == 0 && (cabinet.Files[0].FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT
                                        || cabinet.Files[0].FolderIndex == FolderIndex.CONTINUED_FROM_PREV))
+                        {
                             continue;
+                        }
 
                         var folder = cabinet.Folders[f];
                         CFFILE[] files = cabinet.GetSpannedFilesArray(currentCabFilename, f, ignorePrev, includeDebug);
@@ -408,7 +372,7 @@ namespace SabreTools.Serialization.Wrappers
                                         if (tempCabinet == null)
                                             break; // Next cab is missing, continue
                                         
-                                        // Compressiontype not updated because there's no way it's possible that it can swap on continued blocks
+                                        // CompressionType not updated because there's no way it's possible that it can swap on continued blocks
                                         folder = tempCabinet.Folders[0];
                                         lock (tempCabinet._dataSourceLock)
                                         {

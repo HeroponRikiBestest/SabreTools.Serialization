@@ -233,15 +233,19 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get all files for the current folder, plus connected spanned folders.
         /// </summary>
-        /// <param name="filename"></param>
+        /// <param name="filename">Input filename of the cabinet to read from</param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
-        /// <param name="includeDebug"></param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
-        /// <param name="skipPrev"></param>
-        /// <param name="skipNext"></param>
+        /// <param name="skipPrev">True if previous cabinets should be skipped, false otherwise.</param>
+        /// <param name="skipNext">True if next cabinets should be skipped, false otherwise.</param>
         /// <returns>Array of all files for the folder</returns>
-        private CFFILE[] GetSpannedFiles(string? filename, int folderIndex, bool includeDebug, bool ignorePrev = false,
-            bool skipPrev = false, bool skipNext = false)
+        private CFFILE[] GetSpannedFiles(string? filename, 
+            int folderIndex, 
+            bool includeDebug, 
+            bool ignorePrev = false,
+            bool skipPrev = false, 
+            bool skipNext = false)
         {
             // Ignore invalid archives
             if (Files.IsNullOrEmpty())
