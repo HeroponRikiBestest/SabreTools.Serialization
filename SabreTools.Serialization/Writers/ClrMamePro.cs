@@ -76,6 +76,9 @@ namespace SabreTools.Serialization.Writers
             // Write out the games, if they exist
             WriteGames(obj.Game, writer);
 
+            // Write out the info, if it exists
+            WriteInfo(obj.Info, writer);
+
             // Return the stream
             stream.SeekIfPossible(0, SeekOrigin.Begin);
             return stream;
@@ -491,6 +494,28 @@ namespace SabreTools.Serialization.Writers
             writer.WriteOptionalAttributeString("palettesize", driver.PaletteSize);
             writer.WriteOptionalAttributeString("blit", driver.Blit);
             writer.WriteEndElement(); // driver
+        }
+
+        /// <summary>
+        /// Write info information to the current writer
+        /// </summary>
+        /// <param name="info">ClrMamePro representing the info information</param>
+        /// <param name="writer">ClrMameProWriter representing the output</param>
+        private static void WriteInfo(Info? info, ClrMameProWriter writer)
+        {
+            // If the info information is missing, we can't do anything
+            if (info?.Source == null)
+                return;
+
+            writer.WriteStartElement("info");
+
+            foreach (var source in info.Source)
+            {
+                writer.WriteOptionalStandalone("source", source);
+            }
+
+            writer.WriteEndElement(); // info
+            writer.Flush();
         }
 
         #endregion

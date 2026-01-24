@@ -95,6 +95,7 @@ namespace SabreTools.Serialization.Readers
                 var chips = new List<Chip>();
                 var videos = new List<Video>();
                 var dipSwitches = new List<DipSwitch>();
+                var sources = new List<string>();
 
                 while (!reader.EndOfStream)
                 {
@@ -143,6 +144,11 @@ namespace SabreTools.Serialization.Readers
                                     videos.Clear();
                                     dipSwitches.Clear();
                                     break;
+
+                                case "info":
+                                    dat.Info?.Source = [.. sources];
+                                    sources.Clear();
+                                    break;
                             }
                             continue;
                     }
@@ -158,6 +164,9 @@ namespace SabreTools.Serialization.Readers
                                 break;
                             case "game":
                                 game = new Game();
+                                break;
+                            case "info":
+                                dat.Info = new Info();
                                 break;
                             case "machine":
                                 game = new Machine();
@@ -277,6 +286,21 @@ namespace SabreTools.Serialization.Readers
                                     Name = reader.Standalone?.Value ?? string.Empty,
                                 };
                                 samples.Add(sample);
+                                break;
+                        }
+                    }
+
+                    // If we're in an info block
+                    else if (reader.TopLevel == "info"
+                        && reader.RowType == CmpRowType.Standalone)
+                    {
+                        switch (reader.Standalone?.Key?.ToLowerInvariant())
+                        {
+                            case "source":
+                                string? source = reader.Standalone?.Value;
+                                if (source != null)
+                                    sources.Add(source);
+
                                 break;
                         }
                     }

@@ -27,6 +27,7 @@ namespace SabreTools.Serialization.Test.CrossModel
             Assert.NotNull(newMf.Game);
             var newGame = Assert.Single(newMf.Game);
             Validate(newGame);
+            Validate(newMf.Info);
         }
 
         [Fact]
@@ -51,6 +52,7 @@ namespace SabreTools.Serialization.Test.CrossModel
             Assert.NotNull(newMf.Game);
             var newGame = Assert.Single(newMf.Game);
             Validate(newGame);
+            Validate(newMf.Info);
         }
 
         /// <summary>
@@ -229,10 +231,16 @@ namespace SabreTools.Serialization.Test.CrossModel
             gameBase.DipSwitch = [dipswitch];
             gameBase.Driver = driver;
 
+            var info = new Data.Models.ClrMamePro.Info
+            {
+                Source = ["XXXXXX"],
+            };
+
             return new Data.Models.ClrMamePro.MetadataFile
             {
                 ClrMamePro = cmp,
                 Game = [gameBase],
+                Info = info,
             };
         }
 
@@ -500,6 +508,17 @@ namespace SabreTools.Serialization.Test.CrossModel
             Assert.Equal("XXXXXX", driver.Sound);
             Assert.Equal("XXXXXX", driver.PaletteSize);
             Assert.Equal("XXXXXX", driver.Blit);
+        }
+
+        /// <summary>
+        /// Validate a ClrMamePro
+        /// </summary>
+        private static void Validate(Data.Models.ClrMamePro.Info? info)
+        {
+            Assert.NotNull(info);
+            Assert.NotNull(info.Source);
+            string source = Assert.Single(info.Source);
+            Assert.Equal("XXXXXX", source);
         }
     }
 }

@@ -28,6 +28,10 @@ namespace SabreTools.Serialization.CrossModel
                     = Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, game));
             }
 
+            var info = obj.Read<Data.Models.Metadata.InfoSource>(Data.Models.Metadata.MetadataFile.InfoSourceKey);
+            if (info != null)
+                metadataFile.Info = ConvertInfoSourceFromInternalModel(info);
+
             return metadataFile;
         }
 
@@ -343,6 +347,20 @@ namespace SabreTools.Serialization.CrossModel
                 Freq = item.ReadString(Data.Models.Metadata.Video.RefreshKey),
             };
             return video;
+        }
+
+        /// <summary>
+        /// Convert from <see cref="Models.Metadata.InfoSource"/> to <see cref="Models.ClrMamePro.Info"/>
+        /// </summary>
+        private static Info ConvertInfoSourceFromInternalModel(Data.Models.Metadata.InfoSource item)
+        {
+            var info = new Info();
+
+            var sources = item.Read<string[]>(Data.Models.Metadata.InfoSource.SourceKey);
+            if (sources != null && sources.Length > 0)
+                info.Source = [.. sources];
+
+            return info;
         }
     }
 }
