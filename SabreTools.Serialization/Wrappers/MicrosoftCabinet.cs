@@ -174,77 +174,6 @@ namespace SabreTools.Serialization.Wrappers
         #region Folders
 
         /// <summary>
-        /// Decompress all blocks for a folder
-        /// </summary>
-        /// <param name="filename">Filename for one cabinet in the set, if available</param>
-        /// <param name="folder">Folder containing the blocks to decompress</param>
-        /// <param name="folderIndex">Index of the folder in the cabinet</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>Stream representing the decompressed data on success, null otherwise</returns>
-        public Stream? DecompressBlocks(string? filename, CFFOLDER? folder, int folderIndex, bool includeDebug)
-        {
-            // Ensure data blocks
-            var dataBlocks = GetDataBlocks(filename, folder, folderIndex);
-            if (dataBlocks == null || dataBlocks.Length == 0)
-                return null;
-
-            // Get the compression type
-            var compressionType = GetCompressionType(folder!);
-
-            // Setup decompressors
-            var mszip = Decompressor.Create();
-            //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
-
-            // Loop through the data blocks
-            var ms = new MemoryStream();
-            for (int i = 0; i < dataBlocks.Length; i++)
-            {
-                var db = dataBlocks[i];
-
-                // Get the data to be processed
-                byte[] blockData = db.CompressedData;
-
-                // If the block is continued, append
-                bool continuedBlock = false;
-                if (db.UncompressedSize == 0)
-                {
-                    var nextBlock = dataBlocks[i + 1];
-                    byte[]? nextData = nextBlock.CompressedData;
-                    if (nextData == null)
-                        continue;
-
-                    continuedBlock = true;
-                    blockData = [.. blockData, .. nextData];
-                    db.CompressedSize += nextBlock.CompressedSize;
-                    db.UncompressedSize = nextBlock.UncompressedSize;
-                }
-
-                // Get the uncompressed data block
-                byte[] data = compressionType switch
-                {
-                    CompressionType.TYPE_NONE => blockData,
-                    CompressionType.TYPE_MSZIP => DecompressMSZIPBlock(folderIndex, mszip, i, db, blockData, includeDebug),
-
-                    // TODO: Unsupported
-                    CompressionType.TYPE_QUANTUM => [],
-                    CompressionType.TYPE_LZX => [],
-
-                    // Should be impossible
-                    _ => [],
-                };
-
-                // Write the uncompressed data block
-                ms.Write(data, 0, data.Length);
-                ms.Flush();
-
-                // Increment additionally if we had a continued block
-                if (continuedBlock) i++;
-            }
-
-            return ms;
-        }
-
-        /// <summary>
         /// Decompress an MS-ZIP block using an existing decompressor
         /// </summary>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
@@ -302,103 +231,19 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Get the set of data blocks for a folder
-        /// </summary>
-        /// <param name="filename">Filename for one cabinet in the set, if available</param>
-        /// <param name="folder">Folder containing the blocks to decompress</param>
-        /// <param name="folderIndex">Index of the folder in the cabinet</param>
-        /// <param name="skipPrev">Indicates if previous cabinets should be ignored</param>
-        /// <param name="skipNext">Indicates if next cabinets should be ignored</param>
-        /// <returns>Array of data blocks on success, null otherwise</returns>
-        private CFDATA[]? GetDataBlocks(string? filename, CFFOLDER? folder, int folderIndex, bool skipPrev = false, bool skipNext = false)
-        {
-            // Skip invalid folders
-            if (folder?.DataBlocks == null || folder.DataBlocks.Length == 0)
-                return null;
-
-            GetData(folder);
-
-            // Get all files for the folder
-            var files = GetFiles(folderIndex);
-            if (files.Length == 0)
-                return folder.DataBlocks;
-
-            // Check if the folder spans in either direction
-            bool spanPrev = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
-            bool spanNext = Array.Exists(files, f => f.FolderIndex == FolderIndex.CONTINUED_TO_NEXT || f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT);
-
-            // If the folder spans backward and Prev is not being skipped
-            CFDATA[] prevBlocks = [];
-            if (!skipPrev && spanPrev)
-            {
-                // Try to get Prev if it doesn't exist
-                if (Prev?.Header == null)
-                    Prev = OpenPrevious(filename);
-
-                // Get all blocks from Prev
-                if (Prev?.Header != null && Prev.Folders != null)
-                {
-                    int prevFolderIndex = Prev.FolderCount - 1;
-                    var prevFolder = Prev.Folders[prevFolderIndex - 1];
-                    prevBlocks = Prev.GetDataBlocks(filename, prevFolder, prevFolderIndex, skipNext: true) ?? [];
-                }
-            }
-
-            // If the folder spans forward and Next is not being skipped
-            CFDATA[] nextBlocks = [];
-            if (!skipNext && spanNext)
-            {
-                // Try to get Next if it doesn't exist
-                if (Next?.Header == null)
-                    Next = OpenNext(filename);
-
-                // Get all blocks from Prev
-                if (Next?.Header != null && Next.Folders != null)
-                {
-                    var nextFolder = Next.Folders[0];
-                    nextBlocks = Next.GetDataBlocks(filename, nextFolder, 0, skipPrev: true) ?? [];
-                }
-            }
-
-            // Return all found blocks in order
-            return [.. prevBlocks, .. folder.DataBlocks, .. nextBlocks];
-        }
-
-        /// <summary>
-        /// Loads in all the datablocks for the current folder.
-        /// </summary>
-        /// <param name="folder">The folder to have the datablocks loaded for</param>
-        public void GetData(CFFOLDER folder)
-        {
-            if (folder.CabStartOffset <= 0)
-                return;
-
-            uint offset = folder.CabStartOffset;
-            for (int i = 0; i < folder.DataCount; i++)
-            {
-                offset += 8;
-
-                if (Header.DataReservedSize > 0)
-                {
-                    folder.DataBlocks[i].ReservedData = ReadRangeFromSource(offset, Header.DataReservedSize);
-                    offset += Header.DataReservedSize;
-                }
-
-                if (folder.DataBlocks[i].CompressedSize > 0)
-                {
-                    folder.DataBlocks[i].CompressedData = ReadRangeFromSource(offset, folder.DataBlocks[i].CompressedSize);
-                    offset += folder.DataBlocks[i].CompressedSize;
-                }
-            }
-        }
-
-        /// <summary>
         /// Get all files for the current folder, plus connected spanned folders.
         /// </summary>
+        /// <param name="filename">Input filename of the cabinet to read from</param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
-        /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <param name="skipPrev">True if previous cabinets should be skipped, false otherwise.</param>
+        /// <param name="skipNext">True if next cabinets should be skipped, false otherwise.</param>
         /// <returns>Array of all files for the folder</returns>
-        private CFFILE[] GetSpannedFiles(string? filename, int folderIndex, bool ignorePrev = false, bool skipPrev = false, bool skipNext = false)
+        private CFFILE[] GetSpannedFiles(string? filename, 
+            int folderIndex, 
+            bool includeDebug, 
+            bool skipPrev = false, 
+            bool skipNext = false)
         {
             // Ignore invalid archives
             if (Files.IsNullOrEmpty())
@@ -410,14 +255,12 @@ namespace SabreTools.Serialization.Wrappers
                 if (string.IsNullOrEmpty(f.Name))
                     return false;
 
-                // Ignore links to previous cabinets, if required
-                if (ignorePrev)
-                {
-                    if (f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV)
-                        return false;
-                    else if (f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT)
-                        return false;
-                }
+                // Ignore links to previous cabinets
+                if (f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV)
+                    return false;
+                else if (f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT)
+                    return false;
+                
 
                 int fileFolder = GetFolderIndex(f);
                 return fileFolder == folderIndex;
@@ -433,13 +276,13 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Try to get Prev if it doesn't exist
                 if (Prev?.Header == null)
-                    Prev = OpenPrevious(filename);
+                    Prev = OpenPrevious(filename, includeDebug);
 
                 // Get all files from Prev
                 if (Prev?.Header != null && Prev.Folders != null)
                 {
                     int prevFolderIndex = Prev.FolderCount - 1;
-                    prevFiles = Prev.GetSpannedFiles(filename, prevFolderIndex, skipNext: true) ?? [];
+                    prevFiles = Prev.GetSpannedFiles(filename, prevFolderIndex, includeDebug, skipNext: true) ?? [];
                 }
             }
 
@@ -449,13 +292,13 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Try to get Next if it doesn't exist
                 if (Next?.Header == null)
-                    Next = OpenNext(filename);
-
+                    Next = OpenNext(filename); 
+                
                 // Get all files from Prev
                 if (Next?.Header != null && Next.Folders != null)
                 {
                     var nextFolder = Next.Folders[0];
-                    nextFiles = Next.GetSpannedFiles(filename, 0, skipPrev: true) ?? [];
+                    nextFiles = Next.GetSpannedFiles(filename, 0, includeDebug, skipPrev: true) ?? [];
                 }
             }
 
