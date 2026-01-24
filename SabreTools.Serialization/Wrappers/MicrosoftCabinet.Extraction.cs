@@ -120,7 +120,7 @@ namespace SabreTools.Serialization.Wrappers
             }
             catch
             {
-                if (includeDebug) Console.WriteLine($"Error: Cabinet set part {filename} could not be opened!");
+                if (includeDebug) Console.WriteLine($"Error: Cabinet set part {next} could not be opened!");
                 return null;
             }
         }
@@ -158,7 +158,7 @@ namespace SabreTools.Serialization.Wrappers
             }
             catch
             {
-                if (includeDebug) Console.WriteLine($"Error: Cabinet set part {filename} could not be opened!");
+                if (includeDebug) Console.WriteLine($"Error: Cabinet set part {prev} could not be opened!");
                 return null;
             }
         }
