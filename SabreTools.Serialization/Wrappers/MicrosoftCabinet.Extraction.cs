@@ -105,14 +105,13 @@ namespace SabreTools.Serialization.Wrappers
             string? next = CabinetNext;
             if (string.IsNullOrEmpty(next))
                 return null;
-            
+
             // Get the full next path
             string? folder = Path.GetDirectoryName(filename);
             if (folder != null)
                 next = Path.Combine(folder, next);
 
             // Open and return the next cabinet
-            // Catch exceptions due to file not existing, etc
             try
             {
                 var fs = File.Open(next, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -143,14 +142,13 @@ namespace SabreTools.Serialization.Wrappers
             string? prev = CabinetPrev;
             if (string.IsNullOrEmpty(prev))
                 return null;
-            
+
             // Get the full next path
             string? folder = Path.GetDirectoryName(filename);
             if (folder != null)
                 prev = Path.Combine(folder, prev);
 
             // Open and return the previous cabinet
-            // Catch exceptions due to file not existing, etc
             try
             {
                 var fs = File.Open(prev, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -173,31 +171,32 @@ namespace SabreTools.Serialization.Wrappers
             // Display warning in debug runs
             if (includeDebug) Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
 
-            // Open the full set if possible
-            var cabinet = this;
+            // Only extract if a physical file is present
+            // TODO: Revisit if partial extraction should be supported
             if (Filename == null)
             {
                 if (includeDebug) Console.WriteLine($"Cabinet set could not be opened!");
                 return false;
             }
-            
-            cabinet = OpenSet(Filename, includeDebug);
-            if (cabinet == null) 
+
+            // Open the full set if possible
+            var cabinet = OpenSet(Filename, includeDebug);
+            if (cabinet == null)
                 return false;
-            
+
             // If we have anything but the first file, avoid extraction to avoid repeat extracts
-            // TODO: if/when full msi support is added, somehow this is going to have to take that into account, while also still handling partial sets
-            if (this.Filename != cabinet.Filename)
+            // TODO: This is going to have to take missing parts into account for MSI support
+            if (Filename != cabinet.Filename)
             {
                 string firstCabName = Path.GetFileName(cabinet.Filename) ?? string.Empty;
                 if (includeDebug) Console.WriteLine($"Only the first cabinet {firstCabName} will be extracted!");
                 return false;
             }
-            
+
             // If the archive is invalid
-            if (cabinet?.Folders == null || cabinet.Folders.Length == 0)
+            if (cabinet.Folders.Length == 0)
                 return false;
-            
+
             return cabinet.ExtractSet(Filename, outputDirectory, includeDebug);
         }
 
@@ -229,7 +228,7 @@ namespace SabreTools.Serialization.Wrappers
                 fileList.Add(file);
             }
 
-            return fileList.ToArray();
+            return [.. fileList];
         }
 
         /// <summary>
@@ -264,30 +263,28 @@ namespace SabreTools.Serialization.Wrappers
         /// <returns>Read datablock</returns>
         private CFDATA? ReadBlock(ref long offset, bool includeDebug)
         {
-
-            // Should only ever occur if it tries to read more than the file, but good to catch in general
-            try 
+            try
             {
-                lock (this._dataSourceLock)
+                lock (_dataSourceLock)
                 {
-                    this._dataSource.SeekIfPossible(offset, SeekOrigin.Begin);
+                    _dataSource.SeekIfPossible(offset, SeekOrigin.Begin);
                     var dataBlock = new CFDATA();
 
-                    var dataReservedSize = this.Header.DataReservedSize;
+                    var dataReservedSize = Header.DataReservedSize;
 
-                    dataBlock.Checksum = this._dataSource.ReadUInt32LittleEndian();
-                    dataBlock.CompressedSize = this._dataSource.ReadUInt16LittleEndian();
-                    dataBlock.UncompressedSize = this._dataSource.ReadUInt16LittleEndian();
+                    dataBlock.Checksum = _dataSource.ReadUInt32LittleEndian();
+                    dataBlock.CompressedSize = _dataSource.ReadUInt16LittleEndian();
+                    dataBlock.UncompressedSize = _dataSource.ReadUInt16LittleEndian();
 
                     if (dataReservedSize > 0)
-                        dataBlock.ReservedData = this._dataSource.ReadBytes(dataReservedSize);
+                        dataBlock.ReservedData = _dataSource.ReadBytes(dataReservedSize);
 
                     if (dataBlock.CompressedSize > 0)
-                        dataBlock.CompressedData = this._dataSource.ReadBytes(dataBlock.CompressedSize);
+                        dataBlock.CompressedData = _dataSource.ReadBytes(dataBlock.CompressedSize);
 
                     offset = _dataSource.Position;
 
-                    return dataBlock;   
+                    return dataBlock;
                 }
             }
             catch (Exception ex)
@@ -295,7 +292,6 @@ namespace SabreTools.Serialization.Wrappers
                 if (includeDebug) Console.Error.WriteLine(ex);
                 return null;
             }
-            
         }
 
         /// <summary>
@@ -330,28 +326,27 @@ namespace SabreTools.Serialization.Wrappers
                         var file = files[0];
                         int bytesLeft = (int)file.FileSize;
                         int fileCounter = 0;
-                        
+
                         // Cache starting position
                         offset = folder.CabStartOffset;
-                        
+
                         var mszip = Decompressor.Create();
                         try
                         {
                             // Ensure folder contains data
                             if (folder.DataCount == 0)
                                 return false;
+                            if (folder.CabStartOffset <= 0)
+                                return false;
 
                             // Skip unsupported compression types to avoid opening a blank filestream. This can be altered/removed if these types are ever supported.
                             var compressionType = GetCompressionType(folder);
                             if (compressionType == CompressionType.TYPE_QUANTUM || compressionType == CompressionType.TYPE_LZX)
                                 continue;
-                            
-                            var fs = GetFileStream(file.Name, outputDirectory);
 
                             //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
 
-                            if (folder.CabStartOffset <= 0)
-                                return false; 
+                            var fs = GetFileStream(file.Name, outputDirectory);
 
                             var tempCabinet = cabinet;
                             int j = 0;
@@ -377,7 +372,7 @@ namespace SabreTools.Serialization.Wrappers
                                     tempCabinet = tempCabinet.Next;
                                     if (tempCabinet == null)
                                         break; // Next cab is missing, continue
-                                    
+
                                     // CompressionType not updated because there's no way it's possible that it can swap on continued blocks
                                     folder = tempCabinet.Folders[0];
                                     offset = folder.CabStartOffset;
@@ -387,9 +382,9 @@ namespace SabreTools.Serialization.Wrappers
                                         if (includeDebug) Console.Error.WriteLine($"Error extracting file {file.Name}");
                                         break;
                                     }
-                                    
+
                                     byte[] nextData = nextBlock.CompressedData;
-                                    if (nextData.Length == 0) 
+                                    if (nextData.Length == 0)
                                         continue;
 
                                     continuedBlock = true;
@@ -397,7 +392,7 @@ namespace SabreTools.Serialization.Wrappers
                                     dataBlock.CompressedSize += nextBlock.CompressedSize;
                                     dataBlock.UncompressedSize = nextBlock.UncompressedSize;
                                 }
-                                
+
                                 // Get the uncompressed data block
                                 byte[] data = compressionType switch
                                 {
@@ -411,7 +406,7 @@ namespace SabreTools.Serialization.Wrappers
                                     // Should be impossible
                                     _ => [],
                                 };
-                                
+
                                 if (bytesLeft > 0 && bytesLeft >= data.Length)
                                 {
                                     fs.Write(data);
@@ -478,7 +473,7 @@ namespace SabreTools.Serialization.Wrappers
                                     fs.Write(data, tempBytesLeft, data.Length - tempBytesLeft);
                                     bytesLeft -= (data.Length - tempBytesLeft);
                                 }
-                                
+
                                 // Top if block occurs on http://redump.org/disc/107833/ , middle on https://dbox.tools/titles/pc/57520FA0 , bottom still unobserved
                                 // While loop since this also handles 0 byte files. Example file seen in http://redump.org/disc/93312/ , cab Group17.cab, file TRACKSLOC6DYNTEX_BIN
                                 while (bytesLeft == 0)
@@ -496,7 +491,7 @@ namespace SabreTools.Serialization.Wrappers
 
                                 if (continuedBlock)
                                     j = 0;
-                                
+
                                 j++;
                             }
                         }

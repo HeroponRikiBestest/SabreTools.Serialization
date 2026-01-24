@@ -239,10 +239,10 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="skipPrev">True if previous cabinets should be skipped, false otherwise.</param>
         /// <param name="skipNext">True if next cabinets should be skipped, false otherwise.</param>
         /// <returns>Array of all files for the folder</returns>
-        private CFFILE[] GetSpannedFiles(string? filename, 
-            int folderIndex, 
-            bool includeDebug, 
-            bool skipPrev = false, 
+        private CFFILE[] GetSpannedFiles(string? filename,
+            int folderIndex,
+            bool includeDebug,
+            bool skipPrev = false,
             bool skipNext = false)
         {
             // Ignore invalid archives
@@ -260,7 +260,6 @@ namespace SabreTools.Serialization.Wrappers
                     return false;
                 else if (f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT)
                     return false;
-                
 
                 int fileFolder = GetFolderIndex(f);
                 return fileFolder == folderIndex;
@@ -292,8 +291,8 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Try to get Next if it doesn't exist
                 if (Next?.Header == null)
-                    Next = OpenNext(filename); 
-                
+                    Next = OpenNext(filename);
+
                 // Get all files from Prev
                 if (Next?.Header != null && Next.Folders != null)
                 {
