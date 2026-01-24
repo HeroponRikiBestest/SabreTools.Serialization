@@ -182,7 +182,6 @@ namespace SabreTools.Serialization.Wrappers
             }
             
             cabinet = OpenSet(Filename, includeDebug);
-            
             if (cabinet == null) 
                 return false;
             
@@ -194,7 +193,6 @@ namespace SabreTools.Serialization.Wrappers
                 if (includeDebug) Console.WriteLine($"Only the first cabinet {firstCabName} will be extracted!");
                 return false;
             }
-            
             
             // If the archive is invalid
             if (cabinet?.Folders == null || cabinet.Folders.Length == 0)
@@ -235,11 +233,11 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Get filestream for a file to be extracted to
+        /// Get stream representing the output file
         /// </summary>
         /// <param name="filename">Filename for the file that will be extracted to</param>
         /// <param name="outputDirectory">Path to the output directory</param>
-        /// <returns>Get stream representing the output file</returns>
+        /// <returns>Filestream opened for the file</returns>
         private FileStream GetFileStream(string filename, string outputDirectory)
         {
             // Ensure directory separators are consistent
@@ -362,19 +360,19 @@ namespace SabreTools.Serialization.Wrappers
                             // Has to be a while loop instead of a for loop due to cab spanning continue blocks
                             while (j < folder.DataCount)
                             {
-                                var db = tempCabinet.ReadBlock(ref offset, includeDebug);
-                                if (db == null)
+                                var dataBlock = tempCabinet.ReadBlock(ref offset, includeDebug);
+                                if (dataBlock == null)
                                 {
                                     if (includeDebug) Console.Error.WriteLine($"Error extracting file {file.Name}");
                                     break;
                                 }
 
                                 // Get the data to be processed
-                                byte[] blockData = db.CompressedData;
+                                byte[] blockData = dataBlock.CompressedData;
 
                                 // If the block is continued, append
                                 bool continuedBlock = false;
-                                if (db.UncompressedSize == 0)
+                                if (dataBlock.UncompressedSize == 0)
                                 {
                                     tempCabinet = tempCabinet.Next;
                                     if (tempCabinet == null)
@@ -382,32 +380,29 @@ namespace SabreTools.Serialization.Wrappers
                                     
                                     // CompressionType not updated because there's no way it's possible that it can swap on continued blocks
                                     folder = tempCabinet.Folders[0];
-                                    lock (tempCabinet._dataSourceLock)
+                                    offset = folder.CabStartOffset;
+                                    var nextBlock = tempCabinet.ReadBlock(ref offset, includeDebug);
+                                    if (nextBlock == null)
                                     {
-                                        offset = folder.CabStartOffset;
-                                        var nextBlock = tempCabinet.ReadBlock(ref offset, includeDebug);
-                                        if (nextBlock == null)
-                                        {
-                                            if (includeDebug) Console.Error.WriteLine($"Error extracting file {file.Name}");
-                                            break;
-                                        }
-                                        
-                                        byte[] nextData = nextBlock.CompressedData;
-                                        if (nextData.Length == 0) 
-                                            continue;
-
-                                        continuedBlock = true;
-                                        blockData = [.. blockData, .. nextData];
-                                        db.CompressedSize += nextBlock.CompressedSize;
-                                        db.UncompressedSize = nextBlock.UncompressedSize;
+                                        if (includeDebug) Console.Error.WriteLine($"Error extracting file {file.Name}");
+                                        break;
                                     }
+                                    
+                                    byte[] nextData = nextBlock.CompressedData;
+                                    if (nextData.Length == 0) 
+                                        continue;
+
+                                    continuedBlock = true;
+                                    blockData = [.. blockData, .. nextData];
+                                    dataBlock.CompressedSize += nextBlock.CompressedSize;
+                                    dataBlock.UncompressedSize = nextBlock.UncompressedSize;
                                 }
                                 
                                 // Get the uncompressed data block
                                 byte[] data = compressionType switch
                                 {
                                     CompressionType.TYPE_NONE => blockData,
-                                    CompressionType.TYPE_MSZIP => DecompressMSZIPBlock(f, mszip, j, db, blockData, includeDebug),
+                                    CompressionType.TYPE_MSZIP => DecompressMSZIPBlock(f, mszip, j, dataBlock, blockData, includeDebug),
 
                                     // TODO: Unsupported
                                     CompressionType.TYPE_QUANTUM => [],

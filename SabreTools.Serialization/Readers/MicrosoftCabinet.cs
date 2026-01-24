@@ -172,7 +172,20 @@ namespace SabreTools.Serialization.Readers
             if (header.FolderReservedSize > 0)
                 folder.ReservedData = data.ReadBytes(header.FolderReservedSize);
             
-            // if (folder.CabStartOffset > 0)
+            /*if (folder.CabStartOffset > 0)
+            {
+                long currentPosition = data.Position;
+                data.SeekIfPossible(folder.CabStartOffset, SeekOrigin.Begin);
+
+                folder.DataBlocks = new CFDATA[folder.DataCount];
+                for (int i = 0; i < folder.DataCount; i++)
+                {
+                    CFDATA dataBlock = ParseDataBlock(data, header.DataReservedSize);
+                    folder.DataBlocks[i] = dataBlock;
+                }
+
+                data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
+            }*/
 
             return folder;
         }
