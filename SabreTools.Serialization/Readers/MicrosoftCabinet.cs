@@ -171,32 +171,32 @@ namespace SabreTools.Serialization.Readers
 
             if (header.FolderReservedSize > 0)
                 folder.ReservedData = data.ReadBytes(header.FolderReservedSize);
-            
-            /*if (folder.CabStartOffset > 0)
-            {
-                long currentPosition = data.Position;
-                data.SeekIfPossible(folder.CabStartOffset, SeekOrigin.Begin);
 
-                folder.DataBlocks = new CFDATA[folder.DataCount];
-                for (int i = 0; i < folder.DataCount; i++)
-                {
-                    CFDATA dataBlock = ParseDataBlock(data, header.DataReservedSize);
-                    folder.DataBlocks[i] = dataBlock;
-                }
+            // if (folder.CabStartOffset > 0)
+            // {
+            //     long currentPosition = data.Position;
+            //     data.SeekIfPossible(folder.CabStartOffset, SeekOrigin.Begin);
 
-                data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
-            }*/
+            //     folder.DataBlocks = new CFDATA[folder.DataCount];
+            //     for (int i = 0; i < folder.DataCount; i++)
+            //     {
+            //         CFDATA dataBlock = ParseDataBlock(data, header.DataReservedSize);
+            //         folder.DataBlocks[i] = dataBlock;
+            //     }
+
+            //     data.SeekIfPossible(currentPosition, SeekOrigin.Begin);
+            // }
 
             return folder;
         }
-        
+
         /// <summary>
         /// Parse a Stream into a data block
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <param name="dataReservedSize">Reserved byte size for data blocks</param>
         /// <returns>Filled folder on success, null on error</returns>
-        private static CFDATA ParseDataBlock(Stream data, byte dataReservedSize)
+        public static CFDATA ParseDataBlock(Stream data, byte dataReservedSize)
         {
             var dataBlock = new CFDATA();
 
