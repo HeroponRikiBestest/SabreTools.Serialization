@@ -171,8 +171,33 @@ namespace SabreTools.Serialization.Readers
 
             if (header.FolderReservedSize > 0)
                 folder.ReservedData = data.ReadBytes(header.FolderReservedSize);
+            
+            // if (folder.CabStartOffset > 0)
 
             return folder;
+        }
+        
+        /// <summary>
+        /// Parse a Stream into a data block
+        /// </summary>
+        /// <param name="data">Stream to parse</param>
+        /// <param name="dataReservedSize">Reserved byte size for data blocks</param>
+        /// <returns>Filled folder on success, null on error</returns>
+        private static CFDATA ParseDataBlock(Stream data, byte dataReservedSize)
+        {
+            var dataBlock = new CFDATA();
+
+            dataBlock.Checksum = data.ReadUInt32LittleEndian();
+            dataBlock.CompressedSize = data.ReadUInt16LittleEndian();
+            dataBlock.UncompressedSize = data.ReadUInt16LittleEndian();
+
+            if (dataReservedSize > 0)
+                data.SeekIfPossible(dataReservedSize, SeekOrigin.Current);
+
+            if (dataBlock.CompressedSize > 0)
+                data.SeekIfPossible(dataBlock.CompressedSize, SeekOrigin.Current);
+
+            return dataBlock;
         }
 
         /// <summary>

@@ -236,14 +236,12 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="filename">Input filename of the cabinet to read from</param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <param name="ignorePrev">True to ignore previous links, false otherwise</param>
         /// <param name="skipPrev">True if previous cabinets should be skipped, false otherwise.</param>
         /// <param name="skipNext">True if next cabinets should be skipped, false otherwise.</param>
         /// <returns>Array of all files for the folder</returns>
         private CFFILE[] GetSpannedFiles(string? filename, 
             int folderIndex, 
             bool includeDebug, 
-            bool ignorePrev = false,
             bool skipPrev = false, 
             bool skipNext = false)
         {
@@ -257,14 +255,12 @@ namespace SabreTools.Serialization.Wrappers
                 if (string.IsNullOrEmpty(f.Name))
                     return false;
 
-                // Ignore links to previous cabinets, if required
-                if (ignorePrev)
-                {
-                    if (f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV)
-                        return false;
-                    else if (f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT)
-                        return false;
-                }
+                // Ignore links to previous cabinets
+                if (f.FolderIndex == FolderIndex.CONTINUED_FROM_PREV)
+                    return false;
+                else if (f.FolderIndex == FolderIndex.CONTINUED_PREV_AND_NEXT)
+                    return false;
+                
 
                 int fileFolder = GetFolderIndex(f);
                 return fileFolder == folderIndex;
@@ -296,8 +292,8 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Try to get Next if it doesn't exist
                 if (Next?.Header == null)
-                    Next = OpenNext(filename, false); // Debug ignored here since if it's enabled, this will get output earlier anyways
-
+                    Next = OpenNext(filename); 
+                
                 // Get all files from Prev
                 if (Next?.Header != null && Next.Folders != null)
                 {
