@@ -321,7 +321,7 @@ namespace SabreTools.Serialization.Wrappers
             /// <summary>
             /// Current number of bytes left to write of the current file
             /// </summary>
-            private int _bytesLeft;
+            private long _bytesLeft;
 
             /// <summary>
             /// Current index in the folder of files to extract
@@ -347,7 +347,7 @@ namespace SabreTools.Serialization.Wrappers
                 _cabinet = cabinet;
                 _folder = folder;
                 _files = files;
-                _bytesLeft = (int)_files[0].FileSize;
+                _bytesLeft = _files[0].FileSize;
                 _fileCounter = 0;
                 _offset = folder.CabStartOffset;
                 _fileStream = null;
@@ -434,11 +434,10 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     _fileStream = GetFileStream(filename, outputDirectory);
 
-                    int j = 0;
 
                     // Loop through the data blocks
                     // Has to be a while loop instead of a for loop due to cab spanning continue blocks
-                    while (j < _folder.DataCount)
+                    for (int j = 0; j < _folder.DataCount; j++)
                     {
                         var dataBlock = ReadBlock(includeDebug);
                         if (dataBlock == null)
@@ -497,8 +496,6 @@ namespace SabreTools.Serialization.Wrappers
 
                         if (continuedBlock)
                             j = 0;
-
-                        j++;
                     }
                 }
                 catch (Exception ex)
@@ -524,25 +521,25 @@ namespace SabreTools.Serialization.Wrappers
                 }
                 else
                 {
-                    int tempBytesLeft = _bytesLeft;
+                    long tempBytesLeft = _bytesLeft;
                     if (_fileStream == null)
                         return;
                     
                     if (_bytesLeft > 0 && _bytesLeft < data.Length)
-                        _fileStream.Write(data, 0, _bytesLeft);
+                        _fileStream.Write(data, 0, (int)_bytesLeft);
                     
                     if (EndFile(outputDirectory))
                         return;
                     
                     while (_bytesLeft < data.Length - tempBytesLeft)
                     {
-                        _fileStream.Write(data, tempBytesLeft, _bytesLeft);
+                        _fileStream.Write(data, (int)tempBytesLeft, (int)_bytesLeft);
                         tempBytesLeft += _bytesLeft;
                         if (EndFile(outputDirectory))
                             break;
                     }
 
-                    _fileStream.Write(data, tempBytesLeft, data.Length - tempBytesLeft);
+                    _fileStream.Write(data, (int)tempBytesLeft, data.Length - (int)tempBytesLeft);
                     _bytesLeft -= (data.Length - tempBytesLeft);
                 }
 
