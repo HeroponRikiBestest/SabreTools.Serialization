@@ -397,7 +397,6 @@ namespace SabreTools.Serialization.Wrappers
             /// <summary>
             /// Read a datablock from a cabinet
             /// </summary>
-            /// <param name="offset">Offset to be read from</param>
             /// <param name="includeDebug">True to include debug data, false otherwise</param>
             /// <returns>Read datablock</returns>
             private CFDATA? ReadBlock(bool includeDebug)
