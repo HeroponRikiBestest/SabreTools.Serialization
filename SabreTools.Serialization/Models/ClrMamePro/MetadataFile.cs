@@ -7,5 +7,8 @@ namespace SabreTools.Data.Models.ClrMamePro
 
         /// <remarks>game, machine, resource, set</remarks>
         public GameBase[]? Game { get; set; }
+
+        /// <remarks>info</remarks>
+        public Info? Info { get; set; }
     }
 }

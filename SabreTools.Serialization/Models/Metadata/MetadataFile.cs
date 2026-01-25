@@ -17,6 +17,10 @@ namespace SabreTools.Data.Models.Metadata
         [NoFilter]
         public const string HeaderKey = "header";
 
+        /// <remarks>InfoSource</remarks>
+        [NoFilter]
+        public const string InfoSourceKey = "infosource";
+
         #endregion
     }
 }
