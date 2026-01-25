@@ -281,8 +281,6 @@ namespace SabreTools.Serialization.Wrappers
                         
                         var reader = Reader.Create(cabinet, folder, files, file, bytesLeft, fileCounter, offset);
                         
-                        //var reader = new Reader(cabinet, folder, files, file, bytesLeft, fileCounter, offset);
-
                         reader.ExtractData(outputDirectory, compressionType, f, includeDebug);
                     }
 
