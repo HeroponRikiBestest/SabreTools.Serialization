@@ -177,15 +177,20 @@ namespace SabreTools.Serialization.Wrappers
                 // Open the full set if possible
                 cabinet = OpenSet(Filename, includeDebug);
                 if (cabinet == null)
-                    return false;
-                
-                // If we have anything but the first file, avoid extraction to avoid repeat extracts
-                // TODO: This is going to have to take missing parts into account for MSI support
-                if (Filename != cabinet.Filename)
                 {
-                    string firstCabName = Path.GetFileName(cabinet.Filename) ?? string.Empty;
-                    if (includeDebug) Console.WriteLine($"Only the first cabinet {firstCabName} will be extracted!");
-                    return false;
+                    if (includeDebug) Console.WriteLine($"Cabinet set could not be opened!");
+                    cabinet = this;
+                }
+                else
+                {
+                    // If we have anything but the first file, avoid extraction to avoid repeat extracts
+                    // TODO: This is going to have to take missing parts into account for MSI support
+                    if (Filename != cabinet.Filename)
+                    {
+                        string firstCabName = Path.GetFileName(cabinet.Filename) ?? string.Empty;
+                        if (includeDebug) Console.WriteLine($"Only the first cabinet {firstCabName} will be extracted!");
+                        return false;
+                    }
                 }
             }
             else
@@ -193,7 +198,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (includeDebug) Console.WriteLine($"Cabinet set could not be opened!");
                 cabinet = this;
             }
-            
+
             // If the archive is invalid
             if (cabinet.Folders.Length == 0)
                 return false;
