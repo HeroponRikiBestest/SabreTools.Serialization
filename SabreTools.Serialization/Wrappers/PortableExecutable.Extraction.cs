@@ -539,7 +539,7 @@ namespace SabreTools.Serialization.Wrappers
             // Attempt to extract package
             return MatroschkaPackage.Extract(outputDirectory, includeDebug);
         }
-        
+
         /// <summary>
         /// Extract data from an Installshield Executable
         /// </summary>

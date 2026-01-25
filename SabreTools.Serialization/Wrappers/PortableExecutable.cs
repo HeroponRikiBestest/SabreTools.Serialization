@@ -257,7 +257,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
         } = null;
-        
+
         /// <summary>
         /// InstallShield Executable wrapper, if it exists
         /// </summary>
@@ -289,7 +289,7 @@ namespace SabreTools.Serialization.Wrappers
                         _installshieldExecutableFailed = true;
                         return null;
                     }
-                    
+
                     // Parse the package
                     lock (_dataSourceLock)
                     {
@@ -1087,7 +1087,7 @@ namespace SabreTools.Serialization.Wrappers
         /// Cached attempt at creation for <see cref="InstallShieldExecutable"/>
         /// </summary>
         private bool _installshieldExecutableFailed = false;
-        
+
         /// <summary>
         /// Lock object for <see cref="MatroschkaPackage"/>
         /// </summary>
