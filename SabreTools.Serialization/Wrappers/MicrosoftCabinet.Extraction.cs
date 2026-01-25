@@ -511,6 +511,7 @@ namespace SabreTools.Serialization.Wrappers
             /// <param name="outputDirectory">Path to the output directory</param>
             private void WriteData(byte[] data, string outputDirectory)
             {
+                // If there are bytes left to write, and more bytes left to write than the length of the current data to be written.
                 if (_bytesLeft > 0 && _bytesLeft >= data.Length)
                 {
                     if (_fileStream == null)
@@ -525,12 +526,15 @@ namespace SabreTools.Serialization.Wrappers
                     if (_fileStream == null)
                         return;
                     
+                    // If there are still bytes left to write, but less bytes than the length of the current data to be written
                     if (_bytesLeft > 0 && _bytesLeft < data.Length)
                         _fileStream.Write(data, 0, (int)_bytesLeft);
                     
+                    // Close and iterate file.
                     if (EndFile(outputDirectory))
                         return;
                     
+                    // While the file still has bytes that need to be written to it, but less bytes than the input data still has to be written.
                     while (_bytesLeft < data.Length - tempBytesLeft)
                     {
                         _fileStream.Write(data, (int)tempBytesLeft, (int)_bytesLeft);
