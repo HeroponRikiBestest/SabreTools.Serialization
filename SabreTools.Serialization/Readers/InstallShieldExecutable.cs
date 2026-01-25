@@ -19,7 +19,6 @@ namespace SabreTools.Serialization.Readers
                 var sfx = new SFX();
                 
                 // Cache the initial offset
-                // This should always already be at the overlay offset.
                 long initialOffset = data.Position;
 
                 var sfxList = new List<FileEntry>();
