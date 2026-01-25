@@ -51,7 +51,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Seek to the first part of the cabinet set
-            while (current.CabinetPrev != null)
+            while (current.CabinetPrev is not null)
             {
                 // Attempt to open the previous cabinet
                 var prev = current.OpenPrevious(filename, includeDebug);
@@ -66,7 +66,7 @@ namespace SabreTools.Serialization.Wrappers
             var start = current;
 
             // Read in the cabinet parts sequentially
-            while (current.CabinetNext != null)
+            while (current.CabinetNext is not null)
             {
                 // If the current and next filenames match
                 if (Path.GetFileName(filename) == current.CabinetNext)
@@ -108,7 +108,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the full next path
             string? folder = Path.GetDirectoryName(filename);
-            if (folder != null)
+            if (folder is not null)
                 next = Path.Combine(folder, next);
 
             // Open and return the next cabinet
@@ -145,7 +145,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the full next path
             string? folder = Path.GetDirectoryName(filename);
-            if (folder != null)
+            if (folder is not null)
                 prev = Path.Combine(folder, prev);
 
             // Open and return the previous cabinet
@@ -172,7 +172,7 @@ namespace SabreTools.Serialization.Wrappers
             if (includeDebug) Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
 
             MicrosoftCabinet? cabinet;
-            if (Filename != null)
+            if (Filename is not null)
             {
                 // Open the full set if possible
                 cabinet = OpenSet(Filename, includeDebug);
@@ -378,7 +378,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Ensure the full output directory exists
                 filename = Path.Combine(outputDirectory, filename);
                 var directoryName = Path.GetDirectoryName(filename);
-                if (directoryName != null && !Directory.Exists(directoryName))
+                if (directoryName is not null && !Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
 
                 // Open the output file for writing

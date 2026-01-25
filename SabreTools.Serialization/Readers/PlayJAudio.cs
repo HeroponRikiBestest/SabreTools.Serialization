@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Readers
                     uint? unknownOffset2 = (audioHeader as AudioHeaderV1)?.UnknownOffset2;
 
                     // If we have an unknown value 2 offset
-                    if (unknownOffset2 != null && unknownOffset2 > 0)
+                    if (unknownOffset2 is not null && unknownOffset2 > 0)
                     {
                         // Get the unknown value 2 offset
                         long offset = initialOffset + unknownOffset2.Value;
@@ -96,7 +96,7 @@ namespace SabreTools.Serialization.Readers
                     uint? unknownOffset3 = (audioHeader as AudioHeaderV1)?.UnknownOffset3;
 
                     // If we have an unknown block 3 offset
-                    if (unknownOffset3 != null && unknownOffset3 > 0)
+                    if (unknownOffset3 is not null && unknownOffset3 > 0)
                     {
                         // Get the unknown block 3 offset
                         long offset = initialOffset + unknownOffset3.Value;

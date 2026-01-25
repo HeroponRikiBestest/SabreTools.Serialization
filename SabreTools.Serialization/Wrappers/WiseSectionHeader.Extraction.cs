@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.Wrappers
             // Extract the file
             var destination = new MemoryStream();
             ExtractionStatus status;
-            if (!(Version != null && Version[1] == 0x01))
+            if (!(Version is not null && Version[1] == 0x01))
                 status = ExtractStreamWithChecksum(destination, entrySize, includeDebug);
             else // hack for Codesited5.exe , very early and very strange.
                 status = ExtractStreamWithoutChecksum(destination, entrySize, includeDebug);
@@ -100,7 +100,7 @@ namespace SabreTools.Serialization.Wrappers
             // Ensure the full output directory exists
             filename = Path.Combine(outputDirectory, filename);
             var directoryName = Path.GetDirectoryName(filename);
-            if (directoryName != null && !Directory.Exists(directoryName))
+            if (directoryName is not null && !Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
             // Write the output file
@@ -142,7 +142,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (includeDebug) Console.WriteLine($"Expected CRC-32: {expectedCrc32:X8}");
 
                 byte[]? hashBytes = HashTool.GetByteArrayHashArray(actual, HashType.CRC32);
-                if (hashBytes != null)
+                if (hashBytes is not null)
                 {
                     uint actualCrc32 = BitConverter.ToUInt32(hashBytes, 0);
 

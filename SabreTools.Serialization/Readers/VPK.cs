@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.Readers
                 #region Archive Hashes
 
                 if (header?.Version == 2
-                    && file.ExtendedHeader != null
+                    && file.ExtendedHeader is not null
                     && file.ExtendedHeader.ArchiveMD5SectionSize > 0
                     && data.Position + file.ExtendedHeader.ArchiveMD5SectionSize <= data.Length)
                 {

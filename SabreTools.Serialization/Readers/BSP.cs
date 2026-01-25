@@ -68,7 +68,7 @@ namespace SabreTools.Serialization.Readers
                             break;
                         case LumpType.LUMP_VISIBILITY:
                             var visiblityLump = ParseVisibilityLump(data, lumpEntry.Offset, lumpEntry.Length);
-                            if (visiblityLump != null)
+                            if (visiblityLump is not null)
                                 file.VisibilityLump = visiblityLump;
 
                             break;

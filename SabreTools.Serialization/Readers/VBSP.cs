@@ -357,7 +357,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var plane = data.ReadType<Plane>();
-                if (plane != null)
+                if (plane is not null)
                     planes.Add(plane);
             }
 
@@ -375,7 +375,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var texdata = data.ReadType<Texdata>();
-                if (texdata != null)
+                if (texdata is not null)
                     texdatas.Add(texdata);
             }
 
@@ -436,7 +436,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var node = data.ReadType<VbspNode>();
-                if (node != null)
+                if (node is not null)
                     nodes.Add(node);
             }
 
@@ -454,7 +454,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var texinfo = data.ReadType<VbspTexinfo>();
-                if (texinfo != null)
+                if (texinfo is not null)
                     texinfos.Add(texinfo);
             }
 
@@ -472,7 +472,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var face = data.ReadType<VbspFace>();
-                if (face != null)
+                if (face is not null)
                     faces.Add(face);
             }
 
@@ -490,7 +490,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var model = ParsePhysModel(data);
-                if (model != null)
+                if (model is not null)
                     models.Add(model);
             }
 
@@ -514,7 +514,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < model.Solids.Length; i++)
             {
                 var solid = ParsePhysSolid(data);
-                if (solid != null)
+                if (solid is not null)
                     model.Solids[i] = solid;
             }
 
@@ -569,7 +569,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < lump.Count; i++)
             {
                 var occluderData = data.ReadType<OccluderData>();
-                if (occluderData != null)
+                if (occluderData is not null)
                     lump.Data[i] = occluderData;
             }
             lump.PolyDataCount = data.ReadInt32LittleEndian();
@@ -577,7 +577,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < lump.Count; i++)
             {
                 var polyData = data.ReadType<OccluderPolyData>();
-                if (polyData != null)
+                if (polyData is not null)
                     lump.PolyData[i] = polyData;
             }
             lump.VertexIndexCount = data.ReadInt32LittleEndian();
@@ -601,7 +601,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var leaf = ParseVbspLeaf(data, version);
-                if (leaf != null)
+                if (leaf is not null)
                     leaves.Add(leaf);
             }
 
@@ -671,7 +671,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var edge = data.ReadType<Edge>();
-                if (edge != null)
+                if (edge is not null)
                     edges.Add(edge);
             }
 
@@ -705,7 +705,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var model = data.ReadType<VbspModel>();
-                if (model != null)
+                if (model is not null)
                     models.Add(model);
             }
 
@@ -723,7 +723,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var worldLight = data.ReadType<WorldLight>();
-                if (worldLight != null)
+                if (worldLight is not null)
                     worldLights.Add(worldLight);
             }
 
@@ -773,7 +773,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var brush = data.ReadType<Brush>();
-                if (brush != null)
+                if (brush is not null)
                     brushes.Add(brush);
             }
 
@@ -791,7 +791,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var brushside = data.ReadType<Brushside>();
-                if (brushside != null)
+                if (brushside is not null)
                     brushsides.Add(brushside);
             }
 
@@ -809,7 +809,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var dispInfo = data.ReadType<DispInfo>();
-                if (dispInfo != null)
+                if (dispInfo is not null)
                     dispInfos.Add(dispInfo);
             }
 
@@ -827,7 +827,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var vert = data.ReadType<DispVert>();
-                if (vert != null)
+                if (vert is not null)
                     verts.Add(vert);
             }
 
@@ -848,7 +848,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < lump.LumpCount; i++)
             {
                 var dir = data.ReadType<GameLumpDirectory>();
-                if (dir != null)
+                if (dir is not null)
                     lump.Directories[i] = dir;
             }
 
@@ -866,7 +866,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var cubemap = data.ReadType<Cubemap>();
-                if (cubemap != null)
+                if (cubemap is not null)
                     cubemaps.Add(cubemap);
             }
 
@@ -898,7 +898,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var str = data.ReadNullTerminatedAnsiString();
-                if (str != null)
+                if (str is not null)
                     strings.Add(str);
             }
 
@@ -932,7 +932,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var overlay = data.ReadType<Overlay>();
-                if (overlay != null)
+                if (overlay is not null)
                     overlays.Add(overlay);
             }
 
@@ -950,7 +950,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var tri = data.ReadType<DispTri>();
-                if (tri != null)
+                if (tri is not null)
                     tris.Add(tri);
             }
 
@@ -968,7 +968,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var index = data.ReadType<LeafAmbientIndex>();
-                if (index != null)
+                if (index is not null)
                     indicies.Add(index);
             }
 
@@ -986,7 +986,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var lighting = data.ReadType<LeafAmbientLighting>();
-                if (lighting != null)
+                if (lighting is not null)
                     lightings.Add(lighting);
             }
 

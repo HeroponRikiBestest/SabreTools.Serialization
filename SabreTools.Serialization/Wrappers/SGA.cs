@@ -220,10 +220,10 @@ namespace SabreTools.Serialization.Wrappers
             // Get the folder
             Folder? folder = Directory switch
             {
-                Directory4 d4 => Array.Find(d4.Folders, f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
-                Directory5 d5 => Array.Find(d5.Folders, f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
-                Directory6 d6 => Array.Find(d6.Folders, f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
-                Directory7 d7 => Array.Find(d7.Folders, f => f != null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Directory4 d4 => Array.Find(d4.Folders, f => f is not null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Directory5 d5 => Array.Find(d5.Folders, f => f is not null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Directory6 d6 => Array.Find(d6.Folders, f => f is not null && index >= f.FileStartIndex && index <= f.FileEndIndex),
+                Directory7 d7 => Array.Find(d7.Folders, f => f is not null && index >= f.FileStartIndex && index <= f.FileEndIndex),
                 _ => default,
             };
 

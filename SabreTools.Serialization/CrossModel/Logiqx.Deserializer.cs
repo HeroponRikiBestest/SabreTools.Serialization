@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.CrossModel
             var datafile = new Datafile();
 
             var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
-            if (header != null)
+            if (header is not null)
             {
                 datafile.Build = header.ReadString(Data.Models.Metadata.Header.BuildKey);
                 datafile.Debug = header.ReadString(Data.Models.Metadata.Header.DebugKey);
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.CrossModel
             }
 
             var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
+            if (machines is not null && machines.Length > 0)
                 datafile.Game = Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, game));
 
             return datafile;
@@ -60,19 +60,19 @@ namespace SabreTools.Serialization.CrossModel
             string? forceNodump = item.ReadString(Data.Models.Metadata.Header.ForceNodumpKey);
             string? forceUnpacking = item.ReadString(Data.Models.Metadata.Header.ForcePackingKey);
 
-            if (headerVal != null
-                || forceMerging != null
-                || forceNodump != null
-                || forceUnpacking != null)
+            if (headerVal is not null
+                || forceMerging is not null
+                || forceNodump is not null
+                || forceUnpacking is not null)
             {
                 header.ClrMamePro = new Data.Models.Logiqx.ClrMamePro();
-                if (headerVal != null)
+                if (headerVal is not null)
                     header.ClrMamePro.Header = headerVal;
-                if (forceMerging != null)
+                if (forceMerging is not null)
                     header.ClrMamePro.ForceMerging = forceMerging;
-                if (forceNodump != null)
+                if (forceNodump is not null)
                     header.ClrMamePro.ForceNodump = forceNodump;
-                if (forceUnpacking != null)
+                if (forceUnpacking is not null)
                     header.ClrMamePro.ForcePacking = forceUnpacking;
             }
 
@@ -84,28 +84,28 @@ namespace SabreTools.Serialization.CrossModel
             string? lockBiosMode = item.ReadString(Data.Models.Metadata.Header.LockBiosModeKey);
             string? lockSampleMode = item.ReadString(Data.Models.Metadata.Header.LockSampleModeKey);
 
-            if (plugin != null
-                || romMode != null
-                || biosMode != null
-                || sampleMode != null
-                || lockRomMode != null
-                || lockBiosMode != null
-                || lockSampleMode != null)
+            if (plugin is not null
+                || romMode is not null
+                || biosMode is not null
+                || sampleMode is not null
+                || lockRomMode is not null
+                || lockBiosMode is not null
+                || lockSampleMode is not null)
             {
                 header.RomCenter = new Data.Models.Logiqx.RomCenter();
-                if (plugin != null)
+                if (plugin is not null)
                     header.RomCenter.Plugin = plugin;
-                if (romMode != null)
+                if (romMode is not null)
                     header.RomCenter.RomMode = romMode;
-                if (biosMode != null)
+                if (biosMode is not null)
                     header.RomCenter.BiosMode = biosMode;
-                if (sampleMode != null)
+                if (sampleMode is not null)
                     header.RomCenter.SampleMode = sampleMode;
-                if (lockRomMode != null)
+                if (lockRomMode is not null)
                     header.RomCenter.LockRomMode = lockRomMode;
-                if (lockBiosMode != null)
+                if (lockBiosMode is not null)
                     header.RomCenter.LockBiosMode = lockBiosMode;
-                if (lockSampleMode != null)
+                if (lockSampleMode is not null)
                     header.RomCenter.LockSampleMode = lockSampleMode;
             }
 
@@ -140,47 +140,47 @@ namespace SabreTools.Serialization.CrossModel
             gameBase.Category = item.ReadStringArray(Data.Models.Metadata.Machine.CategoryKey);
 
             var trurip = item.Read<Trurip>(Data.Models.Metadata.Machine.TruripKey);
-            if (trurip != null)
+            if (trurip is not null)
                 gameBase.Trurip = trurip;
 
             var releases = item.Read<Data.Models.Metadata.Release[]>(Data.Models.Metadata.Machine.ReleaseKey);
-            if (releases != null && releases.Length > 0)
+            if (releases is not null && releases.Length > 0)
                 gameBase.Release = Array.ConvertAll(releases, ConvertFromInternalModel);
 
             var biosSets = item.Read<Data.Models.Metadata.BiosSet[]>(Data.Models.Metadata.Machine.BiosSetKey);
-            if (biosSets != null && biosSets.Length > 0)
+            if (biosSets is not null && biosSets.Length > 0)
                 gameBase.BiosSet = Array.ConvertAll(biosSets, ConvertFromInternalModel);
 
             var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
-            if (roms != null && roms.Length > 0)
+            if (roms is not null && roms.Length > 0)
                 gameBase.Rom = Array.ConvertAll(roms, ConvertFromInternalModel);
 
             var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.Machine.DiskKey);
-            if (disks != null && disks.Length > 0)
+            if (disks is not null && disks.Length > 0)
                 gameBase.Disk = Array.ConvertAll(disks, ConvertFromInternalModel);
 
             var medias = item.Read<Data.Models.Metadata.Media[]>(Data.Models.Metadata.Machine.MediaKey);
-            if (medias != null && medias.Length > 0)
+            if (medias is not null && medias.Length > 0)
                 gameBase.Media = Array.ConvertAll(medias, ConvertFromInternalModel);
 
             var deviceRefs = item.Read<Data.Models.Metadata.DeviceRef[]>(Data.Models.Metadata.Machine.DeviceRefKey);
-            if (deviceRefs != null && deviceRefs.Length > 0)
+            if (deviceRefs is not null && deviceRefs.Length > 0)
                 gameBase.DeviceRef = Array.ConvertAll(deviceRefs, ConvertFromInternalModel);
 
             var samples = item.Read<Data.Models.Metadata.Sample[]>(Data.Models.Metadata.Machine.SampleKey);
-            if (samples != null && samples.Length > 0)
+            if (samples is not null && samples.Length > 0)
                 gameBase.Sample = Array.ConvertAll(samples, ConvertFromInternalModel);
 
             var archives = item.Read<Data.Models.Metadata.Archive[]>(Data.Models.Metadata.Machine.ArchiveKey);
-            if (archives != null && archives.Length > 0)
+            if (archives is not null && archives.Length > 0)
                 gameBase.Archive = Array.ConvertAll(archives, ConvertFromInternalModel);
 
             var driver = item.Read<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey);
-            if (driver != null)
+            if (driver is not null)
                 gameBase.Driver = ConvertFromInternalModel(driver);
 
             var softwareLists = item.Read<Data.Models.Metadata.SoftwareList[]>(Data.Models.Metadata.Machine.SoftwareListKey);
-            if (softwareLists != null && softwareLists.Length > 0)
+            if (softwareLists is not null && softwareLists.Length > 0)
                 gameBase.SoftwareList = Array.ConvertAll(softwareLists, ConvertFromInternalModel);
 
             return gameBase;

@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Wrappers
                     return null;
 
                 // Use the cached value, if it exists
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 // CRC-32 is the second packed field
@@ -51,7 +51,7 @@ namespace SabreTools.Serialization.Wrappers
                     return null;
 
                 // Use the cached value, if it exists
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 // MD5 is the first packed field
@@ -108,11 +108,11 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Add extra lengths
                 field += Header.ExtraLength;
-                if (Header.OriginalFileName != null)
+                if (Header.OriginalFileName is not null)
                     field += Header.OriginalFileName.Length + 1;
-                if (Header.FileComment != null)
+                if (Header.FileComment is not null)
                     field += Header.FileComment.Length + 1;
-                if (Header.CRC16 != null)
+                if (Header.CRC16 is not null)
                     field += 2;
 
                 return field;

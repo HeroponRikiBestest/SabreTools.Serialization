@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached value, if it exists
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 // If there are no directory entries

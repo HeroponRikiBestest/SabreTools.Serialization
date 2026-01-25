@@ -54,7 +54,7 @@ namespace SabreTools.Serialization.Writers
                     row.CRC32,
                 };
 
-                if (row.Size != null)
+                if (row.Size is not null)
                     rowArray.Add(row.Size);
 
                 writer.WriteValues([.. rowArray]);

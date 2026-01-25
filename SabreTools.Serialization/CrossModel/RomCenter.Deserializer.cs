@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.CrossModel
                 return null;
 
             var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
-            var metadataFile = header != null ? ConvertHeaderFromInternalModel(header) : new MetadataFile();
+            var metadataFile = header is not null ? ConvertHeaderFromInternalModel(header) : new MetadataFile();
 
             var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
             var items = new List<Rom>();

@@ -117,7 +117,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_overlayDataLock)
                 {
                     // Use the cached data if possible
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // Get the available source length, if possible
@@ -211,7 +211,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_overlayStringsLock)
                 {
                     // Use the cached data if possible
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // Get the available source length, if possible
@@ -259,7 +259,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_stubExecutableDataLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // Populate the raw stub executable data based on the source
@@ -398,7 +398,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Attempt to get the overlay header
                 _dataSource.SeekIfPossible(overlayOffset, SeekOrigin.Begin);
                 var header = WiseOverlayHeader.Create(_dataSource);
-                if (header != null)
+                if (header is not null)
                     return overlayOffset;
 
                 // Align and loop to see if it can be found
@@ -409,7 +409,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     _dataSource.SeekIfPossible(overlayOffset, SeekOrigin.Begin);
                     header = WiseOverlayHeader.Create(_dataSource);
-                    if (header != null)
+                    if (header is not null)
                         return overlayOffset;
 
                     overlayOffset += 0x10;

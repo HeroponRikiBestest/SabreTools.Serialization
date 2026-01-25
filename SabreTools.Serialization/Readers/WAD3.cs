@@ -78,7 +78,7 @@ namespace SabreTools.Serialization.Readers
 
                     // Try to parse the file entry
                     var fileEntry = ParseFileEntry(data, dirEntry.Type);
-                    if (fileEntry != null)
+                    if (fileEntry is not null)
                         file.FileEntries[i] = fileEntry;
                 }
 

@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Wrappers
                 using var xzFile = new XZStream(_dataSource);
 
                 // Ensure directory separators are consistent
-                string filename = Filename != null
+                string filename = Filename is not null
                     ? Path.GetFileNameWithoutExtension(Filename)
                     : Guid.NewGuid().ToString();
                 if (Path.DirectorySeparatorChar == '\\')
@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Ensure the full output directory exists
                 filename = Path.Combine(outputDirectory, filename);
                 var directoryName = Path.GetDirectoryName(filename);
-                if (directoryName != null && !Directory.Exists(directoryName))
+                if (directoryName is not null && !Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
 
                 // Extract the file

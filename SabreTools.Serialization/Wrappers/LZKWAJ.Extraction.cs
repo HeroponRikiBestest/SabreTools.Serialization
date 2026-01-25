@@ -30,7 +30,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Create the full output path
             string filename = FileName ?? "tempfile";
-            if (FileExtension != null)
+            if (FileExtension is not null)
                 filename += $".{FileExtension}";
 
             // Ensure directory separators are consistent
@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Wrappers
             // Ensure the full output directory exists
             filename = Path.Combine(outputDirectory, filename);
             var directoryName = Path.GetDirectoryName(filename);
-            if (directoryName != null && !Directory.Exists(directoryName))
+            if (directoryName is not null && !Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
             // Try to write the data

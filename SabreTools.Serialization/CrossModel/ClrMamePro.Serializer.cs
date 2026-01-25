@@ -13,16 +13,16 @@ namespace SabreTools.Serialization.CrossModel
 
             var metadataFile = new Data.Models.Metadata.MetadataFile();
 
-            if (obj?.ClrMamePro != null)
+            if (obj?.ClrMamePro is not null)
                 metadataFile[Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(obj.ClrMamePro);
 
-            if (obj?.Game != null && obj.Game.Length > 0)
+            if (obj?.Game is not null && obj.Game.Length > 0)
             {
                 metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(obj.Game, ConvertMachineToInternalModel);
             }
 
-            if (obj?.Info != null)
+            if (obj?.Info is not null)
                 metadataFile[Data.Models.Metadata.MetadataFile.InfoSourceKey] = ConvertInfoSourceToInternalModel(obj.Info);
 
             return metadataFile;
@@ -74,73 +74,73 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Machine.SampleOfKey] = item.SampleOf,
             };
 
-            if (item.Release != null && item.Release.Length > 0)
+            if (item.Release is not null && item.Release.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.ReleaseKey]
                     = Array.ConvertAll(item.Release, ConvertToInternalModel);
             }
 
-            if (item.BiosSet != null && item.BiosSet.Length > 0)
+            if (item.BiosSet is not null && item.BiosSet.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.BiosSetKey]
                     = Array.ConvertAll(item.BiosSet, ConvertToInternalModel);
             }
 
-            if (item.Rom != null && item.Rom.Length > 0)
+            if (item.Rom is not null && item.Rom.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.RomKey]
                     = Array.ConvertAll(item.Rom, ConvertToInternalModel);
             }
 
-            if (item.Disk != null && item.Disk.Length > 0)
+            if (item.Disk is not null && item.Disk.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.DiskKey]
                     = Array.ConvertAll(item.Disk, ConvertToInternalModel);
             }
 
-            if (item.Media != null && item.Media.Length > 0)
+            if (item.Media is not null && item.Media.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.MediaKey]
                     = Array.ConvertAll(item.Media, ConvertToInternalModel);
             }
 
-            if (item.Sample != null && item.Sample.Length > 0)
+            if (item.Sample is not null && item.Sample.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.SampleKey]
                     = Array.ConvertAll(item.Sample, ConvertToInternalModel);
             }
 
-            if (item.Archive != null && item.Archive.Length > 0)
+            if (item.Archive is not null && item.Archive.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.ArchiveKey]
                     = Array.ConvertAll(item.Archive, ConvertToInternalModel);
             }
 
-            if (item.Chip != null && item.Chip.Length > 0)
+            if (item.Chip is not null && item.Chip.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.ChipKey]
                     = Array.ConvertAll(item.Chip, ConvertToInternalModel);
             }
 
-            if (item.Video != null)
+            if (item.Video is not null)
             {
                 machine[Data.Models.Metadata.Machine.VideoKey]
                     = Array.ConvertAll(item.Video, ConvertToInternalModel);
             }
 
-            if (item.Sound != null)
+            if (item.Sound is not null)
                 machine[Data.Models.Metadata.Machine.SoundKey] = ConvertToInternalModel(item.Sound);
 
-            if (item.Input != null)
+            if (item.Input is not null)
                 machine[Data.Models.Metadata.Machine.InputKey] = ConvertToInternalModel(item.Input);
 
-            if (item.DipSwitch != null && item.DipSwitch.Length > 0)
+            if (item.DipSwitch is not null && item.DipSwitch.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.DipSwitchKey]
                     = Array.ConvertAll(item.DipSwitch, ConvertToInternalModel);
             }
 
-            if (item.Driver != null)
+            if (item.Driver is not null)
                 machine[Data.Models.Metadata.Machine.DriverKey] = ConvertToInternalModel(item.Driver);
 
             return machine;
@@ -371,7 +371,7 @@ namespace SabreTools.Serialization.CrossModel
             var infoSource = new Data.Models.Metadata.InfoSource();
 
             var sources = item.Source;
-            if (sources != null && sources.Length > 0)
+            if (sources is not null && sources.Length > 0)
             {
                 string[] sourcesCopy = [.. sources];
                 infoSource[Data.Models.Metadata.InfoSource.SourceKey] = sourcesCopy;

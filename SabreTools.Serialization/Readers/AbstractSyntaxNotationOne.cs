@@ -81,7 +81,7 @@ namespace SabreTools.Serialization.Readers
                 while (data.Position < currentIndex + (long)obj.Length)
                 {
                     var value = ParseTypeLengthValue(data);
-                    if (value != null)
+                    if (value is not null)
                         valueList.Add(value);
                 }
 

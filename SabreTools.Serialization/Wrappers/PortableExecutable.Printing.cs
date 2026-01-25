@@ -143,49 +143,49 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(header.LoaderFlags, "  Loader flags");
             builder.AppendLine(header.NumberOfRvaAndSizes, "  Number of data-directory entries");
 
-            if (header.ExportTable != null)
+            if (header.ExportTable is not null)
             {
                 builder.AppendLine("    Export Table (1)");
                 builder.AppendLine(header.ExportTable.VirtualAddress, "      Virtual address");
                 builder.AppendLine(header.ExportTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.ExportTable.Size, "      Size");
             }
-            if (header.ImportTable != null)
+            if (header.ImportTable is not null)
             {
                 builder.AppendLine("    Import Table (2)");
                 builder.AppendLine(header.ImportTable.VirtualAddress, "      Virtual address");
                 builder.AppendLine(header.ImportTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.ImportTable.Size, "      Size");
             }
-            if (header.ResourceTable != null)
+            if (header.ResourceTable is not null)
             {
                 builder.AppendLine("    Resource Table (3)");
                 builder.AppendLine(header.ResourceTable.VirtualAddress, "      Virtual address");
                 builder.AppendLine(header.ResourceTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.ResourceTable.Size, "      Size");
             }
-            if (header.ExceptionTable != null)
+            if (header.ExceptionTable is not null)
             {
                 builder.AppendLine("    Exception Table (4)");
                 builder.AppendLine(header.ExceptionTable.VirtualAddress, "      Virtual address");
                 builder.AppendLine(header.ExceptionTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.ExceptionTable.Size, "      Size");
             }
-            if (header.CertificateTable != null)
+            if (header.CertificateTable is not null)
             {
                 builder.AppendLine("    Certificate Table (5)");
                 builder.AppendLine("      Virtual address: N/A");
                 builder.AppendLine(header.CertificateTable.VirtualAddress, "      Physical address");
                 builder.AppendLine(header.CertificateTable.Size, "      Size");
             }
-            if (header.BaseRelocationTable != null)
+            if (header.BaseRelocationTable is not null)
             {
                 builder.AppendLine("    Base Relocation Table (6)");
                 builder.AppendLine(header.BaseRelocationTable.VirtualAddress, "      Virtual address");
                 builder.AppendLine(header.BaseRelocationTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.BaseRelocationTable.Size, "      Size");
             }
-            if (header.Debug != null)
+            if (header.Debug is not null)
             {
                 builder.AppendLine("    Debug Table (7)");
                 builder.AppendLine(header.Debug.VirtualAddress, "      Virtual address");
@@ -199,49 +199,49 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine("      Physical address: 0 (0x00000000)");
                 builder.AppendLine("      Size: 0 (0x00000000)");
             }
-            if (header.GlobalPtr != null)
+            if (header.GlobalPtr is not null)
             {
                 builder.AppendLine("    Global Pointer Register (9)");
                 builder.AppendLine(header.GlobalPtr.VirtualAddress, "      Virtual address");
                 builder.AppendLine(header.GlobalPtr.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.GlobalPtr.Size, "      Size");
             }
-            if (header.ThreadLocalStorageTable != null)
+            if (header.ThreadLocalStorageTable is not null)
             {
                 builder.AppendLine("    Thread Local Storage (TLS) Table (10)");
                 builder.AppendLine(header.ThreadLocalStorageTable.VirtualAddress, "      Virtual address");
                 builder.AppendLine(header.ThreadLocalStorageTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.ThreadLocalStorageTable.Size, "      Size");
             }
-            if (header.LoadConfigTable != null)
+            if (header.LoadConfigTable is not null)
             {
                 builder.AppendLine("    Load Config Table (11)");
                 builder.AppendLine(header.LoadConfigTable.VirtualAddress, "      Virtual address");
                 builder.AppendLine(header.LoadConfigTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.LoadConfigTable.Size, "      Size");
             }
-            if (header.BoundImport != null)
+            if (header.BoundImport is not null)
             {
                 builder.AppendLine("    Bound Import Table (12)");
                 builder.AppendLine(header.BoundImport.VirtualAddress, "      Virtual address");
                 builder.AppendLine(header.BoundImport.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.BoundImport.Size, "      Size");
             }
-            if (header.ImportAddressTable != null)
+            if (header.ImportAddressTable is not null)
             {
                 builder.AppendLine("    Import Address Table (13)");
                 builder.AppendLine(header.ImportAddressTable.VirtualAddress, "      Virtual address");
                 builder.AppendLine(header.ImportAddressTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.ImportAddressTable.Size, "      Size");
             }
-            if (header.DelayImportDescriptor != null)
+            if (header.DelayImportDescriptor is not null)
             {
                 builder.AppendLine("    Delay Import Descriptor (14)");
                 builder.AppendLine(header.DelayImportDescriptor.VirtualAddress, "      Virtual address");
                 builder.AppendLine(header.DelayImportDescriptor.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.DelayImportDescriptor.Size, "      Size");
             }
-            if (header.CLRRuntimeHeader != null)
+            if (header.CLRRuntimeHeader is not null)
             {
                 builder.AppendLine("    CLR Runtime Header (15)");
                 builder.AppendLine(header.CLRRuntimeHeader.VirtualAddress, "      Virtual address");
@@ -326,7 +326,7 @@ namespace SabreTools.Serialization.Wrappers
         private static void Print(StringBuilder builder, StandardRecord entry, int i)
         {
             builder.AppendLine($"  Symbol Table Entry {i} (Standard Record)");
-            if (entry.ShortName != null)
+            if (entry.ShortName is not null)
             {
                 builder.AppendLine(entry.ShortName, "    Short name", Encoding.ASCII);
             }
@@ -891,7 +891,7 @@ namespace SabreTools.Serialization.Wrappers
                     var entry = table.Entries[i];
 
                     var newTypes = new List<object>(types ?? []);
-                    if (entry.Name?.UnicodeString != null)
+                    if (entry.Name?.UnicodeString is not null)
                         newTypes.Add(Encoding.Unicode.GetString(entry.Name.UnicodeString));
                     else
                         newTypes.Add(entry.IntegerID);
@@ -916,9 +916,9 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(entry.IntegerID, $"{padding}Integer ID");
             }
 
-            if (entry.DataEntry != null)
+            if (entry.DataEntry is not null)
                 Print(builder, entry.DataEntry, level: level + 1, types, sections);
-            else if (entry.Subdirectory != null)
+            else if (entry.Subdirectory is not null)
                 Print(builder, entry.Subdirectory, level: level + 1, types, sections);
         }
 
@@ -938,7 +938,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(entry.Reserved, $"{padding}Reserved");
 
             // TODO: Print out per-type data
-            if (types != null && types.Count > 0 && types[0] is uint resourceType)
+            if (types is not null && types.Count > 0 && types[0] is uint resourceType)
             {
                 switch ((ResourceType)resourceType)
                 {
@@ -1010,7 +1010,7 @@ namespace SabreTools.Serialization.Wrappers
                         break;
                 }
             }
-            else if (types != null && types.Count > 0 && types[0] is string resourceString)
+            else if (types is not null && types.Count > 0 && types[0] is string resourceString)
             {
                 PrintResourceUNKNOWN(entry, level, types[0], builder);
             }
@@ -1123,7 +1123,7 @@ namespace SabreTools.Serialization.Wrappers
                 return;
             }
 
-            if (dialogBox.DialogTemplate != null)
+            if (dialogBox.DialogTemplate is not null)
             {
                 builder.AppendLine($"{padding}Style: {dialogBox.DialogTemplate.Style} (0x{dialogBox.DialogTemplate.Style:X})");
                 builder.AppendLine($"{padding}Extended style: {dialogBox.DialogTemplate.ExtendedStyle} (0x{dialogBox.DialogTemplate.ExtendedStyle:X})");
@@ -1172,13 +1172,13 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine(dialogItemTemplate.TitleResource, $"{padding}  Title resource");
                     builder.AppendLine(dialogItemTemplate.TitleResourceOrdinal, $"{padding}  Title resource ordinal");
                     builder.AppendLine(dialogItemTemplate.CreationDataSize, $"{padding}  Creation data size");
-                    if (dialogItemTemplate.CreationData != null && dialogItemTemplate.CreationData.Length != 0)
+                    if (dialogItemTemplate.CreationData is not null && dialogItemTemplate.CreationData.Length != 0)
                         builder.AppendLine(dialogItemTemplate.CreationData, $"{padding}  Creation data");
                     else
                         builder.AppendLine($"{padding}  Creation data: [EMPTY]");
                 }
             }
-            else if (dialogBox.ExtendedDialogTemplate != null)
+            else if (dialogBox.ExtendedDialogTemplate is not null)
             {
                 builder.AppendLine(dialogBox.ExtendedDialogTemplate.Version, $"{padding}Version");
                 builder.AppendLine(dialogBox.ExtendedDialogTemplate.Signature, $"{padding}Signature");
@@ -1234,7 +1234,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine(dialogItemTemplate.TitleResource, $"{padding}  Title resource");
                     builder.AppendLine(dialogItemTemplate.TitleResourceOrdinal, $"{padding}  Title resource ordinal");
                     builder.AppendLine(dialogItemTemplate.CreationDataSize, $"{padding}  Creation data size");
-                    if (dialogItemTemplate.CreationData != null && dialogItemTemplate.CreationData.Length != 0)
+                    if (dialogItemTemplate.CreationData is not null && dialogItemTemplate.CreationData.Length != 0)
                         builder.AppendLine(dialogItemTemplate.CreationData, $"{padding}  Creation data");
                     else
                         builder.AppendLine($"{padding}  Creation data: [EMPTY]");
@@ -1348,13 +1348,13 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     builder.AppendLine(magic, $"{padding}Data");
 
-                    //if (entry.Data != null)
+                    //if (entry.Data is not null)
                     //    builder.AppendLine(entry.Data, $"{padding}Value (Byte Data)");
-                    //if (entry.Data != null)
+                    //if (entry.Data is not null)
                     //    builder.AppendLine(Encoding.ASCII.GetString(entry.Data), $"{padding}Value (ASCII)");
-                    //if (entry.Data != null)
+                    //if (entry.Data is not null)
                     //    builder.AppendLine(Encoding.UTF8.GetString(entry.Data), $"{padding}Value (UTF-8)");
-                    //if (entry.Data != null)
+                    //if (entry.Data is not null)
                     //    builder.AppendLine(Encoding.Unicode.GetString(entry.Data), $"{padding}Value (Unicode)");
                 }
             }
@@ -1453,7 +1453,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(versionInfo.ValueLength, $"{padding}Value length");
             builder.AppendLine($"{padding}Resource type: {versionInfo.ResourceType} (0x{versionInfo.ResourceType:X})");
             builder.AppendLine(versionInfo.Key, $"{padding}Key");
-            if (versionInfo.ValueLength != 0 && versionInfo.Value != null)
+            if (versionInfo.ValueLength != 0 && versionInfo.Value is not null)
             {
                 builder.AppendLine(versionInfo.Value.Signature, $"{padding}[Fixed File Info] Signature");
                 builder.AppendLine(versionInfo.Value.StrucVersion, $"{padding}[Fixed File Info] Struct version");
@@ -1470,7 +1470,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(versionInfo.Value.FileDateLS, $"{padding}[Fixed File Info] File date (LS)");
             }
 
-            if (versionInfo.StringFileInfo != null)
+            if (versionInfo.StringFileInfo is not null)
             {
                 builder.AppendLine(versionInfo.StringFileInfo.Length, $"{padding}[String File Info] Length");
                 builder.AppendLine(versionInfo.StringFileInfo.ValueLength, $"{padding}[String File Info] Value length");
@@ -1525,7 +1525,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
 
-            if (versionInfo.VarFileInfo != null)
+            if (versionInfo.VarFileInfo is not null)
             {
                 builder.AppendLine(versionInfo.VarFileInfo.Length, $"{padding}[Var File Info] Length");
                 builder.AppendLine(versionInfo.VarFileInfo.ValueLength, $"{padding}[Var File Info] Value length");
@@ -1593,11 +1593,11 @@ namespace SabreTools.Serialization.Wrappers
             string padding = new(' ', (level + 1) * 2);
             builder.AppendLine($"{padding}HTML resource found, not parsed yet");
 
-            //if (entry.Data != null)
+            //if (entry.Data is not null)
             //    builder.AppendLine(Encoding.ASCII.GetString(entry.Data), $"{padding}Value (ASCII)");
-            //if (entry.Data != null)
+            //if (entry.Data is not null)
             //    builder.AppendLine(Encoding.UTF8.GetString(entry.Data), $"{padding}Value (UTF-8)");
-            //if (entry.Data != null)
+            //if (entry.Data is not null)
             //    builder.AppendLine(Encoding.Unicode.GetString(entry.Data), $"{padding}Value (Unicode)");
         }
 
@@ -1614,7 +1614,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             builder.AppendLine(assemblyManifest.ManifestVersion, $"{padding}Manifest version");
-            if (assemblyManifest.AssemblyIdentities != null && assemblyManifest.AssemblyIdentities.Length > 0)
+            if (assemblyManifest.AssemblyIdentities is not null && assemblyManifest.AssemblyIdentities.Length > 0)
             {
                 for (int i = 0; i < assemblyManifest.AssemblyIdentities.Length; i++)
                 {
@@ -1629,10 +1629,10 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
 
-            if (assemblyManifest.Description != null)
+            if (assemblyManifest.Description is not null)
                 builder.AppendLine(assemblyManifest.Description.Value, $"{padding}[Assembly Description] Value");
 
-            if (assemblyManifest.COMInterfaceExternalProxyStub != null && assemblyManifest.COMInterfaceExternalProxyStub.Length > 0)
+            if (assemblyManifest.COMInterfaceExternalProxyStub is not null && assemblyManifest.COMInterfaceExternalProxyStub.Length > 0)
             {
                 for (int i = 0; i < assemblyManifest.COMInterfaceExternalProxyStub.Length; i++)
                 {
@@ -1647,14 +1647,14 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
 
-            if (assemblyManifest.Dependency != null && assemblyManifest.Dependency.Length > 0)
+            if (assemblyManifest.Dependency is not null && assemblyManifest.Dependency.Length > 0)
             {
                 for (int i = 0; i < assemblyManifest.Dependency.Length; i++)
                 {
                     var dependency = assemblyManifest.Dependency[i];
-                    if (dependency?.DependentAssembly != null)
+                    if (dependency?.DependentAssembly is not null)
                     {
-                        if (dependency.DependentAssembly.AssemblyIdentity != null)
+                        if (dependency.DependentAssembly.AssemblyIdentity is not null)
                         {
                             builder.AppendLine(dependency.DependentAssembly.AssemblyIdentity.Name, $"{padding}[Dependency {i} Assembly Identity] Name");
                             builder.AppendLine(dependency.DependentAssembly.AssemblyIdentity.Version, $"{padding}[Dependency {i} Assembly Identity] Version");
@@ -1663,7 +1663,7 @@ namespace SabreTools.Serialization.Wrappers
                             builder.AppendLine(dependency.DependentAssembly.AssemblyIdentity.PublicKeyToken, $"{padding}[Dependency {i} Assembly Identity] Public key token");
                             builder.AppendLine(dependency.DependentAssembly.AssemblyIdentity.Language, $"{padding}[Dependency {i} Assembly Identity] Language");
                         }
-                        if (dependency.DependentAssembly.BindingRedirect != null && dependency.DependentAssembly.BindingRedirect.Length > 0)
+                        if (dependency.DependentAssembly.BindingRedirect is not null && dependency.DependentAssembly.BindingRedirect.Length > 0)
                         {
                             for (int j = 0; j < dependency.DependentAssembly.BindingRedirect.Length; j++)
                             {
@@ -1675,12 +1675,12 @@ namespace SabreTools.Serialization.Wrappers
                         }
                     }
 
-                    if (dependency != null)
+                    if (dependency is not null)
                         builder.AppendLine(dependency.Optional, $"{padding}[Dependency {i}] Optional");
                 }
             }
 
-            if (assemblyManifest.File != null && assemblyManifest.File.Length > 0)
+            if (assemblyManifest.File is not null && assemblyManifest.File.Length > 0)
             {
                 for (int i = 0; i < assemblyManifest.File.Length; i++)
                 {
@@ -1696,7 +1696,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine(file.HashAlgorithm, $"{padding}[File {i}] Hash algorithm");
                     builder.AppendLine(file.Size, $"{padding}[File {i}] Size");
 
-                    if (file.COMClass != null && file.COMClass.Length > 0)
+                    if (file.COMClass is not null && file.COMClass.Length > 0)
                     {
                         for (int j = 0; j < file.COMClass.Length; j++)
                         {
@@ -1708,7 +1708,7 @@ namespace SabreTools.Serialization.Wrappers
                             builder.AppendLine(comClass.TLBID, $"{padding}[File {i} COM Class {j}] TLBID");
                             builder.AppendLine(comClass.Description, $"{padding}[File {i} COM Class {j}] Description");
 
-                            if (comClass.ProgIDs != null && comClass.ProgIDs.Length > 0)
+                            if (comClass.ProgIDs is not null && comClass.ProgIDs.Length > 0)
                             {
                                 for (int k = 0; k < comClass.ProgIDs.Length; k++)
                                 {
@@ -1719,7 +1719,7 @@ namespace SabreTools.Serialization.Wrappers
                         }
                     }
 
-                    if (file.COMInterfaceProxyStub != null && file.COMInterfaceProxyStub.Length > 0)
+                    if (file.COMInterfaceProxyStub is not null && file.COMInterfaceProxyStub.Length > 0)
                     {
                         for (int j = 0; j < file.COMInterfaceProxyStub.Length; j++)
                         {
@@ -1734,7 +1734,7 @@ namespace SabreTools.Serialization.Wrappers
                         }
                     }
 
-                    if (file.Typelib != null && file.Typelib.Length > 0)
+                    if (file.Typelib is not null && file.Typelib.Length > 0)
                     {
                         for (int j = 0; j < file.Typelib.Length; j++)
                         {
@@ -1748,7 +1748,7 @@ namespace SabreTools.Serialization.Wrappers
                         }
                     }
 
-                    if (file.WindowClass != null && file.WindowClass.Length > 0)
+                    if (file.WindowClass is not null && file.WindowClass.Length > 0)
                     {
                         for (int j = 0; j < file.WindowClass.Length; j++)
                         {
@@ -1761,7 +1761,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
 
-            if (assemblyManifest.EverythingElse != null && assemblyManifest.EverythingElse.Length > 0)
+            if (assemblyManifest.EverythingElse is not null && assemblyManifest.EverythingElse.Length > 0)
             {
                 for (int i = 0; i < assemblyManifest.EverythingElse.Length; i++)
                 {
@@ -1832,13 +1832,13 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     builder.AppendLine(magic, $"{padding}Data");
 
-                    //if (entry.Data != null)
+                    //if (entry.Data is not null)
                     //    builder.AppendLine(entry.Data, $"{padding}Value (Byte Data)");
-                    //if (entry.Data != null)
+                    //if (entry.Data is not null)
                     //    builder.AppendLine(Encoding.ASCII.GetString(entry.Data), $"{padding}Value (ASCII)");
-                    //if (entry.Data != null)
+                    //if (entry.Data is not null)
                     //    builder.AppendLine(Encoding.UTF8.GetString(entry.Data), $"{padding}Value (UTF-8)");
-                    //if (entry.Data != null)
+                    //if (entry.Data is not null)
                     //    builder.AppendLine(Encoding.Unicode.GetString(entry.Data), $"{padding}Value (Unicode)");
                 }
             }

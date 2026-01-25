@@ -49,19 +49,19 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteSection("CREDITS");
 
-            if (credits.Author != null)
+            if (credits.Author is not null)
                 writer.WriteKeyValuePair("Author", credits.Author);
-            if (credits.Version != null)
+            if (credits.Version is not null)
                 writer.WriteKeyValuePair("Version", credits.Version);
-            if (credits.Email != null)
+            if (credits.Email is not null)
                 writer.WriteKeyValuePair("Email", credits.Email);
-            if (credits.Homepage != null)
+            if (credits.Homepage is not null)
                 writer.WriteKeyValuePair("Homepage", credits.Homepage);
-            if (credits.Url != null)
+            if (credits.Url is not null)
                 writer.WriteKeyValuePair("Url", credits.Url);
-            if (credits.Date != null)
+            if (credits.Date is not null)
                 writer.WriteKeyValuePair("Date", credits.Date);
-            if (credits.Comment != null)
+            if (credits.Comment is not null)
                 writer.WriteKeyValuePair("Comment", credits.Comment);
             writer.WriteLine();
 
@@ -81,13 +81,13 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteSection("DAT");
 
-            if (dat.Version != null)
+            if (dat.Version is not null)
                 writer.WriteKeyValuePair("Version", dat.Version);
-            if (dat.Plugin != null)
+            if (dat.Plugin is not null)
                 writer.WriteKeyValuePair("Plugin", dat.Plugin);
-            if (dat.Split != null)
+            if (dat.Split is not null)
                 writer.WriteKeyValuePair("Split", dat.Split);
-            if (dat.Merge != null)
+            if (dat.Merge is not null)
                 writer.WriteKeyValuePair("Merge", dat.Merge);
             writer.WriteLine();
 
@@ -107,9 +107,9 @@ namespace SabreTools.Serialization.Writers
 
             writer.WriteSection("EMULATOR");
 
-            if (emulator.RefName != null)
+            if (emulator.RefName is not null)
                 writer.WriteKeyValuePair("refname", emulator.RefName);
-            if (emulator.Version != null)
+            if (emulator.Version is not null)
                 writer.WriteKeyValuePair("version", emulator.Version);
             writer.WriteLine();
 

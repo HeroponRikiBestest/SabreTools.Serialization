@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_stubExecutableDataLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // Populate the raw stub executable data based on the source

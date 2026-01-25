@@ -418,7 +418,7 @@ namespace SabreTools.Serialization.Readers
             obj.LocalFileHeader = localFileHeader;
 
             ulong compressedSize = localFileHeader.CompressedSize;
-            if (localFileHeader.ExtraFields != null)
+            if (localFileHeader.ExtraFields is not null)
             {
                 foreach (var field in localFileHeader.ExtraFields)
                 {
@@ -660,7 +660,7 @@ namespace SabreTools.Serialization.Readers
                     _ => ParseUnknownExtraField(data, ref offset),
                 };
 
-                if (field != null)
+                if (field is not null)
                     fields.Add(field);
             }
 
@@ -751,7 +751,7 @@ namespace SabreTools.Serialization.Readers
                     _ => ParseUnknownExtraField(data, ref offset),
                 };
 
-                if (field != null)
+                if (field is not null)
                     fields.Add(field);
             }
 

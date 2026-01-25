@@ -81,7 +81,7 @@ namespace SabreTools.Serialization.Readers
                     optionalHeader = ParseOptionalHeader(data, fileHeader.SizeOfOptionalHeader);
 
                     // Set the optional header
-                    if (optionalHeader != null)
+                    if (optionalHeader is not null)
                         pex.OptionalHeader = optionalHeader;
                 }
 
@@ -132,7 +132,7 @@ namespace SabreTools.Serialization.Readers
                 #region Export Table
 
                 // Should also be in a '.edata' section
-                if (optionalHeader.ExportTable != null)
+                if (optionalHeader.ExportTable is not null)
                 {
                     offset = initialOffset
                         + optionalHeader.ExportTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.Readers
                             pex.ExportDirectoryTable = exportDirectoryTable;
 
                         // If the export table was parsed, read the remaining pieces
-                        if (exportDirectoryTable != null)
+                        if (exportDirectoryTable is not null)
                         {
                             // Name
                             offset = initialOffset + exportDirectoryTable.NameRVA.ConvertVirtualAddress(pex.SectionTable);
@@ -194,7 +194,7 @@ namespace SabreTools.Serialization.Readers
                             }
 
                             // Name table
-                            if (exportDirectoryTable.NumberOfNamePointers != 0 && pex.NamePointerTable?.Pointers != null)
+                            if (exportDirectoryTable.NumberOfNamePointers != 0 && pex.NamePointerTable?.Pointers is not null)
                                 pex.ExportNameTable = ParseExportNameTable(data, initialOffset, pex.NamePointerTable.Pointers, pex.SectionTable);
                         }
                     }
@@ -205,7 +205,7 @@ namespace SabreTools.Serialization.Readers
                 #region Import Table
 
                 // Should also be in a '.idata' section
-                if (optionalHeader.ImportTable != null)
+                if (optionalHeader.ImportTable is not null)
                 {
                     offset = initialOffset
                         + optionalHeader.ImportTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
@@ -225,7 +225,7 @@ namespace SabreTools.Serialization.Readers
                         pex.ImportDirectoryTable = importDirectoryTable;
 
                         // If the export table was parsed, read the remaining pieces
-                        if (pex.ImportDirectoryTable != null)
+                        if (pex.ImportDirectoryTable is not null)
                         {
                             // Names
                             for (int i = 0; i < importDirectoryTable.Length; i++)
@@ -252,7 +252,7 @@ namespace SabreTools.Serialization.Readers
                             }
 
                             // If an error was not encountered, read the remaining tables
-                            if (pex.ImportDirectoryTable != null)
+                            if (pex.ImportDirectoryTable is not null)
                             {
                                 pex.ImportLookupTables = ParseImportLookupTables(data,
                                     initialOffset,
@@ -275,7 +275,7 @@ namespace SabreTools.Serialization.Readers
                 }
 
                 // TODO: Figure out how to use this in lieu of the current ParseImportAddressTables
-                if (optionalHeader.ImportAddressTable != null)
+                if (optionalHeader.ImportAddressTable is not null)
                 {
                     offset = initialOffset
                         + optionalHeader.ImportAddressTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
@@ -297,7 +297,7 @@ namespace SabreTools.Serialization.Readers
                 #region Resource Directory Table
 
                 // Should also be in a '.rsrc' section
-                if (optionalHeader.ResourceTable != null)
+                if (optionalHeader.ResourceTable is not null)
                 {
                     offset = initialOffset
                         + optionalHeader.ResourceTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
@@ -331,7 +331,7 @@ namespace SabreTools.Serialization.Readers
                         #region Hidden Resources
 
                         // If we have not used up the full size, parse the remaining chunk as a single resource
-                        if (pex.ResourceDirectoryTable?.Entries != null
+                        if (pex.ResourceDirectoryTable?.Entries is not null
                             && tableOffset < tableSize
                             && (offset + tableOffset) != endOfSectionData)
                         {
@@ -368,7 +368,7 @@ namespace SabreTools.Serialization.Readers
 
                 #region Certificate Table
 
-                if (optionalHeader.CertificateTable != null)
+                if (optionalHeader.CertificateTable is not null)
                 {
                     // The Certificate Table entry points to a table of attribute certificates. These
                     // certificates are not loaded into memory as part of the image. As such, the first
@@ -392,7 +392,7 @@ namespace SabreTools.Serialization.Readers
                 #region Base Relocation Table
 
                 // Should also be in a '.reloc' section
-                if (optionalHeader.BaseRelocationTable != null)
+                if (optionalHeader.BaseRelocationTable is not null)
                 {
                     offset = initialOffset
                         + optionalHeader.BaseRelocationTable.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
@@ -414,7 +414,7 @@ namespace SabreTools.Serialization.Readers
                 #region Debug Table
 
                 // Should also be in a '.debug' section
-                if (optionalHeader.Debug != null)
+                if (optionalHeader.Debug is not null)
                 {
                     offset = initialOffset
                         + optionalHeader.Debug.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
@@ -442,7 +442,7 @@ namespace SabreTools.Serialization.Readers
 
                 #region Delay-Load Directory Table
 
-                if (optionalHeader.DelayImportDescriptor != null)
+                if (optionalHeader.DelayImportDescriptor is not null)
                 {
                     offset = initialOffset
                         + optionalHeader.DelayImportDescriptor.VirtualAddress.ConvertVirtualAddress(pex.SectionTable);
@@ -1018,7 +1018,7 @@ namespace SabreTools.Serialization.Readers
 
             obj.Hint = data.ReadUInt16LittleEndian();
             string? name = data.ReadNullTerminatedAnsiString();
-            if (name != null)
+            if (name is not null)
                 obj.Name = name;
 
             return obj;
@@ -1451,7 +1451,7 @@ namespace SabreTools.Serialization.Readers
             foreach (var entry in table.Entries)
             {
                 // Handle directory entries directly
-                if (entry.DataEntry != null && entry.DataEntry.Size > 0)
+                if (entry.DataEntry is not null && entry.DataEntry.Size > 0)
                 {
                     // Convert the data RVA to an offset
                     long nextOffset = entry.DataEntry.DataRVA.ConvertVirtualAddress(sections);
@@ -1469,13 +1469,13 @@ namespace SabreTools.Serialization.Readers
                     else if (nextOffset + entry.DataEntry.Size <= data.Length)
                     {
                         byte[]? entryData = data.ReadFrom(nextOffset + initialOffset, (int)entry.DataEntry.Size, retainPosition: true);
-                        if (entryData != null)
+                        if (entryData is not null)
                             entry.DataEntry.Data = entryData;
                     }
                 }
 
                 // Handle subdirectories by recursion
-                else if (entry.Subdirectory != null)
+                else if (entry.Subdirectory is not null)
                 {
                     ParseResourceData(data,
                         initialOffset,
@@ -1720,13 +1720,13 @@ namespace SabreTools.Serialization.Readers
                 nextSymbolType = 3;
             }
             else if (obj.StorageClass == StorageClass.IMAGE_SYM_CLASS_FILE
-                && shortName != null)
+                && shortName is not null)
             {
                 // Symbol name should be ".file"
                 nextSymbolType = 4;
             }
             else if (obj.StorageClass == StorageClass.IMAGE_SYM_CLASS_STATIC
-                && shortName != null)
+                && shortName is not null)
             {
                 // Should have the name of a section (like ".text")
                 nextSymbolType = 5;

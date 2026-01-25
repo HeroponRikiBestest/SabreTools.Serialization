@@ -284,7 +284,7 @@ namespace StormLibSharp
                 _openFiles.Clear();
 
                 // Release
-                if (_handle != null && !_handle.IsInvalid)
+                if (_handle is not null && !_handle.IsInvalid)
                 {
                     _handle.Close();
                     _handle = null;

@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 if (MediaSubtypes.TryGetValue(Model.MediaSubtypeIdentifier, out var mediaSubtype))
@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 if (Publishers.TryGetValue(Model.PublisherIdentifier, out var publisher))
@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 if (Regions.TryGetValue(Model.RegionIdentifier, out var region))

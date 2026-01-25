@@ -54,7 +54,7 @@ namespace SabreTools.Serialization.Readers
                 var difatSectors = new List<SectorNumber>();
 
                 // Add the sectors from the header
-                if (fileHeader.DIFAT != null)
+                if (fileHeader.DIFAT is not null)
                     difatSectors.AddRange(fileHeader.DIFAT);
 
                 // Loop through and add the DIFAT sectors

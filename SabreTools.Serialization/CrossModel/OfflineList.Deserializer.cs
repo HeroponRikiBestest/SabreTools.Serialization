@@ -12,10 +12,10 @@ namespace SabreTools.Serialization.CrossModel
                 return null;
 
             var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
-            var dat = header != null ? ConvertHeaderFromInternalModel(header) : new Dat();
+            var dat = header is not null ? ConvertHeaderFromInternalModel(header) : new Dat();
 
             var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
+            if (machines is not null && machines.Length > 0)
             {
                 dat.Games = new Games
                 {
@@ -97,7 +97,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
-            if (roms != null && roms.Length > 0)
+            if (roms is not null && roms.Length > 0)
             {
                 var romSizes = Array.ConvertAll(roms, r => r.ReadLong(Data.Models.Metadata.Rom.SizeKey) ?? -1);
                 game.RomSize = Array.Find(romSizes, s => s > -1).ToString();

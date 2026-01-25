@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
-            if (item?.Game != null && item.Game.Length > 0)
+            if (item?.Game is not null && item.Game.Length > 0)
             {
                 metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(item.Game, Listxml.ConvertMachineToInternalModel);

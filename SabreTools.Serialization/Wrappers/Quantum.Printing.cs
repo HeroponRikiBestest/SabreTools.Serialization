@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(fileDescriptor.ExpandedFileSize, "    Expanded file size");
                 builder.AppendLine(fileDescriptor.FileTime, "    File time");
                 builder.AppendLine(fileDescriptor.FileDate, "    File date");
-                if (fileDescriptor.Unknown != null)
+                if (fileDescriptor.Unknown is not null)
                     builder.AppendLine(fileDescriptor.Unknown.Value, "    Unknown (Checksum?)");
             }
 

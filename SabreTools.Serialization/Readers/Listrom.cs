@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.Readers
                     if (string.IsNullOrEmpty(line))
                     {
                         // If we have a set to process
-                        if (set != null)
+                        if (set is not null)
                         {
                             set.Row = [.. rows];
                             sets.Add(set);
@@ -225,12 +225,12 @@ namespace SabreTools.Serialization.Readers
                             break;
                     }
 
-                    if (row != null)
+                    if (row is not null)
                         rows.Add(row);
                 }
 
                 // If we have a set to process
-                if (set != null)
+                if (set is not null)
                 {
                     set.Row = [.. rows];
                     sets.Add(set);

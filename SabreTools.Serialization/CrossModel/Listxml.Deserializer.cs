@@ -12,10 +12,10 @@ namespace SabreTools.Serialization.CrossModel
                 return null;
 
             var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
-            var mame = header != null ? ConvertMameFromInternalModel(header) : new Mame();
+            var mame = header is not null ? ConvertMameFromInternalModel(header) : new Mame();
 
             var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
+            if (machines is not null && machines.Length > 0)
                 mame.Game = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 
             return mame;
@@ -59,83 +59,83 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var biosSets = item.Read<Data.Models.Metadata.BiosSet[]>(Data.Models.Metadata.Machine.BiosSetKey);
-            if (biosSets != null && biosSets.Length > 0)
+            if (biosSets is not null && biosSets.Length > 0)
                 machine.BiosSet = Array.ConvertAll(biosSets, ConvertFromInternalModel);
 
             var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
-            if (roms != null && roms.Length > 0)
+            if (roms is not null && roms.Length > 0)
                 machine.Rom = Array.ConvertAll(roms, ConvertFromInternalModel);
 
             var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.Machine.DiskKey);
-            if (disks != null && disks.Length > 0)
+            if (disks is not null && disks.Length > 0)
                 machine.Disk = Array.ConvertAll(disks, ConvertFromInternalModel);
 
             var deviceRefs = item.Read<Data.Models.Metadata.DeviceRef[]>(Data.Models.Metadata.Machine.DeviceRefKey);
-            if (deviceRefs != null && deviceRefs.Length > 0)
+            if (deviceRefs is not null && deviceRefs.Length > 0)
                 machine.DeviceRef = Array.ConvertAll(deviceRefs, ConvertFromInternalModel);
 
             var samples = item.Read<Data.Models.Metadata.Sample[]>(Data.Models.Metadata.Machine.SampleKey);
-            if (samples != null && samples.Length > 0)
+            if (samples is not null && samples.Length > 0)
                 machine.Sample = Array.ConvertAll(samples, ConvertFromInternalModel);
 
             var chips = item.Read<Data.Models.Metadata.Chip[]>(Data.Models.Metadata.Machine.ChipKey);
-            if (chips != null && chips.Length > 0)
+            if (chips is not null && chips.Length > 0)
                 machine.Chip = Array.ConvertAll(chips, ConvertFromInternalModel);
 
             var displays = item.Read<Data.Models.Metadata.Display[]>(Data.Models.Metadata.Machine.DisplayKey);
-            if (displays != null && displays.Length > 0)
+            if (displays is not null && displays.Length > 0)
                 machine.Display = Array.ConvertAll(displays, ConvertFromInternalModel);
 
             var videos = item.Read<Data.Models.Metadata.Video[]>(Data.Models.Metadata.Machine.VideoKey);
-            if (videos != null && videos.Length > 0)
+            if (videos is not null && videos.Length > 0)
                 machine.Video = Array.ConvertAll(videos, ConvertFromInternalModel);
 
             var sound = item.Read<Data.Models.Metadata.Sound>(Data.Models.Metadata.Machine.SoundKey);
-            if (sound != null)
+            if (sound is not null)
                 machine.Sound = ConvertFromInternalModel(sound);
 
             var input = item.Read<Data.Models.Metadata.Input>(Data.Models.Metadata.Machine.InputKey);
-            if (input != null)
+            if (input is not null)
                 machine.Input = ConvertFromInternalModel(input);
 
             var dipSwitches = item.Read<Data.Models.Metadata.DipSwitch[]>(Data.Models.Metadata.Machine.DipSwitchKey);
-            if (dipSwitches != null && dipSwitches.Length > 0)
+            if (dipSwitches is not null && dipSwitches.Length > 0)
                 machine.DipSwitch = Array.ConvertAll(dipSwitches, ConvertFromInternalModel);
 
             var configurations = item.Read<Data.Models.Metadata.Configuration[]>(Data.Models.Metadata.Machine.ConfigurationKey);
-            if (configurations != null && configurations.Length > 0)
+            if (configurations is not null && configurations.Length > 0)
                 machine.Configuration = Array.ConvertAll(configurations, ConvertFromInternalModel);
 
             var ports = item.Read<Data.Models.Metadata.Port[]>(Data.Models.Metadata.Machine.PortKey);
-            if (ports != null && ports.Length > 0)
+            if (ports is not null && ports.Length > 0)
                 machine.Port = Array.ConvertAll(ports, ConvertFromInternalModel);
 
             var adjusters = item.Read<Data.Models.Metadata.Adjuster[]>(Data.Models.Metadata.Machine.AdjusterKey);
-            if (adjusters != null && adjusters.Length > 0)
+            if (adjusters is not null && adjusters.Length > 0)
                 machine.Adjuster = Array.ConvertAll(adjusters, ConvertFromInternalModel);
 
             var driver = item.Read<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey);
-            if (driver != null)
+            if (driver is not null)
                 machine.Driver = ConvertFromInternalModel(driver);
 
             var features = item.Read<Data.Models.Metadata.Feature[]>(Data.Models.Metadata.Machine.FeatureKey);
-            if (features != null && features.Length > 0)
+            if (features is not null && features.Length > 0)
                 machine.Feature = Array.ConvertAll(features, ConvertFromInternalModel);
 
             var devices = item.Read<Data.Models.Metadata.Device[]>(Data.Models.Metadata.Machine.DeviceKey);
-            if (devices != null && devices.Length > 0)
+            if (devices is not null && devices.Length > 0)
                 machine.Device = Array.ConvertAll(devices, ConvertFromInternalModel);
 
             var slots = item.Read<Data.Models.Metadata.Slot[]>(Data.Models.Metadata.Machine.SlotKey);
-            if (slots != null && slots.Length > 0)
+            if (slots is not null && slots.Length > 0)
                 machine.Slot = Array.ConvertAll(slots, ConvertFromInternalModel);
 
             var softwareLists = item.Read<Data.Models.Metadata.SoftwareList[]>(Data.Models.Metadata.Machine.SoftwareListKey);
-            if (softwareLists != null && softwareLists.Length > 0)
+            if (softwareLists is not null && softwareLists.Length > 0)
                 machine.SoftwareList = Array.ConvertAll(softwareLists, ConvertFromInternalModel);
 
             var ramOptions = item.Read<Data.Models.Metadata.RamOption[]>(Data.Models.Metadata.Machine.RamOptionKey);
-            if (ramOptions != null && ramOptions.Length > 0)
+            if (ramOptions is not null && ramOptions.Length > 0)
                 machine.RamOption = Array.ConvertAll(ramOptions, ConvertFromInternalModel);
 
             return machine;
@@ -153,7 +153,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Adjuster.ConditionKey);
-            if (condition != null)
+            if (condition is not null)
                 adjuster.Condition = ConvertFromInternalModel(condition);
 
             return adjuster;
@@ -229,15 +229,15 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.Configuration.ConditionKey);
-            if (condition != null)
+            if (condition is not null)
                 configuration.Condition = ConvertFromInternalModel(condition);
 
             var confLocations = item.Read<Data.Models.Metadata.ConfLocation[]>(Data.Models.Metadata.Configuration.ConfLocationKey);
-            if (confLocations != null && confLocations.Length > 0)
+            if (confLocations is not null && confLocations.Length > 0)
                 configuration.ConfLocation = Array.ConvertAll(confLocations, ConvertFromInternalModel);
 
             var confSettings = item.Read<Data.Models.Metadata.ConfSetting[]>(Data.Models.Metadata.Configuration.ConfSettingKey);
-            if (confSettings != null && confSettings.Length > 0)
+            if (confSettings is not null && confSettings.Length > 0)
                 configuration.ConfSetting = Array.ConvertAll(confSettings, ConvertFromInternalModel);
 
             return configuration;
@@ -270,7 +270,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.ConfSetting.ConditionKey);
-            if (condition != null)
+            if (condition is not null)
                 confSetting.Condition = ConvertFromInternalModel(condition);
 
             return confSetting;
@@ -314,11 +314,11 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var instance = item.Read<Data.Models.Metadata.Instance>(Data.Models.Metadata.Device.InstanceKey);
-            if (instance != null)
+            if (instance is not null)
                 device.Instance = ConvertFromInternalModel(instance);
 
             var extensions = item.Read<Data.Models.Metadata.Extension[]>(Data.Models.Metadata.Device.ExtensionKey);
-            if (extensions != null && extensions.Length > 0)
+            if (extensions is not null && extensions.Length > 0)
                 device.Extension = Array.ConvertAll(extensions, ConvertFromInternalModel);
 
             return device;
@@ -363,15 +363,15 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipSwitch.ConditionKey);
-            if (condition != null)
+            if (condition is not null)
                 dipSwitch.Condition = ConvertFromInternalModel(condition);
 
             var dipLocations = item.Read<Data.Models.Metadata.DipLocation[]>(Data.Models.Metadata.DipSwitch.DipLocationKey);
-            if (dipLocations != null && dipLocations.Length > 0)
+            if (dipLocations is not null && dipLocations.Length > 0)
                 dipSwitch.DipLocation = Array.ConvertAll(dipLocations, ConvertFromInternalModel);
 
             var dipValues = item.Read<Data.Models.Metadata.DipValue[]>(Data.Models.Metadata.DipSwitch.DipValueKey);
-            if (dipValues != null && dipValues.Length > 0)
+            if (dipValues is not null && dipValues.Length > 0)
                 dipSwitch.DipValue = Array.ConvertAll(dipValues, ConvertFromInternalModel);
 
             return dipSwitch;
@@ -390,7 +390,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var condition = item.Read<Data.Models.Metadata.Condition>(Data.Models.Metadata.DipValue.ConditionKey);
-            if (condition != null)
+            if (condition is not null)
                 dipValue.Condition = ConvertFromInternalModel(condition);
 
             return dipValue;
@@ -504,11 +504,11 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var controlAttr = item.ReadString(Data.Models.Metadata.Input.ControlKey);
-            if (controlAttr != null)
+            if (controlAttr is not null)
                 input.ControlAttr = controlAttr;
 
             var controls = item.Read<Data.Models.Metadata.Control[]>(Data.Models.Metadata.Input.ControlKey);
-            if (controls != null && controls.Length > 0)
+            if (controls is not null && controls.Length > 0)
                 input.Control = Array.ConvertAll(controls, ConvertFromInternalModel);
 
             return input;
@@ -538,7 +538,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var analogs = item.Read<Data.Models.Metadata.Analog[]>(Data.Models.Metadata.Port.AnalogKey);
-            if (analogs != null && analogs.Length > 0)
+            if (analogs is not null && analogs.Length > 0)
                 port.Analog = Array.ConvertAll(analogs, ConvertFromInternalModel);
 
             return port;
@@ -604,7 +604,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var slotOptions = item.Read<Data.Models.Metadata.SlotOption[]>(Data.Models.Metadata.Slot.SlotOptionKey);
-            if (slotOptions != null && slotOptions.Length > 0)
+            if (slotOptions is not null && slotOptions.Length > 0)
                 slot.SlotOption = Array.ConvertAll(slotOptions, ConvertFromInternalModel);
 
             return slot;

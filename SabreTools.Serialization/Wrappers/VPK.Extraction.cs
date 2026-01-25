@@ -96,7 +96,7 @@ namespace SabreTools.Serialization.Wrappers
                 }
 
                 // If we have preload data, prepend it
-                if (data != null && directoryItem.PreloadData != null)
+                if (data is not null && directoryItem.PreloadData is not null)
                     data = [.. directoryItem.PreloadData, .. data];
             }
 
@@ -120,7 +120,7 @@ namespace SabreTools.Serialization.Wrappers
             // Ensure the full output directory exists
             filename = Path.Combine(outputDirectory, filename);
             var directoryName = Path.GetDirectoryName(filename);
-            if (directoryName != null && !Directory.Exists(directoryName))
+            if (directoryName is not null && !Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
             // Try to write the data

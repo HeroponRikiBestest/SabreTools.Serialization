@@ -60,10 +60,10 @@ namespace SabreTools.Serialization.Wrappers
                 field += 4; // DibDeflatedSize
                 field += 4; // DibInflatedSize
 
-                if (Model.InstallScriptDeflatedSize != null)
+                if (Model.InstallScriptDeflatedSize is not null)
                     field += 4; // InstallScriptDeflatedSize
 
-                if (Model.CharacterSet != null)
+                if (Model.CharacterSet is not null)
                     field += 4; // CharacterSet
 
                 field += 2; // Endianness

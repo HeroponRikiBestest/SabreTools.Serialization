@@ -58,7 +58,7 @@ namespace SabreTools.Serialization.Writers
 
             if (!string.IsNullOrEmpty(set.Driver))
             {
-                if (set.Row != null && set.Row.Length > 0)
+                if (set.Row is not null && set.Row.Length > 0)
                 {
                     writer.WriteLine($"ROMs required for driver \"{set.Driver}\".");
                     writer.WriteLine("Name                                   Size Checksum");
@@ -78,7 +78,7 @@ namespace SabreTools.Serialization.Writers
             }
             else if (!string.IsNullOrEmpty(set.Device))
             {
-                if (set.Row != null && set.Row.Length > 0)
+                if (set.Row is not null && set.Row.Length > 0)
                 {
                     writer.WriteLine($"ROMs required for device \"{set.Device}\".");
                     writer.WriteLine("Name                                   Size Checksum");
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.Writers
                     padding = row.Name.Length + 2;
 
                 rowBuilder.Append($"{row.Name.PadRight(padding, ' ')}");
-                if (row.Size != null)
+                if (row.Size is not null)
                     rowBuilder.Append($"{row.Size} ");
 
                 if (row.NoGoodDumpKnown)
@@ -133,7 +133,7 @@ namespace SabreTools.Serialization.Writers
                     if (row.Bad)
                         rowBuilder.Append("BAD ");
 
-                    if (row.Size != null)
+                    if (row.Size is not null)
                     {
                         rowBuilder.Append($"CRC({row.CRC}) ");
                         rowBuilder.Append($"SHA1({row.SHA1}) ");

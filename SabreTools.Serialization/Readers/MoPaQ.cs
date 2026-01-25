@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Set the hash table, if possible
                 var hashTable = ParseHashTable(data, initialOffset, archive.ArchiveHeader, decrypter);
-                if (hashTable != null)
+                if (hashTable is not null)
                     archive.HashTable = hashTable;
 
                 #endregion
@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Set the block table, if possible
                 var blockTable = ParseBlockTable(data, initialOffset, archive.ArchiveHeader, decrypter);
-                if (blockTable != null)
+                if (blockTable is not null)
                     archive.BlockTable = blockTable;
 
                 #endregion
@@ -82,7 +82,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Set the hi-block table, if possible
                 var hiBlockTable = ParseHiBlockTable(data, initialOffset, archive.ArchiveHeader);
-                if (hiBlockTable != null)
+                if (hiBlockTable is not null)
                     archive.HiBlockTable = hiBlockTable;
 
                 #endregion
@@ -91,7 +91,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Set the BET table, if possible
                 var betTable = ParseBetTable(data, initialOffset, archive.ArchiveHeader, decrypter);
-                if (betTable != null)
+                if (betTable is not null)
                     archive.BetTable = betTable;
 
                 #endregion
@@ -100,7 +100,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Set the HET table, if possible
                 var hetTable = ParseHetTable(data, initialOffset, archive.ArchiveHeader, decrypter);
-                if (hetTable != null)
+                if (hetTable is not null)
                     archive.HetTable = hetTable;
 
                 #endregion

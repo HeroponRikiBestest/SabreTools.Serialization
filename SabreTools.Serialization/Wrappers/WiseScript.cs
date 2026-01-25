@@ -156,7 +156,7 @@ namespace SabreTools.Serialization.Wrappers
             // Initialize important loop information
             int normalFileCount = 0;
             Dictionary<string, string> environment = [];
-            if (sourceDirectory != null)
+            if (sourceDirectory is not null)
                 environment.Add("INST", sourceDirectory);
 
             // Loop through the state machine and process
@@ -287,7 +287,7 @@ namespace SabreTools.Serialization.Wrappers
 
                             // Sanity check
                             string? newFileDirectory = Path.GetDirectoryName(newFilePath);
-                            if (newFileDirectory != null && !Directory.Exists(newFileDirectory))
+                            if (newFileDirectory is not null && !Directory.Exists(newFileDirectory))
                                 Directory.CreateDirectory(newFileDirectory);
 
                             File.Copy(oldFilePath, newFilePath);
@@ -312,7 +312,7 @@ namespace SabreTools.Serialization.Wrappers
                         if (state.Data is not GetTemporaryFilename getTemporaryFilename)
                             return false;
 
-                        if (getTemporaryFilename.Variable != null)
+                        if (getTemporaryFilename.Variable is not null)
                             environment[getTemporaryFilename.Variable] = Guid.NewGuid().ToString();
                         break;
 
@@ -352,7 +352,7 @@ namespace SabreTools.Serialization.Wrappers
             // Ensure the full output directory exists
             iniFilePath = Path.Combine(outputDirectory, iniFilePath);
             var directoryName = Path.GetDirectoryName(iniFilePath);
-            if (directoryName != null && !Directory.Exists(directoryName))
+            if (directoryName is not null && !Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
             using var iniFile = File.Open(iniFilePath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);

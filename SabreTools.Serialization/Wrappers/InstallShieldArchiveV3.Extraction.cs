@@ -102,7 +102,7 @@ namespace SabreTools.Serialization.Wrappers
             // Ensure the full output directory exists
             filename = Path.Combine(outputDirectory, filename);
             var directoryName = Path.GetDirectoryName(filename);
-            if (directoryName != null && !System.IO.Directory.Exists(directoryName))
+            if (directoryName is not null && !System.IO.Directory.Exists(directoryName))
                 System.IO.Directory.CreateDirectory(directoryName);
 
             // Try to write the data

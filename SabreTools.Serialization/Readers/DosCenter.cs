@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Readers
                             switch (lastTopLevel)
                             {
                                 case "game":
-                                    if (game != null)
+                                    if (game is not null)
                                     {
                                         game.File = [.. files];
                                         games.Add(game);
@@ -127,7 +127,7 @@ namespace SabreTools.Serialization.Readers
 
                         // Create the file and add to the list
                         var file = CreateFile(reader);
-                        if (file != null)
+                        if (file is not null)
                             files.Add(file);
                     }
                 }
