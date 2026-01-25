@@ -171,26 +171,32 @@ namespace SabreTools.Serialization.Wrappers
             // Display warning in debug runs
             if (includeDebug) Console.WriteLine("WARNING: LZX and Quantum compression schemes are not supported so some files may be skipped!");
 
-            // Only extract if a physical file is present
-            // TODO: Revisit if partial extraction should be supported
-            if (Filename == null)
+            MicrosoftCabinet? cabinet;
+            if (Filename != null)
+            {
+                // Open the full set if possible
+                cabinet = OpenSet(Filename, includeDebug);
+                if (cabinet == null)
+                {
+                    if (includeDebug) Console.WriteLine($"Cabinet set could not be opened!");
+                    cabinet = this;
+                }
+                else
+                {
+                    // If we have anything but the first file, avoid extraction to avoid repeat extracts
+                    // TODO: This is going to have to take missing parts into account for MSI support
+                    if (Filename != cabinet.Filename)
+                    {
+                        string firstCabName = Path.GetFileName(cabinet.Filename) ?? string.Empty;
+                        if (includeDebug) Console.WriteLine($"Only the first cabinet {firstCabName} will be extracted!");
+                        return false;
+                    }
+                }
+            }
+            else
             {
                 if (includeDebug) Console.WriteLine($"Cabinet set could not be opened!");
-                return false;
-            }
-
-            // Open the full set if possible
-            var cabinet = OpenSet(Filename, includeDebug);
-            if (cabinet == null)
-                return false;
-
-            // If we have anything but the first file, avoid extraction to avoid repeat extracts
-            // TODO: This is going to have to take missing parts into account for MSI support
-            if (Filename != cabinet.Filename)
-            {
-                string firstCabName = Path.GetFileName(cabinet.Filename) ?? string.Empty;
-                if (includeDebug) Console.WriteLine($"Only the first cabinet {firstCabName} will be extracted!");
-                return false;
+                cabinet = this;
             }
 
             // If the archive is invalid
