@@ -17,16 +17,34 @@ namespace SabreTools.Serialization.Readers
             try
             {
                 // Cache the initial offset
+                // This should always already be at the overlay offset.
                 long initialOffset = data.Position;
 
                 var sfxList = new List<FileEntry>();
+                
+                while (data.Position < data.Length)
+                {
+                    // Try to parse the entry
+                    var fileEntry = ParseFileEntry(data, initialOffset);
+                    if (fileEntry == null)
+                        break;
 
-                // Try to parse the entry
-                var fileEntry = ParseFileEntry(data);
-                if (fileEntry == null)
+                    // Get the length, and make sure it won't EOF
+                    long length = (long)fileEntry.Length;
+                    if (length > data.Length - data.Position)
+                        break;
+
+                    data.SeekIfPossible(length, SeekOrigin.Current);
+                    sfxList.Add(fileEntry);
+                }
+                
+                if (sfxList.Count == 0)
                     return null;
-
-                return fileEntry;
+                
+                var sfx = new SFX();
+                sfx = new SFX();
+                sfx.Entries = sfxList.ToArray();
+                return sfx;
             }
             catch
             {
@@ -40,8 +58,9 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled FileEntry on success, null on error</returns>
-        public static FileEntry? ParseFileEntry(Stream data)
+        public static FileEntry? ParseFileEntry(Stream data, long initialOffset)
         {
+            
             string? name = data.ReadNullTerminatedAnsiString();
             if (name == null)
                 return null;
@@ -65,12 +84,12 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             var obj = new FileEntry();
-
             obj.Name = name;
             obj.Path = path;
             obj.Version = version;
             obj.Length = lengthValue;
-
+            obj.Offset = data.Position - initialOffset; // TODO: i have to compensate by subtracting initial offset since apparently you start there in extraction?
+            
             return obj;
         }
     }

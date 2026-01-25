@@ -162,78 +162,6 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Extract data from an InstallShield Executable
-        /// </summary>
-        /// <param name="outputDirectory">Output directory to write to</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>True if extraction succeeded, false otherwise</returns>
-        public bool ExtractInstallShieldExecutable(string outputDirectory, bool includeDebug)
-        {
-            try
-            {
-                // Return if overlay doesn't exist.
-                long overlayAddress = OverlayAddress;
-                if (overlayAddress < 0)
-                    return false;
-
-                const int chunkSize = 2048 * 1024;
-                var reader = new Readers.InstallShieldExecutable();
-
-                lock (_dataSourceLock)
-                {
-                    // Ensure the stream is starting at the overlay address
-                    _dataSource.SeekIfPossible(overlayAddress, SeekOrigin.Begin);
-
-                    while (_dataSource.Position < _dataSource.Length)
-                    {
-                        // Try to deserialize the source data
-                        var entry = reader.Deserialize(_dataSource);
-                        if (entry?.Path == null)
-                            return false;
-
-                        // Get the length, and make sure it won't EOF
-                        long length = (long)entry.Length;
-                        if (length > _dataSource.Length - _dataSource.Position)
-                            break;
-
-                        // Ensure directory separators are consistent
-                        var filename = entry.Path.TrimEnd('\0');
-                        if (Path.DirectorySeparatorChar == '\\')
-                            filename = filename.Replace('/', '\\');
-                        else if (Path.DirectorySeparatorChar == '/')
-                            filename = filename.Replace('\\', '/');
-
-                        // Ensure the full output directory exists
-                        filename = Path.Combine(outputDirectory, filename);
-                        var directoryName = Path.GetDirectoryName(filename);
-                        if (directoryName != null && !Directory.Exists(directoryName))
-                            Directory.CreateDirectory(directoryName);
-
-                        // Write the output file
-                        using var fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-                        while (length > 0)
-                        {
-                            int bytesToRead = (int)Math.Min(length, chunkSize);
-
-                            byte[] buffer = _dataSource.ReadBytes(bytesToRead);
-                            fs.Write(buffer, 0, bytesToRead);
-                            fs.Flush();
-
-                            length -= bytesToRead;
-                        }
-                    }
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (includeDebug) Console.Error.WriteLine(ex);
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Extract data from the overlay
         /// </summary>
         /// <param name="outputDirectory">Output directory to write to</param>
@@ -610,6 +538,22 @@ namespace SabreTools.Serialization.Wrappers
 
             // Attempt to extract package
             return MatroschkaPackage.Extract(outputDirectory, includeDebug);
+        }
+        
+        /// <summary>
+        /// Extract data from an Installshield Executable
+        /// </summary>
+        /// <param name="outputDirectory">Output directory to write to</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        /// <returns>True if extraction succeeded, false otherwise</returns>
+        public bool ExtractInstallShieldExecutable(string outputDirectory, bool includeDebug)
+        {
+            // Check if executable contains an InstallShield Executable or not
+            if (ISEXE == null)
+                return false;
+
+            // Attempt to extract package
+            return ISEXE.Extract(outputDirectory, includeDebug);
         }
 
         /// <summary>
