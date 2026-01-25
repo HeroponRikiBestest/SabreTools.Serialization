@@ -259,9 +259,6 @@ namespace SabreTools.Serialization.Wrappers
 
                         var folder = cabinet.Folders[f];
                         var files = cabinet.GetSpannedFilesArray(currentCabFilename, f, includeDebug);
-
-                        // Cache starting position
-                        long offset = folder.CabStartOffset;
                         
                         // Ensure folder contains data
                         if (folder.DataCount == 0)
@@ -276,7 +273,7 @@ namespace SabreTools.Serialization.Wrappers
                         
                         //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
                         
-                        var reader = new Reader(cabinet, folder, files, offset);
+                        var reader = new Reader(cabinet, folder, files);
                         
                         reader.ExtractData(outputDirectory, compressionType, f, includeDebug);
                     }
@@ -352,7 +349,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #region Constructors
 
-            public Reader(MicrosoftCabinet cabinet, CFFOLDER folder, CFFILE[] files, long offset)
+            public Reader(MicrosoftCabinet cabinet, CFFOLDER folder, CFFILE[] files)
             {
                 _cabinet = cabinet;
                 _folder = folder;
@@ -360,7 +357,7 @@ namespace SabreTools.Serialization.Wrappers
                 _file = files[0];
                 _bytesLeft = (int)_file.FileSize;
                 _fileCounter = 0;
-                _offset = offset;
+                _offset = folder.CabStartOffset;
                 _fileStream = null;
             }
 
