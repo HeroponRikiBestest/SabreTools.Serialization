@@ -279,7 +279,7 @@ namespace SabreTools.Serialization.Wrappers
                         
                         //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
                         
-                        var reader = Reader.Create(cabinet, folder, files, file, bytesLeft, fileCounter, offset);
+                        var reader = new Reader(cabinet, folder, files, file, bytesLeft, fileCounter, offset);
                         
                         reader.ExtractData(outputDirectory, compressionType, f, includeDebug);
                     }
@@ -355,7 +355,7 @@ namespace SabreTools.Serialization.Wrappers
 
             #region Constructors
 
-            private Reader(MicrosoftCabinet cabinet, CFFOLDER folder, CFFILE[] files, CFFILE file, int bytesLeft, int fileCounter, long offset)
+            public Reader(MicrosoftCabinet cabinet, CFFOLDER folder, CFFILE[] files, CFFILE file, int bytesLeft, int fileCounter, long offset)
             {
                 _cabinet = cabinet;
                 _folder = folder;
@@ -368,16 +368,6 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             #endregion
-            
-            /// <summary>
-            /// Create a new <see cref="Reader"> from an existing set of cabinet, folder, and file info.
-            /// </summary>
-            public static Reader Create(MicrosoftCabinet cabinet, CFFOLDER folder, CFFILE[] files, CFFILE file, int bytesLeft, int fileCounter, long offset)
-            {
-                var reader = new Reader(cabinet, folder, files, file, bytesLeft, fileCounter, offset);
-                
-                return reader;
-            }
             
             /// <summary>
             /// Get stream representing the output file
