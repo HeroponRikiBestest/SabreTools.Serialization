@@ -304,7 +304,9 @@ namespace SabreTools.Serialization.Wrappers
             }
         }
         
-        
+        /// <summary>
+        /// Helper to extract files from a cabinet set
+        /// </summary>
         private class Reader
         {
             #region Private Instance Variables
@@ -368,7 +370,7 @@ namespace SabreTools.Serialization.Wrappers
             #endregion
             
             /// <summary>
-            /// Create a new <see cref="Reader"> from an existing cabinet, index, and file descriptor
+            /// Create a new <see cref="Reader"> from an existing set of cabinet, folder, and file info.
             /// </summary>
             public static Reader Create(MicrosoftCabinet cabinet, CFFOLDER folder, CFFILE[] files, CFFILE file, int bytesLeft, int fileCounter, long offset)
             {
