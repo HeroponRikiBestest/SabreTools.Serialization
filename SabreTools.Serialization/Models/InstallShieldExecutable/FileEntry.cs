@@ -1,5 +1,8 @@
 namespace SabreTools.Data.Models.InstallShieldExecutable
 {
+    /// <summary>
+    /// Set of attributes for each fileEntry in an InstallShield Executable
+    /// </summary>
     public class FileEntry
     {
         /// <summary>

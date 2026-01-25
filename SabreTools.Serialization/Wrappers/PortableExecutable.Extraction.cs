@@ -177,7 +177,7 @@ namespace SabreTools.Serialization.Wrappers
                     return false;
 
                 const int chunkSize = 2048 * 1024;
-                var reader = new Readers.InstallShieldExecutableFile();
+                var reader = new Readers.InstallShieldExecutable();
 
                 lock (_dataSourceLock)
                 {

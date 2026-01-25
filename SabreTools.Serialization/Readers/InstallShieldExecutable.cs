@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.InstallShieldExecutable;
 using SabreTools.IO.Extensions;
@@ -5,9 +6,9 @@ using SabreTools.IO.Extensions;
 namespace SabreTools.Serialization.Readers
 {
     // TODO: This should parse an entire SFX, not just a single entry
-    public class InstallShieldExecutableFile : BaseBinaryReader<FileEntry>
+    public class InstallShieldExecutable : BaseBinaryReader<SFX>
     {
-        public override FileEntry? Deserialize(Stream? data)
+        public override SFX? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -17,6 +18,8 @@ namespace SabreTools.Serialization.Readers
             {
                 // Cache the initial offset
                 long initialOffset = data.Position;
+
+                var sfxList = new List<FileEntry>();
 
                 // Try to parse the entry
                 var fileEntry = ParseFileEntry(data);
@@ -41,6 +44,12 @@ namespace SabreTools.Serialization.Readers
         {
             string? name = data.ReadNullTerminatedAnsiString();
             if (name == null)
+                return null;
+            
+            if (name == "InstallShieldExecutable") // TODO: can this give debug output somehow?
+                return null;
+            
+            if (name == "ISSetupStream") // TODO: can this give debug output somehow?
                 return null;
 
             string? path = data.ReadNullTerminatedAnsiString();
