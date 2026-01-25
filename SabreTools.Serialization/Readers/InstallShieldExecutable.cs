@@ -15,6 +15,8 @@ namespace SabreTools.Serialization.Readers
 
             try
             {
+                var sfx = new SFX();
+                
                 // Cache the initial offset
                 // This should always already be at the overlay offset.
                 long initialOffset = data.Position;
@@ -40,9 +42,7 @@ namespace SabreTools.Serialization.Readers
                 if (sfxList.Count == 0)
                     return null;
                 
-                var sfx = new SFX();
-                sfx = new SFX();
-                sfx.Entries = sfxList.ToArray();
+                sfx.Entries = [.. sfxList];
                 return sfx;
             }
             catch
@@ -59,11 +59,14 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled FileEntry on success, null on error</returns>
         public static FileEntry? ParseFileEntry(Stream data, long initialOffset)
         {
-            
             string? name = data.ReadNullTerminatedAnsiString();
             if (name == null)
                 return null;
             
+            // Both of these strings indicate that this is a different kind of encrypted and/or compressed format of
+            // ISEXE that is not yet supported, but will be in the future. 
+            // They return early because no extraction can be performed, like how MsCab currently returns if a folder
+            // is LZX or Quantum.
             if (name == "InstallShieldExecutable")
                 return null;
             

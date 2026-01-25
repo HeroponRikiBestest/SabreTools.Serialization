@@ -29,8 +29,9 @@ namespace SabreTools.Data.Models.InstallShieldExecutable
         public ulong Length { get; set; }
         
         /// <summary>
-        /// Offset of the file. This is not stored in the installshield executable, but it needs to be stored here for extraction.
+        /// Offset of the file.
         /// </summary>
+        /// <remarks>This is not stored in the installshield executable, but it needs to be stored here for extraction.</remarks>
         public long Offset { get; set; }
     }
 }

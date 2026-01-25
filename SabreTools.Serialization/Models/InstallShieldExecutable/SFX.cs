@@ -25,7 +25,6 @@ namespace SabreTools.Data.Models.InstallShieldExecutable
     /// documents the plain variant. Clearer naming and separation between the types is yet
     /// to come.
     /// </remarks>
-
     /// There is no unified header or footer that indicates a file
     /// table, so having either each file entry cache the data
     /// or be associated with an offset may make it more useful.
