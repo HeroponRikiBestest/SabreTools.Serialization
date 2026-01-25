@@ -257,6 +257,56 @@ namespace SabreTools.Serialization.Wrappers
                 }
             }
         } = null;
+        
+        /// <summary>
+        /// InstallShield Executable wrapper, if it exists
+        /// </summary>
+        public InstallShieldExecutable? ISEXE
+        {
+            get
+            {
+                lock (_installshieldExecutableLock)
+                {
+                    // Use the cached data if possible
+                    if (field != null)
+                        return field;
+
+                    // Check to see if creation has already been attempted
+                    if (_installshieldExecutableFailed)
+                        return null;
+
+                    // Get the available source length, if possible
+                    var dataLength = Length;
+                    if (dataLength == -1)
+                    {
+                        _installshieldExecutableFailed = true;
+                        return null;
+                    }
+
+                    // Check if there's a valid OverlayAddress
+                    if (OverlayAddress < 0 || OverlayAddress > dataLength)
+                    {
+                        _installshieldExecutableFailed = true;
+                        return null;
+                    }
+                    
+                    // Parse the package
+                    lock (_dataSourceLock)
+                    {
+                        _dataSource.SeekIfPossible(OverlayAddress, SeekOrigin.Begin);
+                        field = InstallShieldExecutable.Create(_dataSource);
+                    }
+
+                    if (field?.Entries.Length == 0)
+                    {
+                        _installshieldExecutableFailed = true;
+                        return null;
+                    }
+
+                    return field;
+                }
+            }
+        } = null;
 
         /// <inheritdoc cref="Executable.OptionalHeader"/>
         public Data.Models.PortableExecutable.OptionalHeader OptionalHeader => Model.OptionalHeader;
@@ -1028,6 +1078,16 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         private readonly object _headerPaddingStringsLock = new();
 
+        /// <summary>
+        /// Lock object for <see cref="InstallShieldExecutable"/>
+        /// </summary>
+        private readonly object _installshieldExecutableLock = new();
+
+        /// <summary>
+        /// Cached attempt at creation for <see cref="InstallShieldExecutable"/>
+        /// </summary>
+        private bool _installshieldExecutableFailed = false;
+        
         /// <summary>
         /// Lock object for <see cref="MatroschkaPackage"/>
         /// </summary>

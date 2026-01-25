@@ -1,5 +1,8 @@
 namespace SabreTools.Data.Models.InstallShieldExecutable
 {
+    /// <summary>
+    /// Set of attributes for each fileEntry in an InstallShield Executable
+    /// </summary>
     public class FileEntry
     {
         /// <summary>
@@ -24,5 +27,11 @@ namespace SabreTools.Data.Models.InstallShieldExecutable
         /// Length of the file. Stored in the installshield executable as a string.
         /// </summary>
         public ulong Length { get; set; }
+        
+        /// <summary>
+        /// Offset of the file.
+        /// </summary>
+        /// <remarks>This is not stored in the installshield executable, but it needs to be stored here for extraction.</remarks>
+        public long Offset { get; set; }
     }
 }
