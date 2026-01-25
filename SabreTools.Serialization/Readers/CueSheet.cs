@@ -98,6 +98,10 @@ namespace SabreTools.Serialization.Readers
 
                             cueFiles.Add(file);
                             break;
+
+                        default:
+                            // TODO: Log invalid values
+                            break;
                     }
                 }
 
@@ -620,6 +624,10 @@ namespace SabreTools.Serialization.Readers
 
                     case "data":
                         flag |= CueTrackFlag.DATA;
+                        break;
+
+                    default:
+                        // TODO: Log invalid values
                         break;
                 }
             }

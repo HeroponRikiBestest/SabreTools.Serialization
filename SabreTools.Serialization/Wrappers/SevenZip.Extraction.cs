@@ -225,6 +225,7 @@ namespace SabreTools.Serialization.Wrappers
                     if (includeDebug) Console.Error.WriteLine(ex);
                 }
             }
+
             return true;
         }
 
@@ -268,7 +269,6 @@ namespace SabreTools.Serialization.Wrappers
                     // Increment the index
                     index++;
                 }
-
             }
             catch (Exception ex)
             {

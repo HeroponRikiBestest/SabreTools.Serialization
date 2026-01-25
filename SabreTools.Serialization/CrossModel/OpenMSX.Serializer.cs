@@ -86,6 +86,10 @@ namespace SabreTools.Serialization.CrossModel
                     case SCCPlusCart sccPlusCart:
                         dump[Data.Models.Metadata.Dump.SCCPlusCartKey] = ConvertToInternalModel(sccPlusCart);
                         break;
+
+                    default:
+                        // TODO: Log invalid values
+                        break;
                 }
             }
 

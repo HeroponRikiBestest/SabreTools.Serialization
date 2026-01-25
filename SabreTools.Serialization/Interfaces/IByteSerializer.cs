@@ -11,6 +11,6 @@ namespace SabreTools.Serialization.Interfaces
         /// <typeparam name="T">Type of object to serialize from</typeparam>
         /// <param name="obj">Data to serialize</param>
         /// <returns>Filled object on success, null on error</returns>
-        byte[]? SerializeArray(TModel? obj);
+        public byte[]? SerializeArray(TModel? obj);
     }
 }

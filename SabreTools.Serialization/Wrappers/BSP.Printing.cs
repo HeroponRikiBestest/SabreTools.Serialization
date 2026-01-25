@@ -57,6 +57,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(lump.Offset, "    Offset");
                 builder.AppendLine(lump.Length, "    Length");
 
+#pragma warning disable IDE0010
                 switch ((LumpType)i)
                 {
                     case LumpType.LUMP_ENTITIES:
@@ -108,6 +109,7 @@ namespace SabreTools.Serialization.Wrappers
                         builder.AppendLine($"    Unsupported lump type: {(LumpType)i} (0x{i:X4})");
                         break;
                 }
+#pragma warning restore IDE0010
             }
 
             builder.AppendLine();
@@ -115,6 +117,7 @@ namespace SabreTools.Serialization.Wrappers
 
         private static string GetLumpName(int i)
         {
+#pragma warning disable IDE0072
             return (LumpType)i switch
             {
                 LumpType.LUMP_ENTITIES => " - LUMP_ENTITIES",
@@ -134,6 +137,7 @@ namespace SabreTools.Serialization.Wrappers
                 LumpType.LUMP_MODELS => " - LUMP_MODELS",
                 _ => string.Empty,
             };
+#pragma warning restore IDE0072
         }
 
         private static void Print(StringBuilder builder, EntitiesLump lump)

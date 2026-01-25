@@ -212,7 +212,12 @@ namespace SabreTools.Serialization.Readers
                         entry.MoveableSegmentNumber = data.ReadByteValue();
                         entry.MoveableOffset = data.ReadUInt16LittleEndian();
                         break;
+
+                    default:
+                        // TODO: Log invalid values
+                        break;
                 }
+
                 entryTable.Add(entry);
             }
 
@@ -253,7 +258,7 @@ namespace SabreTools.Serialization.Readers
             obj.MovableEntriesCount = data.ReadUInt16LittleEndian();
             obj.SegmentAlignmentShiftCount = data.ReadUInt16LittleEndian();
             obj.ResourceEntriesCount = data.ReadUInt16LittleEndian();
-            obj.TargetOperatingSystem = (Data.Models.NewExecutable.OperatingSystem)data.ReadByteValue();
+            obj.TargetOperatingSystem = (OperatingSystem)data.ReadByteValue();
             obj.AdditionalFlags = (OS2Flag)data.ReadByteValue();
             obj.ReturnThunkOffset = data.ReadUInt16LittleEndian();
             obj.SegmentReferenceThunkOffset = data.ReadUInt16LittleEndian();
@@ -469,6 +474,12 @@ namespace SabreTools.Serialization.Readers
                 case RelocationRecordFlag.OSFIXUP:
                     obj.OSFixupRelocationRecord = ParseOSFixupRelocationRecord(data);
                     break;
+                case RelocationRecordFlag.ADDITIVE:
+                    // TODO: Figure out the record for this, if possible
+                    break;
+                default:
+                    // TODO: Log invalid values
+                    break;
             }
 
             return obj;
@@ -665,7 +676,6 @@ namespace SabreTools.Serialization.Readers
             // Seek to the data offset and read
             data.SeekIfPossible(obj.Offset + initialOffset, SeekOrigin.Begin);
             obj.Data = data.ReadBytes(obj.Length);
-
 
 #if NET20 || NET35
             if ((obj.FlagWord & SegmentTableEntryFlag.RELOCINFO) != 0)

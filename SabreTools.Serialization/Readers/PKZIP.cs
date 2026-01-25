@@ -108,6 +108,10 @@ namespace SabreTools.Serialization.Readers
                             validBlock = true;
                             archive.ArchiveExtraDataRecord = aedr;
                             break;
+
+                        default:
+                            // TODO: Log invalid values
+                            break;
                     }
 
                     // If there was an invalid block
@@ -209,6 +213,7 @@ namespace SabreTools.Serialization.Readers
                 else
                     obj.FileName = Encoding.ASCII.GetString(filenameBytes);
             }
+
             if (obj.ExtraFieldLength > 0 && data.Position + obj.ExtraFieldLength <= data.Length)
             {
                 byte[] extraBytes = data.ReadBytes(obj.ExtraFieldLength);
@@ -217,6 +222,7 @@ namespace SabreTools.Serialization.Readers
 
                 obj.ExtraFields = ParseExtraFields(obj, extraBytes);
             }
+
             if (obj.FileCommentLength > 0 && data.Position + obj.FileCommentLength <= data.Length)
             {
                 byte[] commentBytes = data.ReadBytes(obj.FileCommentLength);
@@ -562,6 +568,7 @@ namespace SabreTools.Serialization.Readers
                 else
                     obj.FileName = Encoding.ASCII.GetString(filenameBytes);
             }
+
             if (obj.ExtraFieldLength > 0 && data.Position + obj.ExtraFieldLength <= data.Length)
             {
                 byte[] extraBytes = data.ReadBytes(obj.ExtraFieldLength);

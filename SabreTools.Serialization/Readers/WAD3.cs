@@ -165,11 +165,13 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.FontInfo[i] = ParseCharInfo(data);
             }
+
             obj.Data = new byte[obj.Height][];
             for (int i = 0; i < obj.Height; i++)
             {
                 obj.Data[i] = data.ReadBytes((int)obj.Width);
             }
+
             obj.ColorsUsed = data.ReadUInt16LittleEndian();
             obj.Palette = new byte[obj.ColorsUsed][];
             for (int i = 0; i < obj.ColorsUsed; i++)
@@ -233,11 +235,13 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.MipOffsets[i] = data.ReadUInt32LittleEndian();
             }
+
             obj.MipImages = new MipMap[4];
             for (int i = 0; i < obj.MipImages.Length; i++)
             {
                 obj.MipImages[i] = ParseMipMap(data, obj.Width, obj.Height);
             }
+
             obj.ColorsUsed = data.ReadUInt16LittleEndian();
             obj.Palette = new byte[obj.ColorsUsed][];
             for (int i = 0; i < obj.ColorsUsed; i++)
@@ -264,6 +268,7 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.Data[i] = data.ReadBytes((int)obj.Width);
             }
+
             obj.ColorsUsed = data.ReadUInt16LittleEndian();
             obj.Palette = new byte[obj.ColorsUsed][];
             for (int i = 0; i < obj.ColorsUsed; i++)

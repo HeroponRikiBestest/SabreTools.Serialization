@@ -190,6 +190,9 @@ namespace SabreTools.Serialization.Readers
                     case 4:
                         directorySectorCount = fileHeader.NumberOfDirectorySectors;
                         break;
+                    default:
+                        // TODO: Log invalid values
+                        break;
                 }
 
                 // Loop through and add the directory sectors

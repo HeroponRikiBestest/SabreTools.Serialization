@@ -297,6 +297,9 @@ namespace SabreTools.Serialization.Wrappers
                         builder.AppendLine(entry.MoveableSegmentNumber, "    Segment number");
                         builder.AppendLine(entry.MoveableOffset, "    Offset");
                         break;
+                    case SegmentEntryType.Unused:
+                    default:
+                        break;
                 }
             }
 

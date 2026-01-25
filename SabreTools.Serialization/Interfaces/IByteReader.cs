@@ -12,6 +12,6 @@ namespace SabreTools.Serialization.Interfaces
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
         /// <returns>Filled object on success, null on error</returns>
-        TModel? Deserialize(byte[]? data, int offset);
+        public TModel? Deserialize(byte[]? data, int offset);
     }
 }

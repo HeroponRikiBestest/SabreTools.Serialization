@@ -1041,7 +1041,7 @@ namespace SabreTools.Serialization.Readers
                 obj.Add(entry);
 
                 // All zero values means the last entry
-                if (entry.OrdinalNameFlag == false
+                if (!entry.OrdinalNameFlag
                     && entry.OrdinalNumber == 0
                     && entry.HintNameTableRVA == 0)
                     break;
@@ -1103,7 +1103,7 @@ namespace SabreTools.Serialization.Readers
                 if (obj.OrdinalNameFlag)
                     obj.OrdinalNumber = (ushort)(value & ~0x80000000);
                 else
-                    obj.HintNameTableRVA = (uint)(value & ~0x80000000);
+                    obj.HintNameTableRVA = value & ~0x80000000;
             }
             else if (magic == OptionalHeaderMagicNumber.PE32Plus)
             {
@@ -1182,7 +1182,7 @@ namespace SabreTools.Serialization.Readers
                 obj.Add(entry);
 
                 // All zero values means the last entry
-                if (entry.OrdinalNameFlag == false
+                if (!entry.OrdinalNameFlag
                     && entry.OrdinalNumber == 0
                     && entry.HintNameTableRVA == 0)
                     break;
@@ -1246,7 +1246,7 @@ namespace SabreTools.Serialization.Readers
                 if (obj.OrdinalNameFlag)
                     obj.OrdinalNumber = (ushort)(value & ~0x80000000);
                 else
-                    obj.HintNameTableRVA = (uint)(value & ~0x80000000);
+                    obj.HintNameTableRVA = value & ~0x80000000;
             }
             else if (magic == OptionalHeaderMagicNumber.PE32Plus)
             {

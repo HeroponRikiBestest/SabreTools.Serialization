@@ -81,6 +81,14 @@ namespace SabreTools.Serialization.Readers
                 RecordType.VerifyMediaKey => ParseVerifyMediaKeyRecord(data),
                 RecordType.Copyright => ParseCopyrightRecord(data),
 
+                // Unimplemented
+                RecordType.MediaKeyVariantData => ParseGenericRecord(data),
+                RecordType.Unknown0x28_AACS2 => ParseGenericRecord(data),
+                RecordType.DriveRevocationList_AACS2 => ParseGenericRecord(data),
+                RecordType.HostRevocationList_AACS2 => ParseGenericRecord(data),
+                RecordType.VerifyMediaKey_AACS2 => ParseGenericRecord(data),
+                RecordType.EmptyRecord0xF8_AACS2 => ParseGenericRecord(data),
+
                 // Unknown record type
                 _ => ParseGenericRecord(data),
             };

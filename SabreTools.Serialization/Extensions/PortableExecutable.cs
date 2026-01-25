@@ -929,7 +929,7 @@ namespace SabreTools.Data.Extensions
             stringFileInfo.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
             if (stringFileInfo.Key != "StringFileInfo")
             {
-                offset -= 6 + ((stringFileInfo.Key?.Length ?? 0 + 1) * 2);
+                offset -= 6 + (((stringFileInfo.Key?.Length ?? 0) + 1) * 2);
                 return null;
             }
 
@@ -1053,7 +1053,7 @@ namespace SabreTools.Data.Extensions
                 varData.Key = data.ReadNullTerminatedUnicodeString(ref offset) ?? string.Empty;
                 if (varData.Key != "Translation")
                 {
-                    offset -= 6 + ((varData.Key?.Length ?? 0 + 1) * 2);
+                    offset -= 6 + (((varData.Key?.Length ?? 0) + 1) * 2);
                     return null;
                 }
 

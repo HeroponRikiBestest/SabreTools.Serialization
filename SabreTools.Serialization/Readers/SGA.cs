@@ -246,7 +246,7 @@ namespace SabreTools.Serialization.Readers
             // TODO: If indexed by position, I think it needs to be adjusted by start of table
 
             // Create the strings dictionary
-            directory.StringTable = new Dictionary<long, string>((int)directoryHeader.StringTableCount);
+            directory.StringTable = new Dictionary<long, string>(directoryHeader.StringTableCount);
 
             // Get the current position to adjust the offsets
             long stringTableStart = data.Position;

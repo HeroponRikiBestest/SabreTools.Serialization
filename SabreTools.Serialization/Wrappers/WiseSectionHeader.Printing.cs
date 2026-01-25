@@ -55,6 +55,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine($"  String {i}: {entry}");
                 }
             }
+
             builder.AppendLine();
         }
     }

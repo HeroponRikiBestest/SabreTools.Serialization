@@ -12,6 +12,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="outputDirectory">Output directory to write to</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>True if extraction succeeded, false otherwise</returns>
-        bool Extract(string outputDirectory, bool includeDebug);
+        public bool Extract(string outputDirectory, bool includeDebug);
     }
 }

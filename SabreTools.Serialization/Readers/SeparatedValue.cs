@@ -151,6 +151,7 @@ namespace SabreTools.Serialization.Readers
                             Status = reader.Line[16],
                         };
                     }
+
                     rows.Add(row);
                 }
 

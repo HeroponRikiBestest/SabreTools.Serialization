@@ -70,6 +70,7 @@ namespace SabreTools.Serialization.Readers
                         extensions.UnknownDataLength = data.ReadUInt16LittleEndian();
                         extensions.UnknownData = data.ReadBytes((int)extensions.UnknownDataLength);
                     }
+
                     if (header.HeaderFlags.HasFlag(KWAJHeaderFlags.HasFileName))
                         extensions.FileName = data.ReadNullTerminatedAnsiString();
                     if (header.HeaderFlags.HasFlag(KWAJHeaderFlags.HasFileExtension))

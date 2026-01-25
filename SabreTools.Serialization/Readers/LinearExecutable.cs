@@ -241,7 +241,7 @@ namespace SabreTools.Serialization.Readers
                     data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the fix-up page table
-                    executable.FixupPageTable = new FixupPageTableEntry[executable.ObjectPageMap?.Length ?? 0 + 1];
+                    executable.FixupPageTable = new FixupPageTableEntry[(executable.ObjectPageMap?.Length ?? 0) + 1];
 
                     // Try to parse the fix-up page table
                     for (int i = 0; i < executable.FixupPageTable.Length; i++)
@@ -264,7 +264,7 @@ namespace SabreTools.Serialization.Readers
                     data.SeekIfPossible(offset, SeekOrigin.Begin);
 
                     // Create the fix-up record table
-                    executable.FixupRecordTable = new FixupRecordTableEntry[executable.ObjectPageMap?.Length ?? 0 + 1];
+                    executable.FixupRecordTable = new FixupRecordTableEntry[(executable.ObjectPageMap?.Length ?? 0) + 1];
 
                     // Try to parse the fix-up record table
                     for (int i = 0; i < executable.FixupRecordTable.Length; i++)
@@ -487,6 +487,10 @@ namespace SabreTools.Serialization.Readers
                         entry.ForwarderModuleOrdinalNumber = data.ReadUInt16LittleEndian();
                         entry.ProcedureNameOffset = data.ReadUInt32LittleEndian();
                         entry.ImportOrdinalNumber = data.ReadUInt32LittleEndian();
+                        break;
+
+                    // Bitflag that is ignored
+                    case BundleType.ParameterTypingInformationPresent:
                         break;
 
                     default:

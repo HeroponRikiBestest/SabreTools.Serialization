@@ -148,6 +148,27 @@ namespace SabreTools.Data.Extensions
                     formatBuilder.Append($", Value: {Encoding.Unicode.GetString(valueAsByteArray)}");
                     break;
 
+                // Unimplemented
+                case ASN1Type.V_ASN1_EOC:
+                case ASN1Type.V_ASN1_NULL:
+                case ASN1Type.V_ASN1_OBJECT_DESCRIPTOR:
+                case ASN1Type.V_ASN1_EXTERNAL:
+                case ASN1Type.V_ASN1_REAL:
+                case ASN1Type.V_ASN1_ENUMERATED:
+                case ASN1Type.V_ASN1_SEQUENCE:
+                case ASN1Type.V_ASN1_SET:
+                case ASN1Type.V_ASN1_NUMERICSTRING:
+                case ASN1Type.V_ASN1_VIDEOTEXSTRING:
+                case ASN1Type.V_ASN1_GENERALIZEDTIME:
+                case ASN1Type.V_ASN1_GRAPHICSTRING:
+                case ASN1Type.V_ASN1_ISO64STRING:
+                case ASN1Type.V_ASN1_GENERALSTRING:
+                case ASN1Type.V_ASN1_UNIVERSALSTRING:
+                case ASN1Type.V_ASN1_PRIMITIVE_TAG:
+                case ASN1Type.V_ASN1_CONSTRUCTED:
+                case ASN1Type.V_ASN1_APPLICATION:
+                case ASN1Type.V_ASN1_CONTEXT_SPECIFIC:
+                case ASN1Type.V_ASN1_PRIVATE:
                 default:
                     formatBuilder.Append($", Value: {BitConverter.ToString(valueAsByteArray).Replace('-', ' ')}");
                     break;

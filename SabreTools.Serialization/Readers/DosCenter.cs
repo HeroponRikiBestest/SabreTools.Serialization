@@ -53,8 +53,22 @@ namespace SabreTools.Serialization.Readers
                                     game = null;
                                     files.Clear();
                                     break;
+
+                                default:
+                                    // TODO: Log invalid values
+                                    break;
                             }
+
                             continue;
+
+                        case CmpRowType.TopLevel:
+                        case CmpRowType.Standalone:
+                        case CmpRowType.Internal:
+                            break;
+
+                        default:
+                            // TODO: Log invalid values
+                            break;
                     }
 
                     // If we're at the root
@@ -68,6 +82,9 @@ namespace SabreTools.Serialization.Readers
                                 break;
                             case "game":
                                 game = new Game();
+                                break;
+                            default:
+                                // TODO: Log invalid values
                                 break;
                         }
                     }
@@ -101,6 +118,9 @@ namespace SabreTools.Serialization.Readers
                             case "comment:":
                                 dat.DosCenter.Comment = reader.Standalone?.Value;
                                 break;
+                            default:
+                                // TODO: Log invalid values
+                                break;
                         }
                     }
 
@@ -114,6 +134,9 @@ namespace SabreTools.Serialization.Readers
                         {
                             case "name":
                                 game.Name = reader.Standalone?.Value;
+                                break;
+                            default:
+                                // TODO: Log invalid values
                                 break;
                         }
                     }
@@ -177,6 +200,9 @@ namespace SabreTools.Serialization.Readers
                         break;
                     case "date":
                         file.Date = kvp.Value;
+                        break;
+                    default:
+                        // TODO: Log invalid values
                         break;
                 }
             }

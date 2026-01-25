@@ -78,6 +78,7 @@ namespace SabreTools.Serialization.Writers
             };
 
             // Write out the items, if they exist
+#pragma warning disable IDE0010
             switch (hash)
             {
                 case HashType.CRC32:
@@ -116,6 +117,7 @@ namespace SabreTools.Serialization.Writers
                 default:
                     throw new ArgumentOutOfRangeException(nameof(hash));
             }
+#pragma warning restore IDE0010
 
             // Return the stream
             stream.SeekIfPossible(0, SeekOrigin.Begin);

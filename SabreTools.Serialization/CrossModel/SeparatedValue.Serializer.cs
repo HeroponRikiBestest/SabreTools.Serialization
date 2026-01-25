@@ -71,6 +71,10 @@ namespace SabreTools.Serialization.CrossModel
                 case Data.Models.Metadata.Rom rom:
                     machine[Data.Models.Metadata.Machine.RomKey] = new Data.Models.Metadata.Rom[] { rom };
                     break;
+
+                default:
+                    // TODO: Log invalid values
+                    break;
             }
 
             return machine;

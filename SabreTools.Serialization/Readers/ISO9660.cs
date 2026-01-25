@@ -456,16 +456,19 @@ namespace SabreTools.Serialization.Readers
                 data.SeekIfPossible(locationL * blockLength, SeekOrigin.Begin);
                 groupL.PathTableL = ParsePathTable(data, sizeL, true);
             }
+
             if (locationL2 != 0 && ((locationL2 * blockLength) + sizeL) < data.Length)
             {
                 data.SeekIfPossible(locationL2 * blockLength, SeekOrigin.Begin);
                 groupL.OptionalPathTableL = ParsePathTable(data, sizeL, true);
             }
+
             if (locationM != 0 && ((locationM * blockLength) + sizeL) < data.Length)
             {
                 data.SeekIfPossible(locationM * blockLength, SeekOrigin.Begin);
                 groupL.PathTableM = ParsePathTable(data, sizeL, false);
             }
+
             if (locationM2 != 0 && ((locationM2 * blockLength) + sizeL) < data.Length)
             {
                 data.SeekIfPossible(locationM2 * blockLength, SeekOrigin.Begin);
@@ -487,16 +490,19 @@ namespace SabreTools.Serialization.Readers
                 data.SeekIfPossible(locationL * blockLength, SeekOrigin.Begin);
                 groupB.PathTableL = ParsePathTable(data, sizeB, true);
             }
+
             if (locationL2 != 0 && ((locationL2 * blockLength) + sizeB) < data.Length)
             {
                 data.SeekIfPossible(locationL2 * blockLength, SeekOrigin.Begin);
                 groupB.OptionalPathTableL = ParsePathTable(data, sizeB, true);
             }
+
             if (locationM != 0 && ((locationM * blockLength) + sizeB) < data.Length)
             {
                 data.SeekIfPossible(locationM * blockLength, SeekOrigin.Begin);
                 groupB.PathTableM = ParsePathTable(data, sizeB, false);
             }
+
             if (locationM2 != 0 && ((locationM2 * blockLength) + sizeB) < data.Length)
             {
                 data.SeekIfPossible(locationM2 * blockLength, SeekOrigin.Begin);
@@ -636,19 +642,19 @@ namespace SabreTools.Serialization.Readers
             // Use provided extent endinanness
             int extentLocation = bigEndian ? dr.ExtentLocation.BigEndian : dr.ExtentLocation.LittleEndian;
             uint extentLength = bigEndian ? dr.ExtentLength.BigEndian : dr.ExtentLength.LittleEndian;
-            long extentOffset = (long)extentLocation * (long)blockLength;
-            long extentFinal = extentOffset + (long)extentLength;
+            long extentOffset = extentLocation * (long)blockLength;
+            long extentFinal = extentOffset + extentLength;
 
             // Deal with extent length ambiguity
             if (!dr.ExtentLength.IsValid)
             {
                 // If provided extent length is invalid, use the other value
-                if (extentLength <= 0 || extentFinal > (long)data.Length)
+                if (extentLength <= 0 || extentFinal > data.Length)
                     extentLength = bigEndian ? dr.ExtentLength.LittleEndian : dr.ExtentLength.BigEndian;
             }
 
             // Validate extent length
-            if (extentLength <= 0 || extentFinal > (long)data.Length)
+            if (extentLength <= 0 || extentFinal > data.Length)
                 return null;
 
             // Move stream to directory location

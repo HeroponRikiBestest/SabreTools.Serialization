@@ -255,6 +255,7 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.Compressors[i] = (CodecType)data.ReadUInt32BigEndian();
             }
+
             obj.LogicalBytes = data.ReadUInt64BigEndian();
             obj.MapOffset = data.ReadUInt64BigEndian();
             obj.MetaOffset = data.ReadUInt64BigEndian();

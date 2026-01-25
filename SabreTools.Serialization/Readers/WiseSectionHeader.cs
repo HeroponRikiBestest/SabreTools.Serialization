@@ -309,6 +309,7 @@ namespace SabreTools.Serialization.Readers
                         {
                             oneCount++;
                         }
+
                         counter++;
                     }
 

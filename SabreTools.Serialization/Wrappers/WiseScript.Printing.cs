@@ -56,6 +56,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine($"  Header String {i}: {entry}");
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -144,6 +145,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine($"      File Text {i}: {entry}");
                 }
             }
+
             builder.AppendLine(data.Source, $"      Source");
             builder.AppendLine();
         }
@@ -172,6 +174,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine($"      Title/Text String {i}: {entry}");
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -193,6 +196,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine($"      Script Line {i}: {entry}");
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -304,6 +308,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
                 }
             }
+
             builder.AppendLine();
         }
 
@@ -381,6 +386,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine($"      Description {i}: {entry}");
                 }
             }
+
             builder.AppendLine();
             builder.AppendLine(data.Source, $"      Source");
             builder.AppendLine();

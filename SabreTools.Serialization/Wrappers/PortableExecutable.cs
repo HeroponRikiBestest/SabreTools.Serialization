@@ -1880,15 +1880,18 @@ namespace SabreTools.Serialization.Wrappers
                             value = entry.Data;
                             break;
                         case ResourceType.RT_BITMAP:
+                        case ResourceType.RT_NEWBITMAP:
                             value = entry.Data;
                             break;
                         case ResourceType.RT_ICON:
                             value = entry.Data;
                             break;
                         case ResourceType.RT_MENU:
+                        case ResourceType.RT_NEWMENU:
                             value = entry.AsMenu();
                             break;
                         case ResourceType.RT_DIALOG:
+                        case ResourceType.RT_NEWDIALOG:
                             value = entry.AsDialogBox();
                             break;
                         case ResourceType.RT_STRING:
@@ -1941,6 +1944,16 @@ namespace SabreTools.Serialization.Wrappers
                             _assemblyManifest = entry.AsAssemblyManifest();
                             value = _assemblyManifest;
                             break;
+
+                        // Bitflag, ignore
+                        case ResourceType.RT_NEWRESOURCE:
+                            break;
+
+                        // Error state, ignore
+                        case ResourceType.RT_ERROR:
+                            value = entry.Data;
+                            break;
+
                         default:
                             value = entry.Data;
                             break;
