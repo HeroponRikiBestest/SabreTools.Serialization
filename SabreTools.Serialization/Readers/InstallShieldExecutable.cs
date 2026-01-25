@@ -5,7 +5,6 @@ using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Readers
 {
-    // TODO: This should parse an entire SFX, not just a single entry
     public class InstallShieldExecutable : BaseBinaryReader<SFX>
     {
         public override SFX? Deserialize(Stream? data)
@@ -65,10 +64,10 @@ namespace SabreTools.Serialization.Readers
             if (name == null)
                 return null;
             
-            if (name == "InstallShieldExecutable") // TODO: can this give debug output somehow?
+            if (name == "InstallShieldExecutable")
                 return null;
             
-            if (name == "ISSetupStream") // TODO: can this give debug output somehow?
+            if (name == "ISSetupStream")
                 return null;
 
             string? path = data.ReadNullTerminatedAnsiString();
@@ -88,7 +87,7 @@ namespace SabreTools.Serialization.Readers
             obj.Path = path;
             obj.Version = version;
             obj.Length = lengthValue;
-            obj.Offset = data.Position - initialOffset; // TODO: i have to compensate by subtracting initial offset since apparently you start there in extraction?
+            obj.Offset = data.Position - initialOffset;
             
             return obj;
         }

@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.InstallShieldExecutable;
 
 namespace SabreTools.Serialization.Wrappers

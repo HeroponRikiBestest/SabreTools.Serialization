@@ -1,8 +1,5 @@
 using System;
 using System.IO;
-using System.Text.RegularExpressions;
-using SabreTools.Data.Models.InstallShieldExecutable;
-using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
 
 namespace SabreTools.Serialization.Wrappers
