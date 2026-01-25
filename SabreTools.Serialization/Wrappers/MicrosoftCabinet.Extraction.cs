@@ -22,7 +22,47 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <remarks>Only used in multi-file</remarks>
         public MicrosoftCabinet? Prev { get; set; }
+        
+        /// <summary>
+        /// Current cabinet file being read from
+        /// </summary>
+        private MicrosoftCabinet _cabinet;
 
+        /// <summary>
+        /// Current folder being read from
+        /// </summary>
+        private CFFOLDER _folder;
+
+        /// <summary>
+        /// Current array of files to be extracted
+        /// </summary>
+        private CFFILE[] _files;
+
+        /// <summary>
+        /// Current file being extracted
+        /// </summary>
+        private CFFILE _file;
+
+        /// <summary>
+        /// Current number of bytes left to write of the current file
+        /// </summary>
+        private int _bytesLeft;
+
+        /// <summary>
+        /// Current index in the folder of files to extract
+        /// </summary>
+        private int _fileCounter;
+
+        /// <summary>
+        /// Current offset in the cabinet being read from
+        /// </summary>
+        private long _offset;
+        
+        /// <summary>
+        /// Current output filestream being written to
+        /// </summary>
+        private FileStream? _fileStream;
+        
         #endregion
 
         #region Cabinet Set
@@ -261,28 +301,28 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="offset">Offset to be read from</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Read datablock</returns>
-        private CFDATA? ReadBlock(ref long offset, bool includeDebug)
+        private CFDATA? ReadBlock(bool includeDebug)
         {
             try
             {
-                lock (_dataSourceLock)
+                lock (_cabinet._dataSourceLock)
                 {
-                    _dataSource.SeekIfPossible(offset, SeekOrigin.Begin);
+                    _cabinet._dataSource.SeekIfPossible(_offset, SeekOrigin.Begin);
                     var dataBlock = new CFDATA();
 
-                    var dataReservedSize = Header.DataReservedSize;
+                    var dataReservedSize = _cabinet.Header.DataReservedSize;
 
-                    dataBlock.Checksum = _dataSource.ReadUInt32LittleEndian();
-                    dataBlock.CompressedSize = _dataSource.ReadUInt16LittleEndian();
-                    dataBlock.UncompressedSize = _dataSource.ReadUInt16LittleEndian();
+                    dataBlock.Checksum = _cabinet._dataSource.ReadUInt32LittleEndian();
+                    dataBlock.CompressedSize = _cabinet._dataSource.ReadUInt16LittleEndian();
+                    dataBlock.UncompressedSize = _cabinet._dataSource.ReadUInt16LittleEndian();
 
                     if (dataReservedSize > 0)
-                        dataBlock.ReservedData = _dataSource.ReadBytes(dataReservedSize);
+                        dataBlock.ReservedData = _cabinet._dataSource.ReadBytes(dataReservedSize);
 
                     if (dataBlock.CompressedSize > 0)
-                        dataBlock.CompressedData = _dataSource.ReadBytes(dataBlock.CompressedSize);
+                        dataBlock.CompressedData = _cabinet._dataSource.ReadBytes(dataBlock.CompressedSize);
 
-                    offset = _dataSource.Position;
+                    _offset = _cabinet._dataSource.Position;
 
                     return dataBlock;
                 }
@@ -305,7 +345,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             var cabinet = this;
             var currentCabFilename = cabFilename;
-            long offset = 0;
+            _offset = 0;
             try
             {
                 // Loop through the folders
@@ -321,185 +361,31 @@ namespace SabreTools.Serialization.Wrappers
                             continue;
                         }
 
-                        var folder = cabinet.Folders[f];
-                        CFFILE[] files = cabinet.GetSpannedFilesArray(currentCabFilename, f, includeDebug);
-                        var file = files[0];
-                        int bytesLeft = (int)file.FileSize;
-                        int fileCounter = 0;
+                        _folder = cabinet.Folders[f];
+                        _files = cabinet.GetSpannedFilesArray(currentCabFilename, f, includeDebug);
+                        _file = _files[0];
+                        _bytesLeft = (int)_file.FileSize;
+                        _fileCounter = 0;
 
                         // Cache starting position
-                        offset = folder.CabStartOffset;
-
-                        var mszip = Decompressor.Create();
-                        try
-                        {
-                            // Ensure folder contains data
-                            if (folder.DataCount == 0)
-                                return false;
-                            if (folder.CabStartOffset <= 0)
-                                return false;
-
-                            // Skip unsupported compression types to avoid opening a blank filestream. This can be altered/removed if these types are ever supported.
-                            var compressionType = GetCompressionType(folder);
-                            if (compressionType == CompressionType.TYPE_QUANTUM || compressionType == CompressionType.TYPE_LZX)
-                                continue;
-
-                            //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
-
-                            var fs = GetFileStream(file.Name, outputDirectory);
-
-                            var tempCabinet = cabinet;
-                            int j = 0;
-
-                            // Loop through the data blocks
-                            // Has to be a while loop instead of a for loop due to cab spanning continue blocks
-                            while (j < folder.DataCount)
-                            {
-                                var dataBlock = tempCabinet.ReadBlock(ref offset, includeDebug);
-                                if (dataBlock == null)
-                                {
-                                    if (includeDebug) Console.Error.WriteLine($"Error extracting file {file.Name}");
-                                    break;
-                                }
-
-                                // Get the data to be processed
-                                byte[] blockData = dataBlock.CompressedData;
-
-                                // If the block is continued, append
-                                bool continuedBlock = false;
-                                if (dataBlock.UncompressedSize == 0)
-                                {
-                                    tempCabinet = tempCabinet.Next;
-                                    if (tempCabinet == null)
-                                        break; // Next cab is missing, continue
-
-                                    // CompressionType not updated because there's no way it's possible that it can swap on continued blocks
-                                    folder = tempCabinet.Folders[0];
-                                    offset = folder.CabStartOffset;
-                                    var nextBlock = tempCabinet.ReadBlock(ref offset, includeDebug);
-                                    if (nextBlock == null)
-                                    {
-                                        if (includeDebug) Console.Error.WriteLine($"Error extracting file {file.Name}");
-                                        break;
-                                    }
-
-                                    byte[] nextData = nextBlock.CompressedData;
-                                    if (nextData.Length == 0)
-                                        continue;
-
-                                    continuedBlock = true;
-                                    blockData = [.. blockData, .. nextData];
-                                    dataBlock.CompressedSize += nextBlock.CompressedSize;
-                                    dataBlock.UncompressedSize = nextBlock.UncompressedSize;
-                                }
-
-                                // Get the uncompressed data block
-                                byte[] data = compressionType switch
-                                {
-                                    CompressionType.TYPE_NONE => blockData,
-                                    CompressionType.TYPE_MSZIP => DecompressMSZIPBlock(f, mszip, j, dataBlock, blockData, includeDebug),
-
-                                    // TODO: Unsupported
-                                    CompressionType.TYPE_QUANTUM => [],
-                                    CompressionType.TYPE_LZX => [],
-
-                                    // Should be impossible
-                                    _ => [],
-                                };
-
-                                if (bytesLeft > 0 && bytesLeft >= data.Length)
-                                {
-                                    fs.Write(data);
-                                    bytesLeft -= data.Length;
-                                }
-                                else if (bytesLeft > 0 && bytesLeft < data.Length)
-                                {
-                                    int tempBytesLeft = bytesLeft;
-                                    fs.Write(data, 0, bytesLeft);
-                                    fs.Close();
-
-                                    // reached end of folder
-                                    if (fileCounter + 1 == files.Length)
-                                        break;
-
-                                    file = files[++fileCounter];
-                                    bytesLeft = (int)file.FileSize;
-                                    fs = GetFileStream(file.Name, outputDirectory);
-                                    while (bytesLeft < data.Length - tempBytesLeft)
-                                    {
-                                        fs.Write(data, tempBytesLeft, bytesLeft);
-                                        tempBytesLeft += bytesLeft;
-                                        fs.Close();
-
-                                        // reached end of folder
-                                        if (fileCounter + 1 == files.Length)
-                                            break;
-
-                                        file = files[++fileCounter];
-                                        bytesLeft = (int)file.FileSize;
-                                        fs = GetFileStream(file.Name, outputDirectory);
-                                    }
-
-                                    fs.Write(data, tempBytesLeft, data.Length - tempBytesLeft);
-                                    bytesLeft -= (data.Length - tempBytesLeft);
-                                }
-                                else
-                                {
-                                    int tempBytesLeft = bytesLeft;
-                                    fs.Close();
-
-                                    // reached end of folder
-                                    if (fileCounter + 1 == files.Length)
-                                        break;
-
-                                    file = files[++fileCounter];
-                                    bytesLeft = (int)file.FileSize;
-                                    fs = GetFileStream(file.Name, outputDirectory);
-                                    while (bytesLeft < data.Length - tempBytesLeft)
-                                    {
-                                        fs.Write(data, tempBytesLeft, bytesLeft);
-                                        tempBytesLeft += bytesLeft;
-                                        fs.Close();
-
-                                        // reached end of folder
-                                        if (fileCounter + 1 == files.Length)
-                                            break;
-
-                                        file = files[++fileCounter];
-                                        bytesLeft = (int)file.FileSize;
-                                        fs = GetFileStream(file.Name, outputDirectory);
-                                    }
-
-                                    fs.Write(data, tempBytesLeft, data.Length - tempBytesLeft);
-                                    bytesLeft -= (data.Length - tempBytesLeft);
-                                }
-
-                                // Top if block occurs on http://redump.org/disc/107833/ , middle on https://dbox.tools/titles/pc/57520FA0 , bottom still unobserved
-                                // While loop since this also handles 0 byte files. Example file seen in http://redump.org/disc/93312/ , cab Group17.cab, file TRACKSLOC6DYNTEX_BIN
-                                while (bytesLeft == 0)
-                                {
-                                    fs.Close();
-
-                                    // reached end of folder
-                                    if (fileCounter + 1 == files.Length)
-                                        break;
-
-                                    file = files[++fileCounter];
-                                    bytesLeft = (int)file.FileSize;
-                                    fs = GetFileStream(file.Name, outputDirectory);
-                                }
-
-                                if (continuedBlock)
-                                    j = 0;
-
-                                j++;
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            if (includeDebug) Console.Error.WriteLine(ex);
+                        _offset = _folder.CabStartOffset;
+                        
+                        // Ensure folder contains data
+                        if (_folder.DataCount == 0)
                             return false;
-                        }
+                        if (_folder.CabStartOffset <= 0)
+                            return false;
+
+                        // Skip unsupported compression types to avoid opening a blank filestream. This can be altered/removed if these types are ever supported.
+                        var compressionType = GetCompressionType(_folder);
+                        if (compressionType == CompressionType.TYPE_QUANTUM || compressionType == CompressionType.TYPE_LZX)
+                            continue;
+                        
+                        _cabinet = cabinet;
+
+                        //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
+
+                        ExtractData(outputDirectory, compressionType, f, includeDebug);
                     }
 
                     // Move to the next cabinet, if possible
@@ -520,6 +406,165 @@ namespace SabreTools.Serialization.Wrappers
                 if (includeDebug) Console.Error.WriteLine(ex);
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Extract the data from a folder
+        /// </summary>
+        /// <param name="outputDirectory">Path to the output directory</param>
+        /// <param name="compressionType">Type of compression that the folder uses</param>
+        /// <param name="folderIndex">Index of the folder in the cabinet</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
+        private void ExtractData(string outputDirectory, CompressionType compressionType, int folderIndex, bool includeDebug)
+        {
+            var mszip = Decompressor.Create();
+
+            try
+            {
+                _fileStream = GetFileStream(_file.Name, outputDirectory);
+
+                int j = 0;
+
+                // Loop through the data blocks
+                // Has to be a while loop instead of a for loop due to cab spanning continue blocks
+                while (j < _folder.DataCount)
+                {
+                    var dataBlock = ReadBlock(includeDebug);
+                    if (dataBlock == null)
+                    {
+                        if (includeDebug) Console.Error.WriteLine($"Error extracting file {_file.Name}");
+                        return;
+                    }
+
+                    // Get the data to be processed
+                    byte[] blockData = dataBlock.CompressedData;
+
+                    // If the block is continued, append
+                    bool continuedBlock = false;
+                    if (dataBlock.UncompressedSize == 0)
+                    {
+                        if (_cabinet.Next == null)
+                            break; // Next cab is missing, continue
+                        
+                        _cabinet = _cabinet.Next;
+
+                        // CompressionType not updated because there's no way it's possible that it can swap on continued blocks
+                        _folder = _cabinet.Folders[0];
+                        _offset = _folder.CabStartOffset;
+                        var nextBlock = ReadBlock(includeDebug);
+                        if (nextBlock == null)
+                        {
+                            if (includeDebug) Console.Error.WriteLine($"Error extracting file {_file.Name}");
+                            return;
+                        }
+
+                        byte[] nextData = nextBlock.CompressedData;
+                        if (nextData.Length == 0)
+                            continue;
+
+                        continuedBlock = true;
+                        blockData = [.. blockData, .. nextData];
+                        dataBlock.CompressedSize += nextBlock.CompressedSize;
+                        dataBlock.UncompressedSize = nextBlock.UncompressedSize;
+                    }
+
+                    // Get the uncompressed data block
+                    byte[] data = compressionType switch
+                    {
+                        CompressionType.TYPE_NONE => blockData,
+                        CompressionType.TYPE_MSZIP => DecompressMSZIPBlock(folderIndex, mszip, j, dataBlock, blockData, includeDebug),
+
+                        // TODO: Unsupported
+                        CompressionType.TYPE_QUANTUM => [],
+                        CompressionType.TYPE_LZX => [],
+
+                        // Should be impossible
+                        _ => [],
+                    };
+
+                    WriteData(data, outputDirectory);
+
+                    if (continuedBlock)
+                        j = 0;
+
+                    j++;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (includeDebug) Console.Error.WriteLine(ex);
+            }
+        }
+
+        /// <summary>
+        /// Write extracted DataBlocks to a file
+        /// </summary>
+        /// <param name="data">Data to be written to the output file</param>
+        /// <param name="outputDirectory">Path to the output directory</param>
+        private void WriteData(byte[] data, string outputDirectory)
+        {
+            if (_bytesLeft > 0 && _bytesLeft >= data.Length)
+            {
+                if (_fileStream == null)
+                    return;
+                
+                _fileStream.Write(data);
+                _bytesLeft -= data.Length;
+            }
+            else
+            {
+                int tempBytesLeft = _bytesLeft;
+                if (_fileStream == null)
+                    return;
+                
+                if (_bytesLeft > 0 && _bytesLeft < data.Length)
+                    _fileStream.Write(data, 0, _bytesLeft);
+                
+                if (EndFile(outputDirectory))
+                    return;
+                
+                while (_bytesLeft < data.Length - tempBytesLeft)
+                {
+                    _fileStream.Write(data, tempBytesLeft, _bytesLeft);
+                    tempBytesLeft += _bytesLeft;
+                    if (EndFile(outputDirectory))
+                        break;
+                }
+
+                _fileStream.Write(data, tempBytesLeft, data.Length - tempBytesLeft);
+                _bytesLeft -= (data.Length - tempBytesLeft);
+            }
+
+            // Top if block occurs on http://redump.org/disc/107833/ , middle on https://dbox.tools/titles/pc/57520FA0 , bottom still unobserved
+            // While loop since this also handles 0 byte files. Example file seen in http://redump.org/disc/93312/ , cab Group17.cab, file TRACKSLOC6DYNTEX_BIN
+            while (_bytesLeft == 0)
+            {
+                if (EndFile(outputDirectory))
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Finish handling a file and progress to the next file as necessary.
+        /// </summary>
+        /// <param name="outputDirectory">Path to the output directory</param>
+        /// <returns>True the end of the folder has been reached, false otherwise</returns>
+        private bool EndFile(string outputDirectory)
+        {
+            if (_fileStream == null)
+                return false;
+            
+            _fileStream.Close();
+
+            // reached end of folder
+            if (_fileCounter + 1 == _files.Length)
+                return true;
+
+            _file = _files[++_fileCounter];
+            _bytesLeft = (int)_file.FileSize;
+            _fileStream = GetFileStream(_file.Name, outputDirectory);
+            
+            return false;
         }
 
         #endregion
