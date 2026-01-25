@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <remarks>Only used in multi-file</remarks>
         public MicrosoftCabinet? Prev { get; set; }
-        
+
         #endregion
 
         #region Cabinet Set
@@ -271,8 +271,6 @@ namespace SabreTools.Serialization.Wrappers
                         if (compressionType == CompressionType.TYPE_QUANTUM || compressionType == CompressionType.TYPE_LZX)
                             continue;
                         
-                        //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
-                        
                         var reader = new Reader(cabinet, folder, files);
                         
                         reader.ExtractData(outputDirectory, compressionType, f, includeDebug);
@@ -319,12 +317,7 @@ namespace SabreTools.Serialization.Wrappers
             /// Current array of files to be extracted
             /// </summary>
             private CFFILE[] _files;
-
-            /// <summary>
-            /// Current file being extracted
-            /// </summary>
-            private CFFILE _file;
-
+            
             /// <summary>
             /// Current number of bytes left to write of the current file
             /// </summary>
@@ -354,8 +347,7 @@ namespace SabreTools.Serialization.Wrappers
                 _cabinet = cabinet;
                 _folder = folder;
                 _files = files;
-                _file = files[0];
-                _bytesLeft = (int)_file.FileSize;
+                _bytesLeft = (int)_files[0].FileSize;
                 _fileCounter = 0;
                 _offset = folder.CabStartOffset;
                 _fileStream = null;
@@ -437,9 +429,10 @@ namespace SabreTools.Serialization.Wrappers
             {
                 var mszip = Decompressor.Create();
 
+                string filename = _files[_fileCounter].Name;
                 try
                 {
-                    _fileStream = GetFileStream(_file.Name, outputDirectory);
+                    _fileStream = GetFileStream(filename, outputDirectory);
 
                     int j = 0;
 
@@ -450,7 +443,7 @@ namespace SabreTools.Serialization.Wrappers
                         var dataBlock = ReadBlock(includeDebug);
                         if (dataBlock == null)
                         {
-                            if (includeDebug) Console.Error.WriteLine($"Error extracting file {_file.Name}");
+                            if (includeDebug) Console.Error.WriteLine($"Error extracting file {filename}");
                             return;
                         }
 
@@ -472,7 +465,7 @@ namespace SabreTools.Serialization.Wrappers
                             var nextBlock = ReadBlock(includeDebug);
                             if (nextBlock == null)
                             {
-                                if (includeDebug) Console.Error.WriteLine($"Error extracting file {_file.Name}");
+                                if (includeDebug) Console.Error.WriteLine($"Error extracting file {filename}");
                                 return;
                             }
 
@@ -493,7 +486,7 @@ namespace SabreTools.Serialization.Wrappers
                             CompressionType.TYPE_MSZIP => DecompressMSZIPBlock(folderIndex, mszip, j, dataBlock, blockData, includeDebug),
 
                             // TODO: Unsupported
-                            CompressionType.TYPE_QUANTUM => [],
+                            CompressionType.TYPE_QUANTUM => [], //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
                             CompressionType.TYPE_LZX => [],
 
                             // Should be impossible
@@ -578,13 +571,12 @@ namespace SabreTools.Serialization.Wrappers
                 if (_fileCounter + 1 == _files.Length)
                     return true;
 
-                _file = _files[++_fileCounter];
-                _bytesLeft = (int)_file.FileSize;
-                _fileStream = GetFileStream(_file.Name, outputDirectory);
+                ++_fileCounter;
+                _bytesLeft = (int)_files[_fileCounter].FileSize;
+                _fileStream = GetFileStream(_files[_fileCounter].Name, outputDirectory);
                 
                 return false;
             }
-            
         }
         
         #endregion
