@@ -17,12 +17,12 @@ namespace SabreTools.Serialization.Readers
             try
             {
                 var sfx = new SFX();
-                
+
                 // Cache the initial offset
                 long initialOffset = data.Position;
 
                 var sfxList = new List<FileEntry>();
-                
+
                 while (data.Position < data.Length)
                 {
                     // Try to parse the entry
@@ -38,10 +38,10 @@ namespace SabreTools.Serialization.Readers
                     data.SeekIfPossible(length, SeekOrigin.Current);
                     sfxList.Add(fileEntry);
                 }
-                
+
                 if (sfxList.Count == 0)
                     return null;
-                
+
                 sfx.Entries = [.. sfxList];
                 return sfx;
             }
@@ -62,14 +62,14 @@ namespace SabreTools.Serialization.Readers
             string? name = data.ReadNullTerminatedAnsiString();
             if (name == null)
                 return null;
-            
+
             // Both of these strings indicate that this is a different kind of encrypted and/or compressed format of
-            // ISEXE that is not yet supported, but will be in the future. 
+            // ISEXE that is not yet supported, but will be in the future.
             // They return early because no extraction can be performed, like how MsCab currently returns if a folder
             // is LZX or Quantum.
             if (name == ISSignatureString)
                 return null;
-            
+
             if (name == ISSetupSignatureString)
                 return null;
 
@@ -91,7 +91,7 @@ namespace SabreTools.Serialization.Readers
             obj.Version = version;
             obj.Length = lengthValue;
             obj.Offset = data.Position - initialOffset;
-            
+
             return obj;
         }
     }

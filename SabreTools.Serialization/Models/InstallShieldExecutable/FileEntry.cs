@@ -27,7 +27,7 @@ namespace SabreTools.Data.Models.InstallShieldExecutable
         /// Length of the file. Stored in the installshield executable as a string.
         /// </summary>
         public ulong Length { get; set; }
-        
+
         /// <summary>
         /// Offset of the file.
         /// </summary>

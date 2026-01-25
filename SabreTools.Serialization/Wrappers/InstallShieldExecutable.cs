@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.Wrappers
 
         /// <inheritdoc cref="SFX.FileEntry"/>
         public FileEntry[] Entries => Model.Entries;
-        
+
         #endregion
 
         #region Constructors

@@ -18,12 +18,12 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     var entry = Entries[i];
                     _dataSource.SeekIfPossible(entry.Offset, SeekOrigin.Begin);
-                    
+
                     // Get the length, and make sure it won't EOF
                     long length = (long)entry.Length;
                     if (length > _dataSource.Length - _dataSource.Position)
                         break;
-                    
+
                     // Ensure directory separators are consistent
                     var filename = entry.Path.TrimEnd('\0');
                     if (Path.DirectorySeparatorChar == '\\')
