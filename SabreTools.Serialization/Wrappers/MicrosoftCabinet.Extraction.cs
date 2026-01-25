@@ -177,7 +177,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Open the full set if possible
                 cabinet = OpenSet(Filename, includeDebug);
                 if (cabinet == null)
-                    return false; // TODO: Do you want this to stay since the else statement is supposed to take care of partial extraction
+                    return false;
                 
                 // If we have anything but the first file, avoid extraction to avoid repeat extracts
                 // TODO: This is going to have to take missing parts into account for MSI support
