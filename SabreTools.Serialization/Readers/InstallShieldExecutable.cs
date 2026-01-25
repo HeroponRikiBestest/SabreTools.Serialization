@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using SabreTools.Data.Models.InstallShieldExecutable;
 using SabreTools.IO.Extensions;
+using static SabreTools.Data.Models.InstallShieldExecutable.Constants;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -67,10 +68,10 @@ namespace SabreTools.Serialization.Readers
             // ISEXE that is not yet supported, but will be in the future. 
             // They return early because no extraction can be performed, like how MsCab currently returns if a folder
             // is LZX or Quantum.
-            if (name == "InstallShieldExecutable")
+            if (name == ISSignatureString)
                 return null;
             
-            if (name == "ISSetupStream")
+            if (name == ISSetupSignatureString)
                 return null;
 
             string? path = data.ReadNullTerminatedAnsiString();
