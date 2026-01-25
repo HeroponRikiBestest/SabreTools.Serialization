@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc/>
         public bool Extract(string outputDirectory, bool includeDebug)
         {
-            if (_dataSource == null || !_dataSource.CanRead)
+            if (_dataSource is null || !_dataSource.CanRead)
                 return false;
 
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER

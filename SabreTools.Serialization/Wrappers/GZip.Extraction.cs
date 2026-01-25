@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // Ensure there is data to extract
-            if (Header == null || DataOffset < 0)
+            if (Header is null || DataOffset < 0)
             {
                 if (includeDebug) Console.Error.WriteLine("Invalid archive detected, skipping...");
                 return false;

@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.Wrappers
             byte[] data = [];
             if (directoryItem.DirectoryEntry.ArchiveIndex == HL_VPK_NO_ARCHIVE)
             {
-                if (directoryItem.PreloadData == null)
+                if (directoryItem.PreloadData is null)
                     return false;
 
                 data = directoryItem.PreloadData;
@@ -56,7 +56,7 @@ namespace SabreTools.Serialization.Wrappers
             else
             {
                 // If we have invalid archives
-                if (ArchiveFilenames == null || ArchiveFilenames.Length == 0)
+                if (ArchiveFilenames is null || ArchiveFilenames.Length == 0)
                     return false;
 
                 // If we have an invalid index
@@ -101,7 +101,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // If there is nothing to write out
-            if (data == null)
+            if (data is null)
                 return false;
 
             // If we have an invalid output directory

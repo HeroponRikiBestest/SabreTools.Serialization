@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine("-------------------------");
             builder.AppendLine();
 
-            if (Model.SystemArea == null || Model.SystemArea.Length == 0)
+            if (Model.SystemArea is null || Model.SystemArea.Length == 0)
                 builder.AppendLine(Model.SystemArea, "System Area");
             else if (Array.TrueForAll(Model.SystemArea, b => b == 0))
                 builder.AppendLine("Zeroed", "System Area");

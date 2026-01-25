@@ -30,7 +30,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the decompressor
             var decompressor = Decompressor.CreateSZDD(contents);
-            if (decompressor == null)
+            if (decompressor is null)
                 return false;
 
             // Create the output file

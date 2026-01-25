@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Writers
         public virtual byte[]? SerializeArray(TModel? obj)
         {
             using var stream = SerializeStream(obj);
-            if (stream == null)
+            if (stream is null)
                 return null;
 
             byte[] bytes = new byte[stream.Length];
@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.Writers
                 return false;
 
             using var stream = SerializeStream(obj);
-            if (stream == null)
+            if (stream is null)
                 return false;
 
             using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);

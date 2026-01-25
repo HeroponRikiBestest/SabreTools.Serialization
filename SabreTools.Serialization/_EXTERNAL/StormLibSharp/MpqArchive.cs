@@ -106,7 +106,7 @@ namespace StormLibSharp
 
         private void VerifyHandle()
         {
-            if (_handle == null || _handle.IsInvalid)
+            if (_handle is null || _handle.IsInvalid)
                 throw new ObjectDisposedException("MpqArchive");
         }
 
@@ -202,7 +202,7 @@ namespace StormLibSharp
 
         public void AddPatchArchives(IEnumerable<string> patchPaths)
         {
-            if (patchPaths == null)
+            if (patchPaths is null)
                 throw new ArgumentNullException("patchPaths");
 
             VerifyHandle();

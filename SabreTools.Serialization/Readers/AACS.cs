@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Readers
         public override MediaKeyBlock? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     // Try to parse the record
                     var record = ParseRecord(data);
-                    if (record == null)
+                    if (record is null)
                         continue;
 
                     // Add the record

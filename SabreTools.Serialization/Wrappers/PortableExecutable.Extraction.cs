@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Try to deserialize the source data
                 var deserializer = new Readers.AdvancedInstaller();
                 var sfx = deserializer.Deserialize(_dataSource);
-                if (sfx == null || sfx.Entries.Length == 0)
+                if (sfx is null || sfx.Entries.Length == 0)
                     return false;
 
                 // Loop through the entries and extract
@@ -119,12 +119,12 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Get all resources of type 99 with index 2
                 var resources = FindResourceByNamedType("99, 2");
-                if (resources == null || resources.Count == 0)
+                if (resources is null || resources.Count == 0)
                     return false;
 
                 // Get the first resource of type 99 with index 2
                 var resource = resources[0];
-                if (resource == null || resource.Length == 0)
+                if (resource is null || resource.Length == 0)
                     return false;
 
                 // Create the output data buffer
@@ -137,7 +137,7 @@ namespace SabreTools.Serialization.Wrappers
                     data = DecompressCExeLZ(resource);
 
                 // If we have no data
-                if (data == null)
+                if (data is null)
                     return false;
 
                 // Create the temp filename
@@ -362,7 +362,7 @@ namespace SabreTools.Serialization.Wrappers
                     string resourceKey = kvp.Key;
                     var value = kvp.Value;
 
-                    if (value == null || value is not byte[] ba || ba.Length == 0)
+                    if (value is null || value is not byte[] ba || ba.Length == 0)
                         continue;
 
                     // Set the output variables
@@ -533,7 +533,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractMatroschka(string outputDirectory, bool includeDebug)
         {
             // Check if executable contains Matroschka package or not
-            if (MatroschkaPackage == null)
+            if (MatroschkaPackage is null)
                 return false;
 
             // Attempt to extract package
@@ -549,7 +549,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractInstallShieldExecutable(string outputDirectory, bool includeDebug)
         {
             // Check if executable contains an InstallShield Executable or not
-            if (ISEXE == null)
+            if (ISEXE is null)
                 return false;
 
             // Attempt to extract package
@@ -572,7 +572,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Try to deserialize the source data
                 var deserializer = new Readers.SpoonInstaller();
                 var sfx = deserializer.Deserialize(_dataSource);
-                if (sfx?.Entries == null)
+                if (sfx?.Entries is null)
                     return false;
 
                 // Loop through the entries and extract
@@ -650,7 +650,7 @@ namespace SabreTools.Serialization.Wrappers
             // Seek to the overlay and parse
             source.SeekIfPossible(offset, SeekOrigin.Begin);
             var header = WiseOverlayHeader.Create(source);
-            if (header == null)
+            if (header is null)
             {
                 if (includeDebug) Console.Error.WriteLine("Could not parse a Wise overlay header");
                 return false;
@@ -667,7 +667,7 @@ namespace SabreTools.Serialization.Wrappers
             // Open the script file from the output directory
             var scriptStream = File.OpenRead(Path.Combine(outputDirectory, "WiseScript.bin"));
             var script = WiseScript.Create(scriptStream);
-            if (script == null)
+            if (script is null)
             {
                 if (includeDebug) Console.Error.WriteLine("Could not parse WiseScript.bin");
                 return false;
@@ -692,7 +692,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Get the section header
             var header = WiseSection;
-            if (header == null)
+            if (header is null)
             {
                 if (includeDebug) Console.Error.WriteLine("Could not parse a Wise section header");
                 return false;

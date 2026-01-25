@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the entry
             var entry = Entries[index];
-            if (entry.Path == null)
+            if (entry.Path is null)
                 return false;
 
             // Ensure directory separators are consistent
@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Read the file
             var data = ReadFileData(entry, includeDebug);
-            if (data == null)
+            if (data is null)
                 return false;
 
             // Ensure the full output directory exists
@@ -93,7 +93,7 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? ReadFileData(MatroshkaEntry entry, bool includeDebug)
         {
             // Skip if the entry is incomplete
-            if (entry.Path == null || entry.MD5 == null)
+            if (entry.Path is null || entry.MD5 is null)
                 return null;
 
             // Cache the expected MD5

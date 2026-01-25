@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Readers
         public override Executable? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Parse the MS-DOS stub
                 var stub = new MSDOS().Deserialize(data);
-                if (stub?.Header == null || stub.Header.NewExeHeaderAddr == 0)
+                if (stub?.Header is null || stub.Header.NewExeHeaderAddr == 0)
                     return null;
 
                 // Set the MS-DOS stub
@@ -61,7 +61,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Parse the file header
                 var fileHeader = ParseFileHeader(data);
-                if (fileHeader == null)
+                if (fileHeader is null)
                     return null;
                 if (fileHeader.NumberOfSections > 96)
                     return null;
@@ -126,7 +126,7 @@ namespace SabreTools.Serialization.Readers
                 #endregion
 
                 // All tables require the optional header to exist
-                if (optionalHeader == null)
+                if (optionalHeader is null)
                     return pex;
 
                 #region Export Table
@@ -231,7 +231,7 @@ namespace SabreTools.Serialization.Readers
                             for (int i = 0; i < importDirectoryTable.Length; i++)
                             {
                                 var entry = importDirectoryTable[i];
-                                if (entry == null)
+                                if (entry is null)
                                     continue;
 
                                 long nameOffset = initialOffset + entry.NameRVA.ConvertVirtualAddress(pex.SectionTable);
@@ -480,7 +480,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled attribute certificate on success, null on error</returns>
         public static Data.Models.PortableExecutable.AttributeCertificate.Entry[]? ParseAttributeCertificateTable(byte[]? data)
         {
-            if (data == null)
+            if (data is null)
                 return null;
 
             var obj = new List<Data.Models.PortableExecutable.AttributeCertificate.Entry>();
@@ -489,7 +489,7 @@ namespace SabreTools.Serialization.Readers
             while (offset < data.Length)
             {
                 var entry = ParseAttributeCertificateTableEntry(data, ref offset);
-                if (entry == null)
+                if (entry is null)
                     break;
 
                 obj.Add(entry);
@@ -568,7 +568,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled base relocation table on success, null on error</returns>
         public static Data.Models.PortableExecutable.BaseRelocation.Block[]? ParseBaseRelocationTable(byte[]? data)
         {
-            if (data == null)
+            if (data is null)
                 return null;
 
             var obj = new List<Data.Models.PortableExecutable.BaseRelocation.Block>();
@@ -577,7 +577,7 @@ namespace SabreTools.Serialization.Readers
             while (offset + 8 <= data.Length)
             {
                 var block = ParseBaseRelocationBlock(data, ref offset);
-                if (block == null)
+                if (block is null)
                     break;
 
                 obj.Add(block);
@@ -670,7 +670,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled DebugTable on success, null on error</returns>
         public static Data.Models.PortableExecutable.DebugData.Table? ParseDebugTable(byte[]? data)
         {
-            if (data == null)
+            if (data is null)
                 return null;
 
             var obj = new Data.Models.PortableExecutable.DebugData.Table();
@@ -702,7 +702,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled DelayLoadDirectoryTable on success, null on error</returns>
         public static Data.Models.PortableExecutable.DelayLoad.DirectoryTable? ParseDelayLoadDirectoryTable(byte[]? data)
         {
-            if (data == null)
+            if (data is null)
                 return null;
 
             var obj = new Data.Models.PortableExecutable.DelayLoad.DirectoryTable();
@@ -947,7 +947,7 @@ namespace SabreTools.Serialization.Readers
                     var addresses = new List<int>();
                     foreach (var kvp in importLookupTables)
                     {
-                        if (kvp.Value == null || kvp.Value.Length == 0)
+                        if (kvp.Value is null || kvp.Value.Length == 0)
                             continue;
 
                         var vaddrs = Array.ConvertAll(kvp.Value,
@@ -964,7 +964,7 @@ namespace SabreTools.Serialization.Readers
                     var addresses = new List<int>();
                     foreach (var kvp in importAddressTables)
                     {
-                        if (kvp.Value == null || kvp.Value.Length == 0)
+                        if (kvp.Value is null || kvp.Value.Length == 0)
                             continue;
 
                         var vaddrs = Array.ConvertAll(kvp.Value,
@@ -1443,9 +1443,9 @@ namespace SabreTools.Serialization.Readers
             Data.Models.PortableExecutable.Resource.DirectoryTable? table,
             SectionHeader[] sections)
         {
-            if (tableData == null)
+            if (tableData is null)
                 return;
-            if (table?.Entries == null)
+            if (table?.Entries is null)
                 return;
 
             foreach (var entry in table.Entries)
@@ -1562,7 +1562,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled ResourceDirectoryTable on success, null on error</returns>
         public static Data.Models.PortableExecutable.Resource.DirectoryTable? ParseResourceDirectoryTable(byte[]? tableData, ref int offset)
         {
-            if (tableData == null)
+            if (tableData is null)
                 return null;
 
             var obj = new Data.Models.PortableExecutable.Resource.DirectoryTable();

@@ -144,7 +144,7 @@ namespace SabreTools.Data.Models.Metadata
                 return false;
             else if (!ContainsKey(key))
                 return false;
-            else if (this[key] == null)
+            else if (this[key] is null)
                 return false;
 
             return true;

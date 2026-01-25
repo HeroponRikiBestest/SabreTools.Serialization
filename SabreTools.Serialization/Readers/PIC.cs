@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Readers
         public override DiscInformation? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try

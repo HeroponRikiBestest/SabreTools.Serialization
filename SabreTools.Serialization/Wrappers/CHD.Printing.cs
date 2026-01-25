@@ -120,7 +120,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(header.Version, $"Version");
 
             string compressorsLine = "Compressors: ";
-            if (header.Compressors == null)
+            if (header.Compressors is null)
             {
                 compressorsLine += "[NULL]";
             }

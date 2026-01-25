@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Create the filename
             var filename = GetFileName(index);
-            if (filename == null)
+            if (filename is null)
                 return false;
 
             // Loop through and get all parent directories

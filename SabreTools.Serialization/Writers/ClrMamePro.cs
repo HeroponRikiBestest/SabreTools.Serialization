@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Writers
         public byte[]? SerializeArray(MetadataFile? obj, bool quotes)
         {
             using var stream = SerializeStream(obj, quotes);
-            if (stream == null)
+            if (stream is null)
                 return null;
 
             byte[] bytes = new byte[stream.Length];
@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.Writers
                 return false;
 
             using var stream = SerializeStream(obj, quotes);
-            if (stream == null)
+            if (stream is null)
                 return false;
 
             using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.Writers
         public Stream? SerializeStream(MetadataFile? obj, bool quotes)
         {
             // If the metadata file is null
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             // Setup the writer and output
@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteHeader(Data.Models.ClrMamePro.ClrMamePro? header, ClrMameProWriter writer)
         {
             // If the header information is missing, we can't do anything
-            if (header == null)
+            if (header is null)
                 return;
 
             writer.WriteStartElement("clrmamepro");
@@ -125,13 +125,13 @@ namespace SabreTools.Serialization.Writers
         private static void WriteGames(GameBase[]? games, ClrMameProWriter writer)
         {
             // If the games information is missing, we can't do anything
-            if (games == null || games.Length == 0)
+            if (games is null || games.Length == 0)
                 return;
 
             // Loop through and write out the games
             foreach (var game in games)
             {
-                if (game == null)
+                if (game is null)
                     continue;
 
                 WriteGame(game, writer);
@@ -147,7 +147,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteGame(GameBase game, ClrMameProWriter writer)
         {
             // If the game information is missing, we can't do anything
-            if (game == null)
+            if (game is null)
                 return;
 
             switch (game)
@@ -202,7 +202,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteReleases(Release[]? releases, ClrMameProWriter writer)
         {
             // If the array is missing, we can't do anything
-            if (releases == null)
+            if (releases is null)
                 return;
 
             foreach (var release in releases)
@@ -225,7 +225,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteBiosSets(BiosSet[]? biossets, ClrMameProWriter writer)
         {
             // If the array is missing, we can't do anything
-            if (biossets == null)
+            if (biossets is null)
                 return;
 
             foreach (var biosset in biossets)
@@ -246,7 +246,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteRoms(Rom[]? roms, ClrMameProWriter writer)
         {
             // If the array is missing, we can't do anything
-            if (roms == null)
+            if (roms is null)
                 return;
 
             foreach (var rom in roms)
@@ -291,7 +291,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteDisks(Disk[]? disks, ClrMameProWriter writer)
         {
             // If the array is missing, we can't do anything
-            if (disks == null)
+            if (disks is null)
                 return;
 
             foreach (var disk in disks)
@@ -315,7 +315,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteMedia(Media[]? medias, ClrMameProWriter writer)
         {
             // If the array is missing, we can't do anything
-            if (medias == null)
+            if (medias is null)
                 return;
 
             foreach (var media in medias)
@@ -338,7 +338,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteSamples(Sample[]? samples, ClrMameProWriter writer)
         {
             // If the array is missing, we can't do anything
-            if (samples == null)
+            if (samples is null)
                 return;
 
             foreach (var sample in samples)
@@ -357,7 +357,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteArchives(Archive[]? archives, ClrMameProWriter writer)
         {
             // If the array is missing, we can't do anything
-            if (archives == null)
+            if (archives is null)
                 return;
 
             foreach (var archive in archives)
@@ -376,7 +376,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteChips(Chip[]? chips, ClrMameProWriter writer)
         {
             // If the array is missing, we can't do anything
-            if (chips == null)
+            if (chips is null)
                 return;
 
             foreach (var chip in chips)
@@ -398,7 +398,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteVideos(Video[]? videos, ClrMameProWriter writer)
         {
             // If the item is missing, we can't do anything
-            if (videos == null)
+            if (videos is null)
                 return;
 
             foreach (var video in videos)
@@ -423,7 +423,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteSound(Sound? sound, ClrMameProWriter writer)
         {
             // If the item is missing, we can't do anything
-            if (sound == null)
+            if (sound is null)
                 return;
 
             writer.WriteStartElement("sound");
@@ -439,7 +439,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteInput(Input? input, ClrMameProWriter writer)
         {
             // If the item is missing, we can't do anything
-            if (input == null)
+            if (input is null)
                 return;
 
             writer.WriteStartElement("input");
@@ -460,7 +460,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteDipSwitches(DipSwitch[]? dipswitches, ClrMameProWriter writer)
         {
             // If the array is missing, we can't do anything
-            if (dipswitches == null)
+            if (dipswitches is null)
                 return;
 
             foreach (var dipswitch in dipswitches)
@@ -484,7 +484,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteDriver(Driver? driver, ClrMameProWriter writer)
         {
             // If the item is missing, we can't do anything
-            if (driver == null)
+            if (driver is null)
                 return;
 
             writer.WriteStartElement("driver");
@@ -504,7 +504,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteInfo(Info? info, ClrMameProWriter writer)
         {
             // If the info information is missing, we can't do anything
-            if (info?.Source == null)
+            if (info?.Source is null)
                 return;
 
             writer.WriteStartElement("info");

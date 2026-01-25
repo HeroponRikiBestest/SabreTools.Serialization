@@ -96,7 +96,7 @@ namespace SabreTools.Serialization.Wrappers
         public static LinearExecutable? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -116,7 +116,7 @@ namespace SabreTools.Serialization.Wrappers
         public static LinearExecutable? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -125,7 +125,7 @@ namespace SabreTools.Serialization.Wrappers
                 long currentOffset = data.Position;
 
                 var model = new Readers.LinearExecutable().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 return new LinearExecutable(model, data, currentOffset);
@@ -148,7 +148,7 @@ namespace SabreTools.Serialization.Wrappers
         public ObjectPageMapEntry? GetObjectPageMapEntry(int index)
         {
             // If the object page map table is invalid
-            if (ObjectPageMap == null || ObjectPageMap.Length == 0)
+            if (ObjectPageMap is null || ObjectPageMap.Length == 0)
                 return null;
 
             // If the index is invalid
@@ -191,7 +191,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Get the matching entry
             var entry = GetObjectPageMapEntry(index);
-            if (entry == null)
+            if (entry is null)
                 return -1;
 
             // Return the reported length
@@ -206,7 +206,7 @@ namespace SabreTools.Serialization.Wrappers
         public int GetObjectPageMapEntryOffset(int index)
         {
             // If the information block is invalid
-            if (InformationBlock == null)
+            if (InformationBlock is null)
                 return -1;
 
             // Get the available source length, if possible
@@ -216,7 +216,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the matching entry
             var entry = GetObjectPageMapEntry(index);
-            if (entry == null)
+            if (entry is null)
                 return -1;
 
             // Verify the entry offset
@@ -240,7 +240,7 @@ namespace SabreTools.Serialization.Wrappers
         public ResourceTableEntry? GetResourceTableEntry(int index)
         {
             // If the resource table table is invalid
-            if (ResourceTable == null || ResourceTable.Length == 0)
+            if (ResourceTable is null || ResourceTable.Length == 0)
                 return null;
 
             // If the index is invalid
@@ -260,7 +260,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Get the entry
             var entry = GetResourceTableEntry(index);
-            if (entry == null)
+            if (entry is null)
                 return null;
 
             // Get the entry offset
@@ -277,7 +277,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the matching object data
             var objectData = GetObjectPageMapEntryData(entry.ObjectNumber);
-            if (objectData == null)
+            if (objectData is null)
                 return null;
 
             // Read the entry data and return
@@ -293,7 +293,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Get the matching entry
             var entry = GetResourceTableEntry(index);
-            if (entry == null)
+            if (entry is null)
                 return -1;
 
             // Return the reported length
@@ -308,7 +308,7 @@ namespace SabreTools.Serialization.Wrappers
         public int GetResourceTableEntryOffset(int index)
         {
             // If the information block is invalid
-            if (InformationBlock == null)
+            if (InformationBlock is null)
                 return -1;
 
             // Get the available source length, if possible
@@ -318,7 +318,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the matching entry
             var entry = GetResourceTableEntry(index);
-            if (entry == null)
+            if (entry is null)
                 return -1;
 
             // Get the matching object length

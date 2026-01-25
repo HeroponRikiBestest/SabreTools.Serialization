@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Readers
         public override VbspFile? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -34,7 +34,7 @@ namespace SabreTools.Serialization.Readers
                     return null;
                 if (Array.IndexOf([17, 18, 19, 20, 21, 22, 23, 25, 27, 29, 0x00040014], header.Version) > -1)
                     return null;
-                if (header.Lumps == null || header.Lumps.Length != VBSP_HEADER_LUMPS)
+                if (header.Lumps is null || header.Lumps.Length != VBSP_HEADER_LUMPS)
                     return null;
 
                 // Set the package header
@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     // Get the next lump entry
                     var lumpEntry = header.Lumps[l];
-                    if (lumpEntry == null)
+                    if (lumpEntry is null)
                         continue;
                     if (lumpEntry.Offset == 0 || lumpEntry.Length == 0)
                         continue;
@@ -393,7 +393,7 @@ namespace SabreTools.Serialization.Readers
             while (data.Position < offset + length)
             {
                 var vertex = data.ReadType<Vector3D>();
-                if (vertex == null)
+                if (vertex is null)
                     break;
 
                 vertices.Add(vertex);

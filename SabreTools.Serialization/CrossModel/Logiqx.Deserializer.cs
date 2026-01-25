@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <inheritdoc/>
         public Datafile? Deserialize(Data.Models.Metadata.MetadataFile? obj, bool game)
         {
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             var datafile = new Datafile();

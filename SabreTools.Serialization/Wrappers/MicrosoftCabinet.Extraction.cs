@@ -47,7 +47,7 @@ namespace SabreTools.Serialization.Wrappers
             // Read in the current file and try to parse
             var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             var current = Create(stream);
-            if (current?.Header == null)
+            if (current?.Header is null)
                 return null;
 
             // Seek to the first part of the cabinet set
@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Attempt to open the previous cabinet
                 var prev = current.OpenPrevious(filename, includeDebug);
-                if (prev?.Header == null)
+                if (prev?.Header is null)
                     break;
 
                 // Assign previous as new current
@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Open the next cabinet and try to parse
                 var next = current.OpenNext(filename, includeDebug);
-                if (next?.Header == null)
+                if (next?.Header is null)
                     break;
 
                 // Add the next and previous links, resetting current
@@ -176,7 +176,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Open the full set if possible
                 cabinet = OpenSet(Filename, includeDebug);
-                if (cabinet == null)
+                if (cabinet is null)
                 {
                     if (includeDebug) Console.WriteLine($"Cabinet set could not be opened!");
                     cabinet = this;
@@ -284,7 +284,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Move to the next cabinet, if possible
                     cabinet = cabinet.Next;
-                    if (cabinet == null) // If the next cabinet is missing, there's no better way to handle this
+                    if (cabinet is null) // If the next cabinet is missing, there's no better way to handle this
                         return false;
 
                     currentCabFilename = cabinet.Filename;
@@ -445,7 +445,7 @@ namespace SabreTools.Serialization.Wrappers
                     for (int j = 0; j < _folder.DataCount; j++)
                     {
                         var dataBlock = ReadBlock(includeDebug);
-                        if (dataBlock == null)
+                        if (dataBlock is null)
                         {
                             if (includeDebug) Console.Error.WriteLine($"Error extracting file {filename}");
                             return;
@@ -458,7 +458,7 @@ namespace SabreTools.Serialization.Wrappers
                         bool continuedBlock = false;
                         if (dataBlock.UncompressedSize == 0)
                         {
-                            if (_cabinet.Next == null)
+                            if (_cabinet.Next is null)
                                 break; // Next cab is missing, continue
 
                             _cabinet = _cabinet.Next;
@@ -467,7 +467,7 @@ namespace SabreTools.Serialization.Wrappers
                             _folder = _cabinet.Folders[0];
                             _offset = _folder.CabStartOffset;
                             var nextBlock = ReadBlock(includeDebug);
-                            if (nextBlock == null)
+                            if (nextBlock is null)
                             {
                                 if (includeDebug) Console.Error.WriteLine($"Error extracting file {filename}");
                                 return;
@@ -519,7 +519,7 @@ namespace SabreTools.Serialization.Wrappers
                 // If there are bytes left to write, and more bytes left to write than the length of the current data to be written.
                 if (_bytesLeft > 0 && _bytesLeft >= data.Length)
                 {
-                    if (_fileStream == null)
+                    if (_fileStream is null)
                         return;
 
                     _fileStream.Write(data);
@@ -528,7 +528,7 @@ namespace SabreTools.Serialization.Wrappers
                 else
                 {
                     long tempBytesLeft = _bytesLeft;
-                    if (_fileStream == null)
+                    if (_fileStream is null)
                         return;
 
                     // If there are still bytes left to write, but less bytes than the length of the current data to be written
@@ -568,7 +568,7 @@ namespace SabreTools.Serialization.Wrappers
             /// <returns>True the end of the folder has been reached, false otherwise</returns>
             private bool EndFile(string outputDirectory)
             {
-                if (_fileStream == null)
+                if (_fileStream is null)
                     return false;
 
                 _fileStream.Close();

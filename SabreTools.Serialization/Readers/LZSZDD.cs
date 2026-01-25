@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Readers
         public override SZDDFile? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the header
                 var header = ParseHeader(data);
-                if (header == null)
+                if (header is null)
                     return null;
 
                 // Set the header

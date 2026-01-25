@@ -263,7 +263,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Section Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No section table items");
                 builder.AppendLine();
@@ -297,7 +297,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Symbol Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No symbol table items");
                 builder.AppendLine();
@@ -401,7 +401,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  String Table Information:");
             builder.AppendLine("  -------------------------");
-            if (stringTable?.Strings == null || stringTable.Strings.Length == 0)
+            if (stringTable?.Strings is null || stringTable.Strings.Length == 0)
             {
                 builder.AppendLine("  No string table items");
                 builder.AppendLine();
@@ -423,7 +423,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Attribute Certificate Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No attribute certificate table items");
                 builder.AppendLine();
@@ -446,14 +446,14 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     builder.AppendLine("    Certificate Data [Formatted]");
                     builder.AppendLine("    -------------------------");
-                    if (entry.Certificate == null)
+                    if (entry.Certificate is null)
                     {
                         builder.AppendLine("    INVALID DATA FOUND");
                     }
                     else
                     {
                         var topLevelValues = deserializer.Deserialize(entry.Certificate, 0);
-                        if (topLevelValues == null)
+                        if (topLevelValues is null)
                         {
                             builder.AppendLine("    INVALID DATA FOUND");
                             builder.AppendLine(entry.Certificate, "    Raw data");
@@ -490,7 +490,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Delay-Load Directory Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table == null)
+            if (table is null)
             {
                 builder.AppendLine("  No delay-load directory table items");
                 builder.AppendLine();
@@ -517,7 +517,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Base Relocation Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No base relocation table items");
                 builder.AppendLine();
@@ -560,7 +560,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Debug Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table?.DebugDirectoryTable == null || table.DebugDirectoryTable.Length == 0)
+            if (table?.DebugDirectoryTable is null || table.DebugDirectoryTable.Length == 0)
             {
                 builder.AppendLine("  No debug table items");
                 builder.AppendLine();
@@ -589,7 +589,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine(value: "  Export Directory Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table == null)
+            if (table is null)
             {
                 builder.AppendLine("  No export directory table");
             }
@@ -619,7 +619,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Export Address Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table == null || table.Length == 0)
+            if (table is null || table.Length == 0)
             {
                 builder.AppendLine("  No export address table items");
             }
@@ -642,7 +642,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Export Name Pointer Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table?.Pointers == null || table.Pointers.Length == 0)
+            if (table?.Pointers is null || table.Pointers.Length == 0)
             {
                 builder.AppendLine("  No export name pointer table items");
             }
@@ -664,7 +664,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Export Ordinal Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table?.Indexes == null || table.Indexes.Length == 0)
+            if (table?.Indexes is null || table.Indexes.Length == 0)
             {
                 builder.AppendLine("  No export ordinal table items");
             }
@@ -686,7 +686,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Export Name Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table?.Strings == null || table.Strings.Length == 0)
+            if (table?.Strings is null || table.Strings.Length == 0)
             {
                 builder.AppendLine("  No export name table items");
             }
@@ -708,7 +708,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Import Directory Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table == null || table.Length == 0)
+            if (table is null || table.Length == 0)
             {
                 builder.AppendLine("  No import directory table items");
             }
@@ -738,7 +738,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Import Lookup Tables Information:");
             builder.AppendLine("  -------------------------");
-            if (tables == null || tables.Count == 0)
+            if (tables is null || tables.Count == 0)
             {
                 builder.AppendLine("  No import lookup tables");
             }
@@ -752,7 +752,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine();
                     builder.AppendLine($"    Import Lookup Table {index} Information:");
                     builder.AppendLine("    -------------------------");
-                    if (importLookupTable == null || importLookupTable.Length == 0)
+                    if (importLookupTable is null || importLookupTable.Length == 0)
                     {
                         builder.AppendLine("    No import lookup table items");
                         continue;
@@ -784,7 +784,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Import Address Tables Information:");
             builder.AppendLine("  -------------------------");
-            if (tables == null || tables.Count == 0)
+            if (tables is null || tables.Count == 0)
             {
                 builder.AppendLine("  No import address tables");
             }
@@ -798,7 +798,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine();
                     builder.AppendLine($"    Import Address Table {index} Information:");
                     builder.AppendLine("    -------------------------");
-                    if (importAddressTable == null || importAddressTable.Length == 0)
+                    if (importAddressTable is null || importAddressTable.Length == 0)
                     {
                         builder.AppendLine("    No import address table items");
                         continue;
@@ -830,7 +830,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Import Hint/Name Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table == null || table.Length == 0)
+            if (table is null || table.Length == 0)
             {
                 builder.AppendLine("  No import hint/name table items");
             }
@@ -853,7 +853,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Resource Directory Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table == null)
+            if (table is null)
             {
                 builder.AppendLine("  No resource directory table items");
                 builder.AppendLine();
@@ -1042,7 +1042,7 @@ namespace SabreTools.Serialization.Wrappers
 
             MenuResource? menu = null;
             try { menu = entry.AsMenu(); } catch { }
-            if (menu == null)
+            if (menu is null)
             {
                 builder.AppendLine($"{padding}Menu resource found, but malformed");
                 return;
@@ -1077,7 +1077,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 var menuItem = menu.MenuItems[i];
                 builder.AppendLine($"{padding}Menu item {i}");
-                if (menuItem == null)
+                if (menuItem is null)
                 {
                     builder.AppendLine($"{padding}  [NULL]");
                     continue;
@@ -1117,7 +1117,7 @@ namespace SabreTools.Serialization.Wrappers
 
             DialogBoxResource? dialogBox = null;
             try { dialogBox = entry.AsDialogBox(); } catch { }
-            if (dialogBox == null)
+            if (dialogBox is null)
             {
                 builder.AppendLine($"{padding}Dialog box resource found, but malformed");
                 return;
@@ -1143,7 +1143,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine($"{padding}Dialog item templates");
                 builder.AppendLine($"{padding}-------------------------");
                 if (dialogBox.DialogTemplate.ItemCount == 0
-                    || dialogBox.DialogItemTemplates == null
+                    || dialogBox.DialogItemTemplates is null
                     || dialogBox.DialogItemTemplates.Length == 0)
                 {
                     builder.AppendLine($"{padding}No dialog item templates");
@@ -1154,7 +1154,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     var dialogItemTemplate = dialogBox.DialogItemTemplates[i];
                     builder.AppendLine($"{padding}Dialog item template {i}");
-                    if (dialogItemTemplate == null)
+                    if (dialogItemTemplate is null)
                     {
                         builder.AppendLine($"{padding}  [NULL]");
                         continue;
@@ -1204,7 +1204,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine($"{padding}Dialog item templates");
                 builder.AppendLine($"{padding}-------------------------");
                 if (dialogBox.ExtendedDialogTemplate.DialogItems == 0
-                    || dialogBox.ExtendedDialogItemTemplates == null
+                    || dialogBox.ExtendedDialogItemTemplates is null
                     || dialogBox.ExtendedDialogItemTemplates.Length == 0)
                 {
                     builder.AppendLine($"{padding}No dialog item templates");
@@ -1215,7 +1215,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     var dialogItemTemplate = dialogBox.ExtendedDialogItemTemplates[i];
                     builder.AppendLine($"{padding}Dialog item template {i}");
-                    if (dialogItemTemplate == null)
+                    if (dialogItemTemplate is null)
                     {
                         builder.AppendLine($"{padding}  [NULL]");
                         continue;
@@ -1252,7 +1252,7 @@ namespace SabreTools.Serialization.Wrappers
 
             Dictionary<int, string?>? stringTable = null;
             try { stringTable = entry.AsStringTable(); } catch { }
-            if (stringTable == null)
+            if (stringTable is null)
             {
                 builder.AppendLine($"{padding}String table resource found, but malformed");
                 return;
@@ -1284,7 +1284,7 @@ namespace SabreTools.Serialization.Wrappers
 
             AcceleratorTableEntry[]? acceleratorTable = null;
             try { acceleratorTable = entry.AsAcceleratorTableResource(); } catch { }
-            if (acceleratorTable == null)
+            if (acceleratorTable is null)
             {
                 builder.AppendLine($"{padding}Accelerator table resource found, but malformed");
                 return;
@@ -1307,7 +1307,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine($"{padding}Application-defined resource found, not parsed yet");
 
             // Then print the data, if needed
-            if (entry.Data == null)
+            if (entry.Data is null)
             {
                 builder.AppendLine($"{padding}Data: [NULL] (This may indicate a very large resource)");
             }
@@ -1366,7 +1366,7 @@ namespace SabreTools.Serialization.Wrappers
 
             MessageResourceData? messageTable = null;
             try { messageTable = entry.AsMessageResourceData(); } catch { }
-            if (messageTable == null)
+            if (messageTable is null)
             {
                 builder.AppendLine($"{padding}Message resource data found, but malformed");
                 return;
@@ -1386,7 +1386,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     var messageResourceBlock = messageTable.Blocks[i];
                     builder.AppendLine($"{padding}Message resource block {i}");
-                    if (messageResourceBlock == null)
+                    if (messageResourceBlock is null)
                     {
                         builder.AppendLine($"{padding}  [NULL]");
                         continue;
@@ -1412,7 +1412,7 @@ namespace SabreTools.Serialization.Wrappers
                     uint index = kvp.Key;
                     var messageResourceEntry = kvp.Value;
                     builder.AppendLine($"{padding}Message resource entry {index}");
-                    if (messageResourceEntry == null)
+                    if (messageResourceEntry is null)
                     {
                         builder.AppendLine($"{padding}  [NULL]");
                         continue;
@@ -1443,7 +1443,7 @@ namespace SabreTools.Serialization.Wrappers
 
             VersionInfo? versionInfo = null;
             try { versionInfo = entry.AsVersionInfo(); } catch { }
-            if (versionInfo == null)
+            if (versionInfo is null)
             {
                 builder.AppendLine($"{padding}Version info resource found, but malformed");
                 return;
@@ -1487,7 +1487,7 @@ namespace SabreTools.Serialization.Wrappers
                     for (int i = 0; i < versionInfo.StringFileInfo.Children.Length; i++)
                     {
                         var stringFileInfoChildEntry = versionInfo.StringFileInfo.Children[i];
-                        if (stringFileInfoChildEntry == null)
+                        if (stringFileInfoChildEntry is null)
                         {
                             builder.AppendLine($"{padding}  [String Table {i}] [NULL]");
                             continue;
@@ -1508,7 +1508,7 @@ namespace SabreTools.Serialization.Wrappers
                             for (int j = 0; j < stringFileInfoChildEntry.Children.Length; j++)
                             {
                                 var stringDataEntry = stringFileInfoChildEntry.Children[j];
-                                if (stringDataEntry == null)
+                                if (stringDataEntry is null)
                                 {
                                     builder.AppendLine($"{padding}    [String Data {j}] [NULL]");
                                     continue;
@@ -1542,7 +1542,7 @@ namespace SabreTools.Serialization.Wrappers
                     for (int i = 0; i < versionInfo.VarFileInfo.Children.Length; i++)
                     {
                         var varFileInfoChildEntry = versionInfo.VarFileInfo.Children[i];
-                        if (varFileInfoChildEntry == null)
+                        if (varFileInfoChildEntry is null)
                         {
                             builder.AppendLine($"{padding}  [String Table {i}] [NULL]");
                             continue;
@@ -1607,7 +1607,7 @@ namespace SabreTools.Serialization.Wrappers
 
             AssemblyManifest? assemblyManifest = null;
             try { assemblyManifest = entry.AsAssemblyManifest(); } catch { }
-            if (assemblyManifest == null)
+            if (assemblyManifest is null)
             {
                 builder.AppendLine($"{padding}Assembly manifest found, but malformed");
                 return;
@@ -1685,7 +1685,7 @@ namespace SabreTools.Serialization.Wrappers
                 for (int i = 0; i < assemblyManifest.File.Length; i++)
                 {
                     var file = assemblyManifest.File[i];
-                    if (file == null)
+                    if (file is null)
                     {
                         builder.AppendLine($"{padding}[File {i}] [NULL]");
                         continue;
@@ -1791,7 +1791,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine($"{padding}Unknown type {resourceType} found, not parsed yet");
 
             // Then print the data, if needed
-            if (entry.Data == null)
+            if (entry.Data is null)
             {
                 builder.AppendLine($"{padding}Data: [NULL] (This may indicate a very large resource)");
             }

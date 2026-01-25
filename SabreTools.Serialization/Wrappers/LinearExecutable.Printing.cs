@@ -312,7 +312,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Module Format Directives Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No module format directives table entries");
                 builder.AppendLine();
@@ -336,7 +336,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Verify Record Directive Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No verify record directive table entries");
                 builder.AppendLine();
@@ -590,7 +590,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine();
                 builder.AppendLine("    Source Offset List:");
                 builder.AppendLine("    -------------------------");
-                if (entry.SourceOffsetList == null || entry.SourceOffsetList.Length == 0)
+                if (entry.SourceOffsetList is null || entry.SourceOffsetList.Length == 0)
                 {
                     builder.AppendLine("    No source offset list entries");
                 }
@@ -701,7 +701,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Debug Information:");
             builder.AppendLine("  -------------------------");
-            if (di == null)
+            if (di is null)
             {
                 builder.AppendLine("  No debug information");
                 builder.AppendLine();

@@ -68,7 +68,7 @@ namespace SabreTools.Serialization.Wrappers
                         // Directories
                         case TypeFlag.DIRTYPE:
                             string? entryDirectory = header.FileName?.TrimEnd('\0');
-                            if (entryDirectory == null)
+                            if (entryDirectory is null)
                             {
                                 if (includeDebug) Console.Error.WriteLine($"Entry {i} reported as directory, but no path found! Skipping...");
                                 continue;
@@ -113,7 +113,7 @@ namespace SabreTools.Serialization.Wrappers
 
                         // Exit early if the block has no data
                         var block = entry.Blocks[blockNumber++];
-                        if (block.Data == null || block.Data.Length != 512)
+                        if (block.Data is null || block.Data.Length != 512)
                         {
                             if (includeDebug) Console.Error.WriteLine($"Invalid data for block number {i + 1}, file may be incomplete!");
                             break;

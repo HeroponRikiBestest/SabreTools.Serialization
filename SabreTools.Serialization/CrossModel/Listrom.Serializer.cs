@@ -9,7 +9,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <inheritdoc/>
         public override Data.Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
         {
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             var metadataFile = new Data.Models.Metadata.MetadataFile
@@ -79,7 +79,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Data.Models.Metadata.DatItem ConvertToInternalModel(Row item)
         {
-            if (item.Size == null)
+            if (item.Size is null)
             {
                 var disk = new Data.Models.Metadata.Disk
                 {

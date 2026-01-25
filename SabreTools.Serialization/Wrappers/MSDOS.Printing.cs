@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
+            if (header is null)
             {
                 builder.AppendLine("  No header");
                 builder.AppendLine();

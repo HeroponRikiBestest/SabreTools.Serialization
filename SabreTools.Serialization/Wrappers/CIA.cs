@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Wrappers
         public static CIA? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.Wrappers
         public static CIA? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -74,7 +74,7 @@ namespace SabreTools.Serialization.Wrappers
                 long currentOffset = data.Position;
 
                 var model = new Readers.CIA().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 return new CIA(model, data, currentOffset);
@@ -97,7 +97,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public static bool IsDemo(Ticket? ticket)
         {
-            if (ticket?.Limits == null || ticket.Limits.Length == 0)
+            if (ticket?.Limits is null || ticket.Limits.Length == 0)
                 return false;
 
             return ticket.Limits[0] == 0x0004;
@@ -108,7 +108,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public static uint PlayCount(Ticket ticket)
         {
-            if (ticket?.Limits == null || ticket.Limits.Length == 0)
+            if (ticket?.Limits is null || ticket.Limits.Length == 0)
                 return 0;
 
             return ticket.Limits[1];

@@ -10,7 +10,7 @@ namespace SabreTools.Serialization.Readers
         public override Playlist? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the playlist header
                 var playlistHeader = ParsePlaylistHeader(data);
-                if (playlistHeader == null)
+                if (playlistHeader is null)
                     return null;
 
                 // Set the playlist header
@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Readers
                 for (int i = 0; i < playlist.AudioFiles.Length; i++)
                 {
                     var entryHeader = audioReader.Deserialize(data);
-                    if (entryHeader == null)
+                    if (entryHeader is null)
                         continue;
 
                     playlist.AudioFiles[i] = entryHeader;

@@ -30,7 +30,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Local File Information:");
             builder.AppendLine("  -------------------------");
-            if (localFiles == null || localFiles.Length == 0)
+            if (localFiles is null || localFiles.Length == 0)
             {
                 builder.AppendLine("  No local files");
                 builder.AppendLine();
@@ -72,7 +72,7 @@ namespace SabreTools.Serialization.Wrappers
             #region Encryption Headers
 
             var encryptionHeaders = localFile.EncryptionHeaders;
-            if (encryptionHeaders == null)
+            if (encryptionHeaders is null)
             {
                 builder.AppendLine("    [Encryption Headers]: [NULL]");
             }
@@ -87,7 +87,7 @@ namespace SabreTools.Serialization.Wrappers
             #region File Data
 
             var fileData = localFile.FileData;
-            if (fileData == null)
+            if (fileData is null)
             {
                 builder.AppendLine("    [File Data]: [NULL]");
             }
@@ -102,7 +102,7 @@ namespace SabreTools.Serialization.Wrappers
             #region Data Descriptor
 
             var dataDescriptor = localFile.DataDescriptor;
-            if (dataDescriptor == null)
+            if (dataDescriptor is null)
             {
                 builder.AppendLine("    [Data Descriptor]: [NULL]");
             }
@@ -115,7 +115,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             var zip64DataDescriptor = localFile.ZIP64DataDescriptor;
-            if (zip64DataDescriptor == null)
+            if (zip64DataDescriptor is null)
             {
                 builder.AppendLine("    [ZIP64 Data Descriptor]: [NULL]");
             }
@@ -134,7 +134,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  End of Central Directory Record Information:");
             builder.AppendLine("  -------------------------");
-            if (record == null)
+            if (record is null)
             {
                 builder.AppendLine("  No end of central directory record");
                 builder.AppendLine();
@@ -157,7 +157,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  ZIP64 End of Central Directory Locator Information:");
             builder.AppendLine("  -------------------------");
-            if (locator == null)
+            if (locator is null)
             {
                 builder.AppendLine("  No ZIP64 end of central directory locator");
                 builder.AppendLine();
@@ -175,7 +175,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  ZIP64 End of Central Directory Record Information:");
             builder.AppendLine("  -------------------------");
-            if (record == null)
+            if (record is null)
             {
                 builder.AppendLine("  No ZIP64 end of central directory record");
                 builder.AppendLine();
@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Central Directory File Headers Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No central directory file headers");
                 builder.AppendLine();
@@ -243,7 +243,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Archive Extra Data Record Information:");
             builder.AppendLine("  -------------------------");
-            if (record == null)
+            if (record is null)
             {
                 builder.AppendLine("  No archive extra data record");
                 builder.AppendLine();
@@ -263,7 +263,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(title);
             builder.AppendLine("    -------------------------");
 
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("    No extra fields");
                 builder.AppendLine();

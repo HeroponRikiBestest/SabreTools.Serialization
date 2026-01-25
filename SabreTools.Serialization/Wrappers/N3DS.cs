@@ -231,7 +231,7 @@ namespace SabreTools.Serialization.Wrappers
         public static N3DS? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -251,7 +251,7 @@ namespace SabreTools.Serialization.Wrappers
         public static N3DS? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -260,7 +260,7 @@ namespace SabreTools.Serialization.Wrappers
                 long currentOffset = data.Position;
 
                 var model = new Readers.N3DS().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 return new N3DS(model, data, currentOffset);
@@ -280,13 +280,13 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public BitMasks GetBitMasks(int index)
         {
-            if (Partitions == null)
+            if (Partitions is null)
                 return 0;
             if (index < 0 || index >= Partitions.Length)
                 return 0;
 
             var partition = Partitions[index];
-            if (partition?.Flags == null)
+            if (partition?.Flags is null)
                 return 0;
 
             return partition.Flags.BitMasks;
@@ -297,13 +297,13 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public CryptoMethod GetCryptoMethod(int index)
         {
-            if (Partitions == null)
+            if (Partitions is null)
                 return 0;
             if (index < 0 || index >= Partitions.Length)
                 return 0;
 
             var partition = Partitions[index];
-            if (partition?.Flags == null)
+            if (partition?.Flags is null)
                 return 0;
 
             return partition.Flags.CryptoMethod;
@@ -314,20 +314,20 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public bool IsCodeBinary(int fsIndex, int headerIndex)
         {
-            if (ExeFSHeaders == null)
+            if (ExeFSHeaders is null)
                 return false;
             if (fsIndex < 0 || fsIndex >= ExeFSHeaders.Length)
                 return false;
 
             var fsHeader = ExeFSHeaders[fsIndex];
-            if (fsHeader?.FileHeaders == null)
+            if (fsHeader?.FileHeaders is null)
                 return false;
 
             if (headerIndex < 0 || headerIndex >= fsHeader.FileHeaders.Length)
                 return false;
 
             var fileHeader = fsHeader.FileHeaders[headerIndex];
-            if (fileHeader == null)
+            if (fileHeader is null)
                 return false;
 
             return fileHeader.FileName == ".code";
@@ -357,7 +357,7 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetExeFSOffset(int index)
         {
             // No partitions means no size is available
-            if (PartitionsTable == null || Partitions == null)
+            if (PartitionsTable is null || Partitions is null)
                 return 0;
             if (index < 0 || index >= Partitions.Length)
                 return 0;
@@ -365,7 +365,7 @@ namespace SabreTools.Serialization.Wrappers
             // Invalid partition means no size is available
             var entry = PartitionsTable[index];
             var header = Partitions[index];
-            if (header == null || header.MagicID != NCCHMagicNumber)
+            if (header is null || header.MagicID != NCCHMagicNumber)
                 return 0;
 
             // If the offset is 0, return 0
@@ -385,7 +385,7 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetLogoRegionOffset(int index)
         {
             // No partitions means no size is available
-            if (PartitionsTable == null || Partitions == null)
+            if (PartitionsTable is null || Partitions is null)
                 return 0;
             if (index < 0 || index >= Partitions.Length)
                 return 0;
@@ -393,7 +393,7 @@ namespace SabreTools.Serialization.Wrappers
             // Invalid partition means no size is available
             var entry = PartitionsTable[index];
             var header = Partitions[index];
-            if (header == null || header.MagicID != NCCHMagicNumber)
+            if (header is null || header.MagicID != NCCHMagicNumber)
                 return 0;
 
             // If the offset is 0, return 0
@@ -413,7 +413,7 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetPartitionOffset(int index)
         {
             // No partitions means no size is available
-            if (PartitionsTable == null)
+            if (PartitionsTable is null)
                 return 0;
             if (index < 0 || index >= PartitionsTable.Length)
                 return 0;
@@ -435,7 +435,7 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetPlainRegionOffset(int index)
         {
             // No partitions means no size is available
-            if (PartitionsTable == null || Partitions == null)
+            if (PartitionsTable is null || Partitions is null)
                 return 0;
             if (index < 0 || index >= Partitions.Length)
                 return 0;
@@ -443,7 +443,7 @@ namespace SabreTools.Serialization.Wrappers
             // Invalid partition means no size is available
             var entry = PartitionsTable[index];
             var header = Partitions[index];
-            if (header == null || header.MagicID != NCCHMagicNumber)
+            if (header is null || header.MagicID != NCCHMagicNumber)
                 return 0;
 
             // If the offset is 0, return 0
@@ -463,7 +463,7 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetRomFSOffset(int index)
         {
             // No partitions means no size is available
-            if (PartitionsTable == null || Partitions == null)
+            if (PartitionsTable is null || Partitions is null)
                 return 0;
             if (index < 0 || index >= Partitions.Length)
                 return 0;
@@ -471,7 +471,7 @@ namespace SabreTools.Serialization.Wrappers
             // Invalid partition means no size is available
             var entry = PartitionsTable[index];
             var header = Partitions[index];
-            if (header == null || header.MagicID != NCCHMagicNumber)
+            if (header is null || header.MagicID != NCCHMagicNumber)
                 return 0;
 
             // If the offset is 0, return 0
@@ -495,14 +495,14 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetExeFSSize(int index)
         {
             // Empty partitions array means no size is available
-            if (Partitions == null)
+            if (Partitions is null)
                 return 0;
             if (index < 0 || index >= Partitions.Length)
                 return 0;
 
             // Invalid partition header means no size is available
             var header = Partitions[index];
-            if (header == null)
+            if (header is null)
                 return 0;
 
             // Return the adjusted size
@@ -516,14 +516,14 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetExtendedHeaderSize(int index)
         {
             // Empty partitions array means no size is available
-            if (Partitions == null)
+            if (Partitions is null)
                 return 0;
             if (index < 0 || index >= Partitions.Length)
                 return 0;
 
             // Invalid partition header means no size is available
             var header = Partitions[index];
-            if (header == null)
+            if (header is null)
                 return 0;
 
             // Return the adjusted size
@@ -537,14 +537,14 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetLogoRegionSize(int index)
         {
             // Empty partitions array means no size is available
-            if (Partitions == null)
+            if (Partitions is null)
                 return 0;
             if (index < 0 || index >= Partitions.Length)
                 return 0;
 
             // Invalid partition header means no size is available
             var header = Partitions[index];
-            if (header == null)
+            if (header is null)
                 return 0;
 
             // Return the adjusted size
@@ -558,14 +558,14 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetPlainRegionSize(int index)
         {
             // Empty partitions array means no size is available
-            if (Partitions == null)
+            if (Partitions is null)
                 return 0;
             if (index < 0 || index >= Partitions.Length)
                 return 0;
 
             // Invalid partition header means no size is available
             var header = Partitions[index];
-            if (header == null)
+            if (header is null)
                 return 0;
 
             // Return the adjusted size
@@ -579,14 +579,14 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetRomFSSize(int index)
         {
             // Empty partitions array means no size is available
-            if (Partitions == null)
+            if (Partitions is null)
                 return 0;
             if (index < 0 || index >= Partitions.Length)
                 return 0;
 
             // Invalid partition header means no size is available
             var header = Partitions[index];
-            if (header == null)
+            if (header is null)
                 return 0;
 
             // Return the adjusted size

@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Readers
         public MetadataFile? Deserialize(byte[]? data, int offset, char delim)
         {
             // If the data is invalid
-            if (data == null)
+            if (data is null)
                 return null;
 
             // If the offset is out of bounds
@@ -78,7 +78,7 @@ namespace SabreTools.Serialization.Readers
         public MetadataFile? Deserialize(Stream? data, char delim)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -93,7 +93,7 @@ namespace SabreTools.Serialization.Readers
                 var dat = new MetadataFile();
 
                 // Read the header values first
-                if (!reader.ReadHeader() || reader.HeaderValues == null)
+                if (!reader.ReadHeader() || reader.HeaderValues is null)
                     return null;
 
                 dat.Header = [.. reader.HeaderValues];
@@ -103,7 +103,7 @@ namespace SabreTools.Serialization.Readers
                 while (!reader.EndOfStream)
                 {
                     // If we have no next line
-                    if (!reader.ReadNextLine() || reader.Line == null)
+                    if (!reader.ReadNextLine() || reader.Line is null)
                         break;
 
                     // Parse the line into a row

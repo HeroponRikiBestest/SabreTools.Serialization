@@ -11,7 +11,7 @@ namespace SabreTools.Serialization.Readers
         public override SFX? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     // Try to parse the entry
                     var fileEntry = ParseFileEntry(data, initialOffset);
-                    if (fileEntry == null)
+                    if (fileEntry is null)
                         break;
 
                     // Get the length, and make sure it won't EOF
@@ -60,7 +60,7 @@ namespace SabreTools.Serialization.Readers
         public static FileEntry? ParseFileEntry(Stream data, long initialOffset)
         {
             string? name = data.ReadNullTerminatedAnsiString();
-            if (name == null)
+            if (name is null)
                 return null;
 
             // Both of these strings indicate that this is a different kind of encrypted and/or compressed format of
@@ -74,15 +74,15 @@ namespace SabreTools.Serialization.Readers
                 return null;
 
             string? path = data.ReadNullTerminatedAnsiString();
-            if (path == null)
+            if (path is null)
                 return null;
 
             string? version = data.ReadNullTerminatedAnsiString();
-            if (version == null)
+            if (version is null)
                 return null;
 
             var lengthString = data.ReadNullTerminatedAnsiString();
-            if (lengthString == null || !ulong.TryParse(lengthString, out var lengthValue))
+            if (lengthString is null || !ulong.TryParse(lengthString, out var lengthValue))
                 return null;
 
             var obj = new FileEntry();

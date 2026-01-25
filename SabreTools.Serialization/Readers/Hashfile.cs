@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.Readers
         public Data.Models.Hashfile.Hashfile? Deserialize(byte[]? data, int offset, HashType hash)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -90,7 +90,7 @@ namespace SabreTools.Serialization.Readers
         public Data.Models.Hashfile.Hashfile? DeserializeSFV(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -105,7 +105,7 @@ namespace SabreTools.Serialization.Readers
                     // Read and split the line
                     string? line = reader.ReadLine();
                     string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                    if (lineParts == null || lineParts.Length < 2)
+                    if (lineParts is null || lineParts.Length < 2)
                         continue;
 
                     var sfv = new SFV
@@ -137,7 +137,7 @@ namespace SabreTools.Serialization.Readers
         public Data.Models.Hashfile.Hashfile? DeserializeMD2(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -152,7 +152,7 @@ namespace SabreTools.Serialization.Readers
                     // Read and split the line
                     string? line = reader.ReadLine();
                     string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                    if (lineParts == null || lineParts.Length < 2)
+                    if (lineParts is null || lineParts.Length < 2)
                         continue;
 
                     // Parse the line into a hash
@@ -181,7 +181,7 @@ namespace SabreTools.Serialization.Readers
         public Data.Models.Hashfile.Hashfile? DeserializeMD4(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -196,7 +196,7 @@ namespace SabreTools.Serialization.Readers
                     // Read and split the line
                     string? line = reader.ReadLine();
                     string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                    if (lineParts == null || lineParts.Length < 2)
+                    if (lineParts is null || lineParts.Length < 2)
                         continue;
 
                     // Parse the line into a hash
@@ -225,7 +225,7 @@ namespace SabreTools.Serialization.Readers
         public Data.Models.Hashfile.Hashfile? DeserializeMD5(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             // Setup the reader and output
@@ -238,7 +238,7 @@ namespace SabreTools.Serialization.Readers
                 // Read and split the line
                 string? line = reader.ReadLine();
                 string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (lineParts == null || lineParts.Length < 2)
+                if (lineParts is null || lineParts.Length < 2)
                     continue;
 
                 // Parse the line into a hash
@@ -261,7 +261,7 @@ namespace SabreTools.Serialization.Readers
         public Data.Models.Hashfile.Hashfile? DeserializeRIPEMD128(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             // Setup the reader and output
@@ -274,7 +274,7 @@ namespace SabreTools.Serialization.Readers
                 // Read and split the line
                 string? line = reader.ReadLine();
                 string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (lineParts == null || lineParts.Length < 2)
+                if (lineParts is null || lineParts.Length < 2)
                     continue;
 
                 // Parse the line into a hash
@@ -297,7 +297,7 @@ namespace SabreTools.Serialization.Readers
         public Data.Models.Hashfile.Hashfile? DeserializeRIPEMD160(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             // Setup the reader and output
@@ -310,7 +310,7 @@ namespace SabreTools.Serialization.Readers
                 // Read and split the line
                 string? line = reader.ReadLine();
                 string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (lineParts == null || lineParts.Length < 2)
+                if (lineParts is null || lineParts.Length < 2)
                     continue;
 
                 // Parse the line into a hash
@@ -333,7 +333,7 @@ namespace SabreTools.Serialization.Readers
         public Data.Models.Hashfile.Hashfile? DeserializeSHA1(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -348,7 +348,7 @@ namespace SabreTools.Serialization.Readers
                     // Read and split the line
                     string? line = reader.ReadLine();
                     string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                    if (lineParts == null || lineParts.Length < 2)
+                    if (lineParts is null || lineParts.Length < 2)
                         continue;
 
                     // Parse the line into a hash
@@ -377,7 +377,7 @@ namespace SabreTools.Serialization.Readers
         public Data.Models.Hashfile.Hashfile? DeserializeSHA256(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -392,7 +392,7 @@ namespace SabreTools.Serialization.Readers
                     // Read and split the line
                     string? line = reader.ReadLine();
                     string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                    if (lineParts == null || lineParts.Length < 2)
+                    if (lineParts is null || lineParts.Length < 2)
                         continue;
 
                     // Parse the line into a hash
@@ -421,7 +421,7 @@ namespace SabreTools.Serialization.Readers
         public Data.Models.Hashfile.Hashfile? DeserializeSHA384(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -436,7 +436,7 @@ namespace SabreTools.Serialization.Readers
                     // Read and split the line
                     string? line = reader.ReadLine();
                     string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                    if (lineParts == null || lineParts.Length < 2)
+                    if (lineParts is null || lineParts.Length < 2)
                         continue;
 
                     // Parse the line into a hash
@@ -465,7 +465,7 @@ namespace SabreTools.Serialization.Readers
         public Data.Models.Hashfile.Hashfile? DeserializeSHA512(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -480,7 +480,7 @@ namespace SabreTools.Serialization.Readers
                     // Read and split the line
                     string? line = reader.ReadLine();
                     string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                    if (lineParts == null || lineParts.Length < 2)
+                    if (lineParts is null || lineParts.Length < 2)
                         continue;
 
                     // Parse the line into a hash
@@ -509,7 +509,7 @@ namespace SabreTools.Serialization.Readers
         public Data.Models.Hashfile.Hashfile? DeserializeSpamSum(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return default;
 
             try
@@ -524,7 +524,7 @@ namespace SabreTools.Serialization.Readers
                     // Read and split the line
                     string? line = reader.ReadLine();
                     string[]? lineParts = line?.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                    if (lineParts == null || lineParts.Length < 2)
+                    if (lineParts is null || lineParts.Length < 2)
                         continue;
 
                     // Parse the line into a hash

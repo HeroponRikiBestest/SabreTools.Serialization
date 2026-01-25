@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Wrappers
         public new static CDROM? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.Wrappers
         public new static CDROM? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead || !data.CanSeek)
+            if (data is null || !data.CanRead || !data.CanSeek)
                 return null;
 
             try
@@ -78,7 +78,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Deserialize just the sub-stream
                 var model = new Readers.ISO9660().Deserialize(userData);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 // Reset stream

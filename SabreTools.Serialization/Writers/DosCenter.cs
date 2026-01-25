@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Writers
         public override Stream? SerializeStream(MetadataFile? obj)
         {
             // If the metadata file is null
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             // Setup the writer and output
@@ -41,7 +41,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteHeader(Data.Models.DosCenter.DosCenter? header, ClrMameProWriter writer)
         {
             // If the header information is missing, we can't do anything
-            if (header == null)
+            if (header is null)
                 return;
 
             writer.WriteStartElement("DOSCenter");
@@ -66,7 +66,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteGames(Game[]? games, ClrMameProWriter writer)
         {
             // If the games information is missing, we can't do anything
-            if (games == null || games.Length == 0)
+            if (games is null || games.Length == 0)
                 return;
 
             // Loop through and write out the games
@@ -85,7 +85,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteGame(Game game, ClrMameProWriter writer)
         {
             // If the game information is missing, we can't do anything
-            if (game == null)
+            if (game is null)
                 return;
 
             writer.WriteStartElement("game");
@@ -107,7 +107,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteFiles(Data.Models.DosCenter.File[]? files, ClrMameProWriter writer)
         {
             // If the array is missing, we can't do anything
-            if (files == null)
+            if (files is null)
                 return;
 
             foreach (var file in files)

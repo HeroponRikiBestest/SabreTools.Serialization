@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Readers
         public override MatroshkaPackage? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -24,7 +24,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the header
                 var package = ParseMatroshkaPackage(data);
-                if (package == null)
+                if (package is null)
                     return null;
 
                 // Try to parse the entries
@@ -113,7 +113,7 @@ namespace SabreTools.Serialization.Readers
                 entry.Offset = data.ReadUInt32LittleEndian();
 
                 // On the first entry, determine if the unknown value exists
-                if (hasUnknown == null)
+                if (hasUnknown is null)
                 {
                     tempPosition = data.Position;
                     tempValue = data.ReadUInt32LittleEndian();

@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Writers
         public override Stream? SerializeStream(MetadataFile? obj)
         {
             // If the metadata file is null
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             // Setup the writer and output
@@ -36,13 +36,13 @@ namespace SabreTools.Serialization.Writers
         private static void WriteRows(Row[]? rows, SeparatedValueWriter writer)
         {
             // If the games information is missing, we can't do anything
-            if (rows == null || rows.Length == 0)
+            if (rows is null || rows.Length == 0)
                 return;
 
             // Loop through and write out the rows
             foreach (var row in rows)
             {
-                if (row == null)
+                if (row is null)
                     continue;
 
                 var rowArray = new List<string?>

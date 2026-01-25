@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Readers
         public override BspFile? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     // Get the next lump entry
                     var lumpEntry = header.Lumps![l];
-                    if (lumpEntry == null)
+                    if (lumpEntry is null)
                         continue;
                     if (lumpEntry.Offset == 0 || lumpEntry.Length == 0)
                         continue;

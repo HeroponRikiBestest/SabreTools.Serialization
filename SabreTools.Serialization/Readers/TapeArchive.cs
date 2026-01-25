@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Readers
         public override Archive? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Readers
                 while (data.Position < data.Length)
                 {
                     var entry = ParseEntry(data);
-                    if (entry == null)
+                    if (entry is null)
                         break;
 
                     entries.Add(entry);
@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Readers
             #region Header
 
             var header = ParseHeader(data);
-            if (header == null)
+            if (header is null)
                 return null;
 
             obj.Header = header;
@@ -88,7 +88,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < blocks.Length; i++)
             {
                 var block = ParseBlock(data);
-                if (block == null)
+                if (block is null)
                     break;
 
                 blocks[i] = block;

@@ -120,7 +120,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Unknown Block 3 Information:");
             builder.AppendLine("  -------------------------");
-            if (block == null)
+            if (block is null)
             {
                 builder.AppendLine("  No unknown block 1r");
                 builder.AppendLine();
@@ -136,7 +136,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine("  Data Files Information:");
             builder.AppendLine("  -------------------------");
             builder.AppendLine(count, "  Data files count");
-            if (count == 0 || entries == null || entries.Length == 0)
+            if (count == 0 || entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No data files");
                 builder.AppendLine();

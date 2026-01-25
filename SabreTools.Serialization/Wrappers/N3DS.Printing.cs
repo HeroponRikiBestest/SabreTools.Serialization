@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 builder.AppendLine("    Partition ID table:");
                 builder.AppendLine("    -------------------------");
-                if (header.PartitionIdTable == null || header.PartitionIdTable.Length == 0)
+                if (header.PartitionIdTable is null || header.PartitionIdTable.Length == 0)
                 {
                     builder.AppendLine("    No partition ID table entries");
                 }
@@ -262,7 +262,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(entry.ExtendedHeaderSizeInBytes, "    Extended header size in bytes");
                 builder.AppendLine(entry.Reserved2, "    Reserved 2");
                 builder.AppendLine("    Flags:");
-                if (entry.Flags == null)
+                if (entry.Flags is null)
                 {
                     builder.AppendLine("      [NULL]");
                 }

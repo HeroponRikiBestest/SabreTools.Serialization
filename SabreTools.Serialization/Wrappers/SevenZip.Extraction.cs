@@ -24,7 +24,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Extract(string, bool)"/>
         public bool Extract(string outputDirectory, bool lookForHeader, bool includeDebug)
         {
-            if (_dataSource == null || !_dataSource.CanRead)
+            if (_dataSource is null || !_dataSource.CanRead)
                 return false;
 
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.Wrappers
                             continue;
 
                         // If the entry has an invalid key
-                        if (entry.Key == null)
+                        if (entry.Key is null)
                             continue;
 
                         // If we have a partial entry due to an incomplete multi-part archive, skip it
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.Wrappers
                             firstFile = false;
                             continue;
                         }
-                        
+
                         if (entry.IsSolid)
                         {
                             // If the 7z is solid and the first entry is password-protected, you won't be able to
@@ -87,10 +87,10 @@ namespace SabreTools.Serialization.Wrappers
                                 if (includeDebug) Console.WriteLine("7z is password-protected!");
                                 return false;
                             }
-                            
+
                             isSolid = true;
                         }
-                        
+
                         break;
                     }
                     catch (Exception ex)
@@ -190,18 +190,18 @@ namespace SabreTools.Serialization.Wrappers
                         continue;
 
                     // If the entry has an invalid key
-                    if (entry.Key == null)
+                    if (entry.Key is null)
                         continue;
 
                     // If we have a partial entry due to an incomplete multi-part archive, skip it
                     if (!entry.IsComplete)
                         continue;
-                    
+
                     // If the entry is password-protected, skip it
                     if (entry.IsEncrypted)
                     {
                         if (includeDebug) Console.WriteLine($"File {entry.Key} in 7z is password-protected!");
-                        
+
                         continue;
                     }
 

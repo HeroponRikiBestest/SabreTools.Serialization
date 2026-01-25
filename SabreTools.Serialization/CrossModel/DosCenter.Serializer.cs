@@ -8,7 +8,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <inheritdoc/>
         public override Data.Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
         {
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             var metadataFile = new Data.Models.Metadata.MetadataFile();

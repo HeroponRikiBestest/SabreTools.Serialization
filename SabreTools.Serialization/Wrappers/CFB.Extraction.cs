@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // If we have no files
-            if (DirectoryEntries == null || DirectoryEntries.Length == 0)
+            if (DirectoryEntries is null || DirectoryEntries.Length == 0)
                 return false;
 
             // Loop through and extract all directory entries to the output
@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractEntry(int index, string outputDirectory, bool includeDebug)
         {
             // If we have no entries
-            if (DirectoryEntries == null || DirectoryEntries.Length == 0)
+            if (DirectoryEntries is null || DirectoryEntries.Length == 0)
                 return false;
 
             // If we have an invalid index
@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the entry information
             var entry = DirectoryEntries[index];
-            if (entry == null)
+            if (entry is null)
                 return false;
 
             // Only try to extract stream objects
@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the entry data
             byte[]? data = GetDirectoryEntryData(entry);
-            if (data == null)
+            if (data is null)
                 return false;
 
             // If we have an invalid output directory
@@ -110,7 +110,7 @@ namespace SabreTools.Serialization.Wrappers
         private byte[]? GetDirectoryEntryData(DirectoryEntry entry)
         {
             // If the CFB is invalid
-            if (Header == null)
+            if (Header is null)
                 return null;
 
             // Only try to extract stream objects
@@ -124,7 +124,7 @@ namespace SabreTools.Serialization.Wrappers
             var chain = miniFat
                 ? GetMiniFATSectorChainData((SectorNumber)entry.StartingSectorLocation)
                 : GetFATSectorChainData((SectorNumber)entry.StartingSectorLocation);
-            if (chain == null)
+            if (chain is null)
                 return null;
 
             // Return only the proper amount of data

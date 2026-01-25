@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled XeMID on success, null on error</returns>
         private static Data.Models.Xbox.XeMID? ParseXeMID(string? xemidString)
         {
-            if (xemidString == null)
+            if (xemidString is null)
                 return null;
             if (!(xemidString.Length == 13 || xemidString.Length == 14 || xemidString.Length == 21 || xemidString.Length == 22))
                 return null;

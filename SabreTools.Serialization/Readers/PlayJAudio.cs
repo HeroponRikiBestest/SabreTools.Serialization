@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Readers
         public override AudioFile? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the audio header
                 var audioHeader = ParseAudioHeader(data);
-                if (audioHeader == null)
+                if (audioHeader is null)
                     return null;
 
                 // Set the audio header
@@ -55,7 +55,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the unknown block 1
                 var unknownBlock1 = ParseUnknownBlock1(data);
-                if (unknownBlock1 == null)
+                if (unknownBlock1 is null)
                     return null;
 
                 // Set the unknown block 1
@@ -109,7 +109,7 @@ namespace SabreTools.Serialization.Readers
 
                     // Try to parse the unknown block 3
                     var unknownBlock3 = ParseUnknownBlock3(data);
-                    if (unknownBlock3 == null)
+                    if (unknownBlock3 is null)
                         return null;
 
                     // Set the unknown block 3
@@ -141,7 +141,7 @@ namespace SabreTools.Serialization.Readers
                     for (int i = 0; i < audioFile.DataFiles.Length; i++)
                     {
                         var dataFile = ParseDataFile(data);
-                        if (dataFile == null)
+                        if (dataFile is null)
                             return null;
 
                         audioFile.DataFiles[i] = dataFile;

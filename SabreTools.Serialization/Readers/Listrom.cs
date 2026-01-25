@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Readers
         public override MetadataFile? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return default;
 
             try
@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.Readers
                     // Read the name and set the rest of the line for processing
                     string name = lineParts[0];
                     string trimmedLine = line.Substring(name.Length);
-                    if (trimmedLine == null)
+                    if (trimmedLine is null)
                         continue;
 
 #if NETFRAMEWORK || NETCOREAPP3_1 || NETSTANDARD2_0_OR_GREATER

@@ -43,12 +43,12 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the file
             var file = Files[index];
-            if (file == null)
+            if (file is null)
                 return false;
 
             // Create the filename
             var filename = file.Name;
-            if (filename == null)
+            if (filename is null)
                 return false;
 
             // Get the directory index

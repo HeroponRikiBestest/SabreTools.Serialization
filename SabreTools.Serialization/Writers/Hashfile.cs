@@ -20,7 +20,7 @@ namespace SabreTools.Serialization.Writers
         public byte[]? SerializeArray(Data.Models.Hashfile.Hashfile? obj, HashType hash)
         {
             using var stream = SerializeStream(obj, hash);
-            if (stream == null)
+            if (stream is null)
                 return null;
 
             byte[] bytes = new byte[stream.Length];
@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.Writers
                 return false;
 
             using var stream = SerializeStream(obj, hash);
-            if (stream == null)
+            if (stream is null)
                 return false;
 
             using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -65,7 +65,7 @@ namespace SabreTools.Serialization.Writers
         public Stream? SerializeStream(Data.Models.Hashfile.Hashfile? obj, HashType hash)
         {
             // If the metadata file is null
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             // Setup the writer and output
@@ -130,7 +130,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteSFV(SFV[]? sfvs, SeparatedValueWriter writer)
         {
             // If the item information is missing, we can't do anything
-            if (sfvs == null || sfvs.Length == 0)
+            if (sfvs is null || sfvs.Length == 0)
                 return;
 
             // Loop through and write out the items
@@ -152,7 +152,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteMD2(MD2[]? md2s, SeparatedValueWriter writer)
         {
             // If the item information is missing, we can't do anything
-            if (md2s == null || md2s.Length == 0)
+            if (md2s is null || md2s.Length == 0)
                 return;
 
             // Loop through and write out the items
@@ -174,7 +174,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteMD4(MD4[]? md4s, SeparatedValueWriter writer)
         {
             // If the item information is missing, we can't do anything
-            if (md4s == null || md4s.Length == 0)
+            if (md4s is null || md4s.Length == 0)
                 return;
 
             // Loop through and write out the items
@@ -196,7 +196,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteMD5(MD5[]? md5s, SeparatedValueWriter writer)
         {
             // If the item information is missing, we can't do anything
-            if (md5s == null || md5s.Length == 0)
+            if (md5s is null || md5s.Length == 0)
                 return;
 
             // Loop through and write out the items
@@ -218,7 +218,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteRIPEMD128(RIPEMD128[]? ripemd128s, SeparatedValueWriter writer)
         {
             // If the item information is missing, we can't do anything
-            if (ripemd128s == null || ripemd128s.Length == 0)
+            if (ripemd128s is null || ripemd128s.Length == 0)
                 return;
 
             // Loop through and write out the items
@@ -240,7 +240,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteRIPEMD160(RIPEMD160[]? ripemd160s, SeparatedValueWriter writer)
         {
             // If the item information is missing, we can't do anything
-            if (ripemd160s == null || ripemd160s.Length == 0)
+            if (ripemd160s is null || ripemd160s.Length == 0)
                 return;
 
             // Loop through and write out the items
@@ -262,7 +262,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteSHA1(SHA1[]? sha1s, SeparatedValueWriter writer)
         {
             // If the item information is missing, we can't do anything
-            if (sha1s == null || sha1s.Length == 0)
+            if (sha1s is null || sha1s.Length == 0)
                 return;
 
             // Loop through and write out the items
@@ -284,7 +284,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteSHA256(SHA256[]? sha256s, SeparatedValueWriter writer)
         {
             // If the item information is missing, we can't do anything
-            if (sha256s == null || sha256s.Length == 0)
+            if (sha256s is null || sha256s.Length == 0)
                 return;
 
             // Loop through and write out the items
@@ -306,7 +306,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteSHA384(SHA384[]? sha384s, SeparatedValueWriter writer)
         {
             // If the item information is missing, we can't do anything
-            if (sha384s == null || sha384s.Length == 0)
+            if (sha384s is null || sha384s.Length == 0)
                 return;
 
             // Loop through and write out the items
@@ -328,7 +328,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteSHA512(SHA512[]? sha512s, SeparatedValueWriter writer)
         {
             // If the item information is missing, we can't do anything
-            if (sha512s == null || sha512s.Length == 0)
+            if (sha512s is null || sha512s.Length == 0)
                 return;
 
             // Loop through and write out the items
@@ -350,7 +350,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteSpamSum(SpamSum[]? spamsums, SeparatedValueWriter writer)
         {
             // If the item information is missing, we can't do anything
-            if (spamsums == null || spamsums.Length == 0)
+            if (spamsums is null || spamsums.Length == 0)
                 return;
 
             // Loop through and write out the items

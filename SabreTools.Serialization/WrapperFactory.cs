@@ -75,7 +75,7 @@ namespace SabreTools.Serialization
         public static IWrapper? CreateExecutableWrapper(Stream? stream)
         {
             // If we have no stream
-            if (stream == null)
+            if (stream is null)
                 return null;
 
             // Cache the current offset
@@ -83,7 +83,7 @@ namespace SabreTools.Serialization
 
             // Try to get an MS-DOS wrapper first
             var wrapper = MSDOS.Create(stream);
-            if (wrapper == null || wrapper is not MSDOS msdos)
+            if (wrapper is null || wrapper is not MSDOS msdos)
                 return null;
 
             // Check for a valid new executable address
@@ -95,7 +95,7 @@ namespace SabreTools.Serialization
             var magic = stream.ReadBytes(4);
 
             // If we didn't get valid data at the offset
-            if (magic == null)
+            if (magic is null)
             {
                 return wrapper;
             }
@@ -133,7 +133,7 @@ namespace SabreTools.Serialization
         public static WrapperType GetFileType(byte[]? magic, string? extension)
         {
             // If we have an invalid magic byte array and extension
-            if (magic == null || magic.Length == 0 || extension == null)
+            if (magic is null || magic.Length == 0 || extension is null)
                 return WrapperType.UNKNOWN;
 
             // Normalize the extension

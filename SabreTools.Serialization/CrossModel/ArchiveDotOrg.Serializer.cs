@@ -8,7 +8,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <inheritdoc/>
         public override Data.Models.Metadata.MetadataFile? Serialize(Files? item)
         {
-            if (item == null)
+            if (item is null)
                 return null;
 
             var metadataFile = new Data.Models.Metadata.MetadataFile
@@ -56,7 +56,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Data.Models.Metadata.Rom? ConvertToInternalModel(File? item)
         {
-            if (item == null)
+            if (item is null)
                 return null;
 
             var rom = new Data.Models.Metadata.Rom

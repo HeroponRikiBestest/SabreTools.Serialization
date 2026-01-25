@@ -15,7 +15,7 @@ namespace InfoPrint
             var commandSet = CreateCommands(mainFeature);
 
             // If we have no args, show the help and quit
-            if (args == null || args.Length == 0)
+            if (args is null || args.Length == 0)
             {
                 commandSet.OutputAllHelp();
                 return;

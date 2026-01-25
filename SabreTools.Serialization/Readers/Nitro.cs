@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Readers
         public override Cart? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -329,7 +329,7 @@ namespace SabreTools.Serialization.Readers
             while (true)
             {
                 var entry = ParseNameListEntry(data);
-                if (entry == null)
+                if (entry is null)
                     break;
 
                 nameList.Add(entry);

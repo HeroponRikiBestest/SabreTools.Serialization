@@ -10,7 +10,7 @@ namespace SabreTools.Serialization.Writers
         public override Stream? SerializeStream(Data.Models.IRD.File? obj)
         {
             // If the data is invalid
-            if (obj?.Magic == null)
+            if (obj?.Magic is null)
                 return null;
 
             // If the magic doesn't match
@@ -37,11 +37,11 @@ namespace SabreTools.Serialization.Writers
                 return null;
             if (obj.Footer.Length != obj.FooterLength)
                 return null;
-            if (obj.RegionHashes.Length != obj.RegionCount || !Array.TrueForAll(obj.RegionHashes, h => h == null || h.Length != 16))
+            if (obj.RegionHashes.Length != obj.RegionCount || !Array.TrueForAll(obj.RegionHashes, h => h is null || h.Length != 16))
                 return null;
             if (obj.FileKeys.Length != obj.FileCount)
                 return null;
-            if (obj.FileHashes.Length != obj.FileCount || !Array.TrueForAll(obj.FileHashes, h => h == null || h.Length != 16))
+            if (obj.FileHashes.Length != obj.FileCount || !Array.TrueForAll(obj.FileHashes, h => h is null || h.Length != 16))
                 return null;
             if (obj.PIC.Length != 115)
                 return null;

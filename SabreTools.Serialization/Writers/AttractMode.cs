@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.Writers
         public byte[]? SerializeArray(MetadataFile? obj, bool longHeader)
         {
             using var stream = SerializeStream(obj, longHeader);
-            if (stream == null)
+            if (stream is null)
                 return null;
 
             byte[] bytes = new byte[stream.Length];
@@ -96,7 +96,7 @@ namespace SabreTools.Serialization.Writers
                 return false;
 
             using var stream = SerializeStream(obj, longHeader);
-            if (stream == null)
+            if (stream is null)
                 return false;
 
             using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -118,7 +118,7 @@ namespace SabreTools.Serialization.Writers
         public Stream? SerializeStream(MetadataFile? obj, bool longHeader)
         {
             // If the metadata file is null
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             // Setup the writer and output
@@ -150,13 +150,13 @@ namespace SabreTools.Serialization.Writers
         private static void WriteRows(Row[]? rows, SeparatedValueWriter writer, bool longHeader)
         {
             // If the games information is missing, we can't do anything
-            if (rows == null || rows.Length == 0)
+            if (rows is null || rows.Length == 0)
                 return;
 
             // Loop through and write out the rows
             foreach (var row in rows)
             {
-                if (row == null)
+                if (row is null)
                     continue;
 
                 string?[] rowArray;

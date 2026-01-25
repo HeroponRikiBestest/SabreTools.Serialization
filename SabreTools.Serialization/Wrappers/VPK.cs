@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Wrappers
                 // If the filename is not the right format
                 string extension = Path.GetExtension(Filename).TrimStart('.');
                 string? directoryName = Path.GetDirectoryName(Filename);
-                string fileName = directoryName == null
+                string fileName = directoryName is null
                     ? Path.GetFileNameWithoutExtension(Filename)
                     : Path.Combine(directoryName, Path.GetFileNameWithoutExtension(Filename));
 
@@ -123,7 +123,7 @@ namespace SabreTools.Serialization.Wrappers
         public static VPK? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -143,7 +143,7 @@ namespace SabreTools.Serialization.Wrappers
         public static VPK? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -152,7 +152,7 @@ namespace SabreTools.Serialization.Wrappers
                 long currentOffset = data.Position;
 
                 var model = new Readers.VPK().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 return new VPK(model, data, currentOffset);

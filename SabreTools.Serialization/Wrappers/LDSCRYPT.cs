@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.Wrappers
         public static LDSCRYPT? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -70,7 +70,7 @@ namespace SabreTools.Serialization.Wrappers
         public static LDSCRYPT? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             return new LDSCRYPT(new EncryptedFile(), data);

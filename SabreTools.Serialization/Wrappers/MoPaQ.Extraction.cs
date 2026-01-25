@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Wrappers
                     return false;
                 }
 
-                if (Filename == null || !File.Exists(Filename))
+                if (Filename is null || !File.Exists(Filename))
                     return false;
 
                 // Try to open the archive and listfile

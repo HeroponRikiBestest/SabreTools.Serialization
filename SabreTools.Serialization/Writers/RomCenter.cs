@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Writers
         public override Stream? SerializeStream(MetadataFile? obj)
         {
             // If the metadata file is null
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             // Setup the writer and output
@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteCredits(Credits? credits, IniWriter writer)
         {
             // If the credits information is missing, we can't do anything
-            if (credits == null)
+            if (credits is null)
                 return;
 
             writer.WriteSection("CREDITS");
@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteDat(Dat? dat, IniWriter writer)
         {
             // If the dat information is missing, we can't do anything
-            if (dat == null)
+            if (dat is null)
                 return;
 
             writer.WriteSection("DAT");
@@ -102,7 +102,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteEmulator(Emulator? emulator, IniWriter writer)
         {
             // If the emulator information is missing, we can't do anything
-            if (emulator == null)
+            if (emulator is null)
                 return;
 
             writer.WriteSection("EMULATOR");
@@ -124,7 +124,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteGames(Games? games, IniWriter writer)
         {
             // If the games information is missing, we can't do anything
-            if (games?.Rom == null || games.Rom.Length == 0)
+            if (games?.Rom is null || games.Rom.Length == 0)
                 return;
 
             writer.WriteSection("GAMES");

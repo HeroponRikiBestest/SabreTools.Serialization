@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Readers
         public override Archive? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the archive header
                 var archiveHeader = ParseArchiveHeader(data);
-                if (archiveHeader == null)
+                if (archiveHeader is null)
                     return null;
 
                 // Set the archive header
@@ -198,7 +198,7 @@ namespace SabreTools.Serialization.Readers
                 92,
                 MPQ_KEY_BLOCK_TABLE,
                 out _);
-            if (tableBytes == null)
+            if (tableBytes is null)
                 return null;
 
             // Read in the BET table
@@ -232,7 +232,7 @@ namespace SabreTools.Serialization.Readers
                 entryCount * 16,
                 MPQ_KEY_BLOCK_TABLE,
                 out _);
-            if (tableBytes == null)
+            if (tableBytes is null)
                 return null;
 
             // Read in the block table
@@ -273,7 +273,7 @@ namespace SabreTools.Serialization.Readers
                 entryCount * 16,
                 MPQ_KEY_HASH_TABLE,
                 out _);
-            if (tableBytes == null)
+            if (tableBytes is null)
                 return null;
 
             // Read in the hash table
@@ -311,7 +311,7 @@ namespace SabreTools.Serialization.Readers
                 44,
                 MPQ_KEY_HASH_TABLE,
                 out _);
-            if (tableBytes == null)
+            if (tableBytes is null)
                 return null;
 
             // Read in the HET table

@@ -103,13 +103,13 @@ namespace SabreTools.Serialization.Wrappers
         public static XMID? Create(string? data)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             try
             {
                 var model = new Readers.XMID().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 var ms = new MemoryStream(Encoding.ASCII.GetBytes(data));

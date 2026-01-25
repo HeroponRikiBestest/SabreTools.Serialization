@@ -9,7 +9,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // If we have no segments
-            if (Segments == null || Segments.Length == 0)
+            if (Segments is null || Segments.Length == 0)
                 return false;
 
             // Loop through and extract all files to the output
@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             // If we have no segments
-            if (Segments == null || Segments.Length == 0)
+            if (Segments is null || Segments.Length == 0)
                 return false;
 
             // If we have an invalid index

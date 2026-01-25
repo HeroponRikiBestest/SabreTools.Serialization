@@ -319,7 +319,7 @@ namespace SabreTools.Serialization.Wrappers
 
         private static void Print(StringBuilder builder, PathTableRecord[]? records)
         {
-            if (records == null || records.Length == 0)
+            if (records is null || records.Length == 0)
             {
                 builder.AppendLine("    No records");
                 builder.AppendLine();
@@ -446,7 +446,7 @@ namespace SabreTools.Serialization.Wrappers
         private static void Print(StringBuilder builder, ExtendedAttributeRecord? ear, Encoding encoding)
         {
             builder.AppendLine("      File Extent");
-            if (ear == null)
+            if (ear is null)
                 return;
 
             builder.AppendLineBothEndian(ear.OwnerIdentification, "        Owner Identification");

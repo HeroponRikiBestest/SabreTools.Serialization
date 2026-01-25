@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Readers
         public override Data.Models.WAD3.File? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -61,7 +61,7 @@ namespace SabreTools.Serialization.Readers
                 for (int i = 0; i < header.NumDirs; i++)
                 {
                     var dirEntry = file.DirEntries[i];
-                    if (dirEntry == null)
+                    if (dirEntry is null)
                         continue;
 
                     // TODO: Handle compressed entries

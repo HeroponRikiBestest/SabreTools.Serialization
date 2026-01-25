@@ -156,7 +156,7 @@ namespace SabreTools.Serialization.Wrappers
                 // - 0x14-0x1B - Little-endian file size of the internal file
                 if (Header.ExtraLength != 0x1C)
                     return false;
-                if (Header.ExtraFieldBytes == null || Header.ExtraFieldBytes.Length != 0x1C)
+                if (Header.ExtraFieldBytes is null || Header.ExtraFieldBytes.Length != 0x1C)
                     return false;
 
                 return true;
@@ -201,7 +201,7 @@ namespace SabreTools.Serialization.Wrappers
         public static GZip? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -221,7 +221,7 @@ namespace SabreTools.Serialization.Wrappers
         public static GZip? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -230,7 +230,7 @@ namespace SabreTools.Serialization.Wrappers
                 long currentOffset = data.Position;
 
                 var model = new Readers.GZip().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 return new GZip(model, data, currentOffset);

@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <inheritdoc cref="Deserialize(Data.Models.Metadata.MetadataFile)"/>
         public MetadataFile? Deserialize(Data.Models.Metadata.MetadataFile? obj, bool game)
         {
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             var metadataFile = new MetadataFile();

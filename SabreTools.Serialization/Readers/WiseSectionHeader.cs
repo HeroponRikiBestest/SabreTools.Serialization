@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Readers
         public override SectionHeader? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Readers
                 long initialOffset = data.Position;
 
                 var header = ParseSectionHeader(data, initialOffset);
-                if (header == null)
+                if (header is null)
                     return null;
 
                 // Main MSI file
@@ -93,7 +93,7 @@ namespace SabreTools.Serialization.Readers
             obj.MsiFileEntryLength = data.ReadUInt32LittleEndian();
 
             // If the reported header information is invalid
-            if (obj.Version == null)
+            if (obj.Version is null)
                 return obj;
             if (wisOffset < 0)
                 return obj;
@@ -146,7 +146,7 @@ namespace SabreTools.Serialization.Readers
             // Try to read the string arrays
             // TODO: Count size of string section for later size verification
             byte[][]? stringArrays = ParseStringTable(data, obj.PreStringValues);
-            if (stringArrays == null)
+            if (stringArrays is null)
                 return obj;
 
             // Set the string arrays
@@ -173,7 +173,7 @@ namespace SabreTools.Serialization.Readers
         private static int GetPreStringBytesSize(Stream data, SectionHeader header, int wisOffset)
         {
             // Handle a case that shouldn't happen
-            if (header.Version == null)
+            if (header.Version is null)
                 return 0;
 
             // TODO: better way to figure out how far it's needed to advance?
@@ -248,7 +248,7 @@ namespace SabreTools.Serialization.Readers
                     {
                         byte[]? incrementBytes = data.ReadBytes(2);
                         string? extraLanguageString = data.ReadNullTerminatedAnsiString();
-                        if (extraLanguageString == null)
+                        if (extraLanguageString is null)
                             return null;
 
                         byte[]? extraLanguageStringArray = Encoding.ASCII.GetBytes(extraLanguageString);

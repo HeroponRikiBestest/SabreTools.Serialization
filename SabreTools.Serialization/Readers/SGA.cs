@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Readers
         public override Archive? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the header
                 var header = ParseHeader(data);
-                if (header == null)
+                if (header is null)
                     return null;
 
                 // Set the SGA header
@@ -40,7 +40,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the directory
                 var directory = ParseDirectory(data, header.MajorVersion);
-                if (directory == null)
+                if (directory is null)
                     return null;
 
                 // Set the SGA directory
@@ -150,7 +150,7 @@ namespace SabreTools.Serialization.Readers
 
             // Try to parse the directory header
             var directoryHeader = ParseDirectory4Header(data);
-            if (directoryHeader == null)
+            if (directoryHeader is null)
                 return null;
 
             // Set the directory header
@@ -262,7 +262,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < directory.Folders.Length; i++)
             {
                 var folder = directory.Folders[i];
-                if (folder == null)
+                if (folder is null)
                     continue;
 
                 folder.Name = directory.StringTable[folder.NameOffset];
@@ -272,7 +272,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < directory.Files.Length; i++)
             {
                 var file = directory.Files[i];
-                if (file == null)
+                if (file is null)
                     continue;
 
                 file.Name = directory.StringTable[file.NameOffset];
@@ -299,7 +299,7 @@ namespace SabreTools.Serialization.Readers
 
             // Try to parse the directory header
             var directoryHeader = ParseDirectory5Header(data);
-            if (directoryHeader == null)
+            if (directoryHeader is null)
                 return null;
 
             // Set the directory header
@@ -408,7 +408,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < directory.Folders.Length; i++)
             {
                 var folder = directory.Folders[i];
-                if (folder == null)
+                if (folder is null)
                     continue;
 
                 folder.Name = directory.StringTable[folder.NameOffset];
@@ -418,7 +418,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < directory.Files.Length; i++)
             {
                 var file = directory.Files[i];
-                if (file == null)
+                if (file is null)
                     continue;
 
                 file.Name = directory.StringTable[file.NameOffset];
@@ -445,7 +445,7 @@ namespace SabreTools.Serialization.Readers
 
             // Try to parse the directory header
             var directoryHeader = ParseDirectory5Header(data);
-            if (directoryHeader == null)
+            if (directoryHeader is null)
                 return null;
 
             // Set the directory header
@@ -554,7 +554,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < directory.Folders.Length; i++)
             {
                 var folder = directory.Folders[i];
-                if (folder == null)
+                if (folder is null)
                     continue;
 
                 folder.Name = directory.StringTable[folder.NameOffset];
@@ -564,7 +564,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < directory.Files.Length; i++)
             {
                 var file = directory.Files[i];
-                if (file == null)
+                if (file is null)
                     continue;
 
                 file.Name = directory.StringTable[file.NameOffset];
@@ -591,7 +591,7 @@ namespace SabreTools.Serialization.Readers
 
             // Try to parse the directory header
             var directoryHeader = ParseDirectory7Header(data);
-            if (directoryHeader == null)
+            if (directoryHeader is null)
                 return null;
 
             // Set the directory header
@@ -700,7 +700,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < directory.Folders.Length; i++)
             {
                 var folder = directory.Folders[i];
-                if (folder == null)
+                if (folder is null)
                     continue;
 
                 folder.Name = directory.StringTable[folder.NameOffset];
@@ -710,7 +710,7 @@ namespace SabreTools.Serialization.Readers
             for (int i = 0; i < directory.Files.Length; i++)
             {
                 var file = directory.Files[i];
-                if (file == null)
+                if (file is null)
                     continue;
 
                 file.Name = directory.StringTable[file.NameOffset];

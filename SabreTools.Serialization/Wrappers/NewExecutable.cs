@@ -337,7 +337,7 @@ namespace SabreTools.Serialization.Wrappers
         public static NewExecutable? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -357,7 +357,7 @@ namespace SabreTools.Serialization.Wrappers
         public static NewExecutable? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -366,7 +366,7 @@ namespace SabreTools.Serialization.Wrappers
                 long currentOffset = data.Position;
 
                 var model = new Readers.NewExecutable().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 return new NewExecutable(model, data, currentOffset);
@@ -491,7 +491,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Get the matching resource
             var resource = GetSegment(id);
-            if (resource == null)
+            if (resource is null)
                 return -1;
 
             // Return the reported length
@@ -512,7 +512,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the matching resource
             var resource = GetSegment(id);
-            if (resource == null)
+            if (resource is null)
                 return -1;
 
             // Verify the resource offset
@@ -579,7 +579,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Get the matching segment
             var segment = GetSegment(index);
-            if (segment == null)
+            if (segment is null)
                 return -1;
 
             // Return the reported length
@@ -600,7 +600,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the matching segment
             var segment = GetSegment(index);
-            if (segment == null)
+            if (segment is null)
                 return -1;
 
             // Verify the segment offset

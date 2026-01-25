@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Readers
         public override T? Deserialize(Stream? data)
         {
             // If the stream is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return default;
 
             try

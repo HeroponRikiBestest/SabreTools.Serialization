@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Readers
         public override ScriptFile? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.Readers
                 #region State Machine
 
                 var states = ParseStateMachine(data, header);
-                if (states == null)
+                if (states is null)
                     return null;
 
                 script.States = states;
@@ -156,7 +156,7 @@ namespace SabreTools.Serialization.Readers
             while (true)
             {
                 string? str = data.ReadNullTerminatedAnsiString();
-                if (str == null)
+                if (str is null)
                     break;
 
                 // Try to handle invalid string lengths
@@ -270,7 +270,7 @@ namespace SabreTools.Serialization.Readers
                 };
 
                 // If an error is detected, try parsing with flipped short DLL call values
-                if (stateData == null)
+                if (stateData is null)
                 {
                     // If there has already been one switch, don't try again
                     if (switched)
@@ -799,7 +799,7 @@ namespace SabreTools.Serialization.Readers
                 if (nextByte == 0x09)
                 {
                     var possible = ParseCallDllFunction(data, languageCount, shortDllCall);
-                    op0x18skip = (possible.FunctionName == null || possible.FunctionName.Length == 0) ? 6 : 0;
+                    op0x18skip = (possible.FunctionName is null || possible.FunctionName.Length == 0) ? 6 : 0;
                     data.SeekIfPossible(current, SeekOrigin.Begin);
                 }
             }

@@ -83,11 +83,11 @@ namespace SabreTools.Serialization.Wrappers
                 else
                     file = OpenFileForReading(pattern, i, CABINET_SUFFIX);
 
-                if (file == null)
+                if (file is null)
                     break;
 
                 var current = Create(file);
-                if (current == null)
+                if (current is null)
                     break;
 
                 current.VolumeID = i;
@@ -122,7 +122,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Try to open the file as a stream
             volumeStream = OpenFileForReading(FilenamePattern, volumeId, CABINET_SUFFIX);
-            if (volumeStream == null)
+            if (volumeStream is null)
             {
                 Console.Error.WriteLine($"Failed to open input cabinet file {volumeId}");
                 return null;
@@ -130,7 +130,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Try to parse the stream into a cabinet
             var volume = Create(volumeStream);
-            if (volume == null)
+            if (volume is null)
             {
                 Console.Error.WriteLine($"Failed to open input cabinet file {volumeId}");
                 return null;
@@ -222,7 +222,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // If the cabinet set could not be opened
-            if (cabinet == null)
+            if (cabinet is null)
                 return false;
 
             try
@@ -271,7 +271,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool FileSave(int index, string filename, bool includeDebug, bool useOld = false)
         {
             // Get the file descriptor
-            if (!TryGetFileDescriptor(index, out var fileDescriptor) || fileDescriptor == null)
+            if (!TryGetFileDescriptor(index, out var fileDescriptor) || fileDescriptor is null)
                 return false;
 
             // If the file is split
@@ -280,7 +280,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the reader at the index
             var reader = Reader.Create(this, index, fileDescriptor);
-            if (reader == null)
+            if (reader is null)
                 return false;
 
             // Create the output file and hasher
@@ -390,7 +390,7 @@ namespace SabreTools.Serialization.Wrappers
                 expectedMd5 = expectedMd5.ToLowerInvariant().Replace("-", string.Empty);
 
                 string? actualMd5 = md5.CurrentHashString;
-                if (actualMd5 == null || actualMd5 != expectedMd5)
+                if (actualMd5 is null || actualMd5 != expectedMd5)
                 {
                     Console.Error.WriteLine($"MD5 checksum failure for file {index} ({GetFileName(index)})");
                     return false;
@@ -406,7 +406,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool FileSaveRaw(int index, string filename)
         {
             // Get the file descriptor
-            if (!TryGetFileDescriptor(index, out var fileDescriptor) || fileDescriptor == null)
+            if (!TryGetFileDescriptor(index, out var fileDescriptor) || fileDescriptor is null)
                 return false;
 
             // If the file is split
@@ -415,7 +415,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the reader at the index
             var reader = Reader.Create(this, index, fileDescriptor);
-            if (reader == null)
+            if (reader is null)
                 return false;
 
             // Create the output file
@@ -662,7 +662,7 @@ namespace SabreTools.Serialization.Wrappers
                         Console.Error.WriteLine($"Failed to open volume {fileDescriptor.Volume}");
                         return null;
                     }
-                    else if (reader._volumeFile == null || reader._volumeHeader == null)
+                    else if (reader._volumeFile is null || reader._volumeHeader is null)
                     {
                         Console.Error.WriteLine($"Volume {fileDescriptor.Volume} is invalid");
                         return null;
@@ -751,7 +751,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 // Read the volume from the cabinet set
                 var next = _cabinet.OpenVolume(volume, out var volumeStream);
-                if (next?.VolumeHeader == null || volumeStream == null)
+                if (next?.VolumeHeader is null || volumeStream is null)
                 {
                     Console.Error.WriteLine($"Failed to open input cabinet file {volume}");
                     return false;
