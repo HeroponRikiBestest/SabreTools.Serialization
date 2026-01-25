@@ -18,7 +18,7 @@ namespace SabreTools.Serialization.CrossModel
 
             var machines = new List<Data.Models.Metadata.Machine>();
 
-            if (item.Game != null && item.Game.Length > 0)
+            if (item.Game is not null && item.Game.Length > 0)
                 machines.AddRange(Array.ConvertAll(item.Game, g => ConvertMachineToInternalModel(g)));
 
             foreach (var dir in item.Dir ?? [])
@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Data.Models.Metadata.Header ConvertHeaderToInternalModel(Datafile item)
         {
-            var header = item.Header != null ? ConvertHeaderToInternalModel(item.Header) : [];
+            var header = item.Header is not null ? ConvertHeaderToInternalModel(item.Header) : [];
 
             header[Data.Models.Metadata.Header.BuildKey] = item.Build;
             header[Data.Models.Metadata.Header.DebugKey] = item.Debug;
@@ -68,7 +68,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Header.TypeKey] = item.Type,
             };
 
-            if (item.ClrMamePro != null)
+            if (item.ClrMamePro is not null)
             {
                 header[Data.Models.Metadata.Header.HeaderKey] = item.ClrMamePro.Header;
                 header[Data.Models.Metadata.Header.ForceMergingKey] = item.ClrMamePro.ForceMerging;
@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.CrossModel
                 header[Data.Models.Metadata.Header.ForcePackingKey] = item.ClrMamePro.ForcePacking;
             }
 
-            if (item.RomCenter != null)
+            if (item.RomCenter is not null)
             {
                 header[Data.Models.Metadata.Header.PluginKey] = item.RomCenter.Plugin;
                 header[Data.Models.Metadata.Header.RomModeKey] = item.RomCenter.RomMode;
@@ -97,12 +97,12 @@ namespace SabreTools.Serialization.CrossModel
         {
             // Get the directory name
             string? dirName = item.Name;
-            if (parent != null)
+            if (parent is not null)
                 dirName = $"{parent}\\{item.Name}";
 
             // Handle machine items
             Data.Models.Metadata.Machine[] machines = [];
-            if (item.Game != null && item.Game.Length > 0)
+            if (item.Game is not null && item.Game.Length > 0)
                 machines = Array.ConvertAll(item.Game, g => ConvertMachineToInternalModel(g, dirName));
 
             // Handle dir items
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.CrossModel
         private static Data.Models.Metadata.Machine ConvertMachineToInternalModel(GameBase item, string? dir = null)
         {
             string? machineName = item.Name;
-            if (machineName != null && dir != null)
+            if (machineName is not null && dir is not null)
                 machineName = $"{dir}\\{machineName}";
 
             var machine = new Data.Models.Metadata.Machine
@@ -148,34 +148,34 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Machine.TruripKey] = item.Trurip,
             };
 
-            if (item.Release != null && item.Release.Length > 0)
+            if (item.Release is not null && item.Release.Length > 0)
                 machine[Data.Models.Metadata.Machine.ReleaseKey] = Array.ConvertAll(item.Release, ConvertToInternalModel);
 
-            if (item.BiosSet != null && item.BiosSet.Length > 0)
+            if (item.BiosSet is not null && item.BiosSet.Length > 0)
                 machine[Data.Models.Metadata.Machine.BiosSetKey] = Array.ConvertAll(item.BiosSet, ConvertToInternalModel);
 
-            if (item.Rom != null && item.Rom.Length > 0)
+            if (item.Rom is not null && item.Rom.Length > 0)
                 machine[Data.Models.Metadata.Machine.RomKey] = Array.ConvertAll(item.Rom, ConvertToInternalModel);
 
-            if (item.Disk != null && item.Disk.Length > 0)
+            if (item.Disk is not null && item.Disk.Length > 0)
                 machine[Data.Models.Metadata.Machine.DiskKey] = Array.ConvertAll(item.Disk, ConvertToInternalModel);
 
-            if (item.Media != null && item.Media.Length > 0)
+            if (item.Media is not null && item.Media.Length > 0)
                 machine[Data.Models.Metadata.Machine.MediaKey] = Array.ConvertAll(item.Media, ConvertToInternalModel);
 
-            if (item.DeviceRef != null && item.DeviceRef.Length > 0)
+            if (item.DeviceRef is not null && item.DeviceRef.Length > 0)
                 machine[Data.Models.Metadata.Machine.DeviceRefKey] = Array.ConvertAll(item.DeviceRef, ConvertToInternalModel);
 
-            if (item.Sample != null && item.Sample.Length > 0)
+            if (item.Sample is not null && item.Sample.Length > 0)
                 machine[Data.Models.Metadata.Machine.SampleKey] = Array.ConvertAll(item.Sample, ConvertToInternalModel);
 
-            if (item.Archive != null && item.Archive.Length > 0)
+            if (item.Archive is not null && item.Archive.Length > 0)
                 machine[Data.Models.Metadata.Machine.ArchiveKey] = Array.ConvertAll(item.Archive, ConvertToInternalModel);
 
-            if (item.Driver != null)
+            if (item.Driver is not null)
                 machine[Data.Models.Metadata.Machine.DriverKey] = ConvertToInternalModel(item.Driver);
 
-            if (item.SoftwareList != null && item.SoftwareList.Length > 0)
+            if (item.SoftwareList is not null && item.SoftwareList.Length > 0)
                 machine[Data.Models.Metadata.Machine.SoftwareListKey] = Array.ConvertAll(item.SoftwareList, ConvertToInternalModel);
 
             return machine;

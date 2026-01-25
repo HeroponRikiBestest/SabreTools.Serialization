@@ -116,7 +116,7 @@ namespace SabreTools.Serialization.Readers
                                 case "machine":
                                 case "resource":
                                 case "set":
-                                    if (game != null)
+                                    if (game is not null)
                                     {
                                         game.Release = [.. releases];
                                         game.BiosSet = [.. biosSets];
@@ -298,7 +298,7 @@ namespace SabreTools.Serialization.Readers
                         {
                             case "source":
                                 string? source = reader.Standalone?.Value;
-                                if (source != null)
+                                if (source is not null)
                                     sources.Add(source);
 
                                 break;
@@ -310,7 +310,7 @@ namespace SabreTools.Serialization.Readers
                             || reader.TopLevel == "machine"
                             || reader.TopLevel == "resource"
                             || reader.TopLevel == "set")
-                        && game != null
+                        && game is not null
                         && reader.RowType == CmpRowType.Internal)
                     {
                         // Create the block
@@ -318,67 +318,67 @@ namespace SabreTools.Serialization.Readers
                         {
                             case "release":
                                 var release = CreateRelease(reader);
-                                if (release != null)
+                                if (release is not null)
                                     releases.Add(release);
                                 break;
                             case "biosset":
                                 var biosSet = CreateBiosSet(reader);
-                                if (biosSet != null)
+                                if (biosSet is not null)
                                     biosSets.Add(biosSet);
                                 break;
                             case "rom":
                                 var rom = CreateRom(reader);
-                                if (rom != null)
+                                if (rom is not null)
                                     roms.Add(rom);
                                 break;
                             case "disk":
                                 var disk = CreateDisk(reader);
-                                if (disk != null)
+                                if (disk is not null)
                                     disks.Add(disk);
                                 break;
                             case "media":
                                 var media = CreateMedia(reader);
-                                if (media != null)
+                                if (media is not null)
                                     medias.Add(media);
                                 break;
                             case "sample":
                                 var sample = CreateSample(reader);
-                                if (sample != null)
+                                if (sample is not null)
                                     samples.Add(sample);
                                 break;
                             case "archive":
                                 var archive = CreateArchive(reader);
-                                if (archive != null)
+                                if (archive is not null)
                                     archives.Add(archive);
                                 break;
                             case "chip":
                                 var chip = CreateChip(reader);
-                                if (chip != null)
+                                if (chip is not null)
                                     chips.Add(chip);
                                 break;
                             case "video":
                                 var video = CreateVideo(reader);
-                                if (video != null)
+                                if (video is not null)
                                     videos.Add(video);
                                 break;
                             case "sound":
                                 var sound = CreateSound(reader);
-                                if (sound != null)
+                                if (sound is not null)
                                     game.Sound = sound;
                                 break;
                             case "input":
                                 var input = CreateInput(reader);
-                                if (input != null)
+                                if (input is not null)
                                     game.Input = input;
                                 break;
                             case "dipswitch":
                                 var dipSwitch = CreateDipSwitch(reader);
-                                if (dipSwitch != null)
+                                if (dipSwitch is not null)
                                     dipSwitches.Add(dipSwitch);
                                 break;
                             case "driver":
                                 var driver = CreateDriver(reader);
-                                if (driver != null)
+                                if (driver is not null)
                                     game.Driver = driver;
                                 break;
                             default:

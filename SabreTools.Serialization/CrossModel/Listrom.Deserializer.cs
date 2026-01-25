@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.CrossModel
             var metadataFile = new MetadataFile();
 
             var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
+            if (machines is not null && machines.Length > 0)
                 metadataFile.Set = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 
             return metadataFile;
@@ -35,13 +35,13 @@ namespace SabreTools.Serialization.CrossModel
             var rowItems = new List<Row>();
 
             var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
-            if (roms != null)
+            if (roms is not null)
             {
                 rowItems.AddRange(Array.ConvertAll(roms, ConvertFromInternalModel));
             }
 
             var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.Machine.DiskKey);
-            if (disks != null)
+            if (disks is not null)
                 rowItems.AddRange(Array.ConvertAll(disks, ConvertFromInternalModel));
 
             set.Row = [.. rowItems];

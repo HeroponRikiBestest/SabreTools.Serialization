@@ -30,7 +30,7 @@ namespace SabreTools.Data.Extensions
 
             // If the RVA matches a section start exactly, use that
             var matchingSection = Array.Find(sections, s => s.VirtualAddress == rva);
-            if (matchingSection != null)
+            if (matchingSection is not null)
                 return rva - matchingSection.VirtualAddress + matchingSection.PointerToRawData;
 
             // Loop through all of the sections
@@ -1009,7 +1009,7 @@ namespace SabreTools.Data.Extensions
             while (offset < entry.Data.Length)
             {
                 string? stringValue = entry.Data.ReadPrefixedUnicodeString(ref offset);
-                if (stringValue != null)
+                if (stringValue is not null)
                 {
                     stringValue = stringValue.Replace("\n", "\\n").Replace("\r", newValue: "\\r");
                     stringTable[stringIndex++] = stringValue;

@@ -69,9 +69,9 @@ namespace SabreTools.Serialization.Readers
             data.SeekIfPossible(current, SeekOrigin.Begin);
 
             // If the strings are valid
-            if ((ftpUrl != null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2))
-                && (logPath != null && (logPath.Length == 0 || logPath.StartsWith("%")))
-                && (messageFont != null && (messageFont.Length == 0 || !IsTypicalControlCode(messageFont, strict: true)))
+            if ((ftpUrl is not null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2))
+                && (logPath is not null && (logPath.Length == 0 || logPath.StartsWith("%")))
+                && (messageFont is not null && (messageFont.Length == 0 || !IsTypicalControlCode(messageFont, strict: true)))
                 && !(ftpUrl.Length == 0 && logPath.Length == 0 && messageFont.Length == 0))
             {
                 // TODO: Figure out if this maps to existing fields
@@ -92,9 +92,9 @@ namespace SabreTools.Serialization.Readers
             data.SeekIfPossible(current, SeekOrigin.Begin);
 
             // If the strings are valid
-            if ((ftpUrl != null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2))
-                && (logPath != null && (logPath.Length == 0 || logPath.StartsWith("%")))
-                && (messageFont != null && (messageFont.Length == 0 || !IsTypicalControlCode(messageFont, strict: true)))
+            if ((ftpUrl is not null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2))
+                && (logPath is not null && (logPath.Length == 0 || logPath.StartsWith("%")))
+                && (messageFont is not null && (messageFont.Length == 0 || !IsTypicalControlCode(messageFont, strict: true)))
                 && !(ftpUrl.Length == 0 && logPath.Length == 0 && messageFont.Length == 0))
             {
                 header.Flags = data.ReadByteValue();
@@ -117,9 +117,9 @@ namespace SabreTools.Serialization.Readers
             data.SeekIfPossible(current, SeekOrigin.Begin);
 
             // If the strings are valid
-            if ((ftpUrl != null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2))
-                && (logPath != null && (logPath.Length == 0 || logPath.StartsWith("%")))
-                && (messageFont != null && (messageFont.Length == 0 || !IsTypicalControlCode(messageFont, strict: true)))
+            if ((ftpUrl is not null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2))
+                && (logPath is not null && (logPath.Length == 0 || logPath.StartsWith("%")))
+                && (messageFont is not null && (messageFont.Length == 0 || !IsTypicalControlCode(messageFont, strict: true)))
                 && !(ftpUrl.Length == 0 && logPath.Length == 0 && messageFont.Length == 0))
             {
                 header.Flags = data.ReadByteValue();
@@ -174,7 +174,7 @@ namespace SabreTools.Serialization.Readers
 
                     // Try to read the next block as an install file call
                     var maybeInstall = ParseInstallFile(data, header.LanguageCount);
-                    if (maybeInstall != null
+                    if (maybeInstall is not null
                         && (maybeInstall.DeflateEnd - maybeInstall.DeflateStart) < data.Length
                         && (maybeInstall.DeflateEnd - maybeInstall.DeflateStart) < maybeInstall.InflatedSize)
                     {
@@ -583,9 +583,9 @@ namespace SabreTools.Serialization.Readers
             obj.ValueName = data.ReadNullTerminatedAnsiString();
 
             // If the delete pattern is found
-            if (obj.UnknownFsllib != null && obj.UnknownFsllib.Length > 0
-                && obj.Key != null && obj.Key.Length == 0
-                && obj.NewValue != null && obj.NewValue.Length == 0)
+            if (obj.UnknownFsllib is not null && obj.UnknownFsllib.Length > 0
+                && obj.Key is not null && obj.Key.Length == 0
+                && obj.NewValue is not null && obj.NewValue.Length == 0)
             {
                 data.SeekIfPossible(-(obj.ValueName?.Length ?? 0) - 1, SeekOrigin.Current);
                 obj.ValueName = obj.NewValue;
@@ -596,7 +596,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // If the last value is a control
-            else if (obj.ValueName != null && IsTypicalControlCode(obj.ValueName, strict: true))
+            else if (obj.ValueName is not null && IsTypicalControlCode(obj.ValueName, strict: true))
             {
                 data.SeekIfPossible(-obj.ValueName.Length - 1, SeekOrigin.Current);
                 obj.ValueName = obj.NewValue;

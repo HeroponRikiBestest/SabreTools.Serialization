@@ -18,18 +18,18 @@ namespace SabreTools.Serialization.CrossModel
             var metadataFile = new MetadataFile();
 
             var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
-            if (header != null)
+            if (header is not null)
                 metadataFile.ClrMamePro = ConvertHeaderFromInternalModel(header);
 
             var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
+            if (machines is not null && machines.Length > 0)
             {
                 metadataFile.Game
                     = Array.ConvertAll(machines, m => ConvertMachineFromInternalModel(m, game));
             }
 
             var info = obj.Read<Data.Models.Metadata.InfoSource>(Data.Models.Metadata.MetadataFile.InfoSourceKey);
-            if (info != null)
+            if (info is not null)
                 metadataFile.Info = ConvertInfoSourceFromInternalModel(info);
 
             return metadataFile;
@@ -78,55 +78,55 @@ namespace SabreTools.Serialization.CrossModel
             gameBase.SampleOf = item.ReadString(Data.Models.Metadata.Machine.SampleOfKey);
 
             var releases = item.Read<Data.Models.Metadata.Release[]>(Data.Models.Metadata.Machine.ReleaseKey);
-            if (releases != null && releases.Length > 0)
+            if (releases is not null && releases.Length > 0)
                 gameBase.Release = Array.ConvertAll(releases, ConvertFromInternalModel);
 
             var biosSets = item.Read<Data.Models.Metadata.BiosSet[]>(Data.Models.Metadata.Machine.BiosSetKey);
-            if (biosSets != null && biosSets.Length > 0)
+            if (biosSets is not null && biosSets.Length > 0)
                 gameBase.BiosSet = Array.ConvertAll(biosSets, ConvertFromInternalModel);
 
             var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
-            if (roms != null && roms.Length > 0)
+            if (roms is not null && roms.Length > 0)
                 gameBase.Rom = Array.ConvertAll(roms, ConvertFromInternalModel);
 
             var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.Machine.DiskKey);
-            if (disks != null && disks.Length > 0)
+            if (disks is not null && disks.Length > 0)
                 gameBase.Disk = Array.ConvertAll(disks, ConvertFromInternalModel);
 
             var medias = item.Read<Data.Models.Metadata.Media[]>(Data.Models.Metadata.Machine.MediaKey);
-            if (medias != null && medias.Length > 0)
+            if (medias is not null && medias.Length > 0)
                 gameBase.Media = Array.ConvertAll(medias, ConvertFromInternalModel);
 
             var samples = item.Read<Data.Models.Metadata.Sample[]>(Data.Models.Metadata.Machine.SampleKey);
-            if (samples != null && samples.Length > 0)
+            if (samples is not null && samples.Length > 0)
                 gameBase.Sample = Array.ConvertAll(samples, ConvertFromInternalModel);
 
             var archives = item.Read<Data.Models.Metadata.Archive[]>(Data.Models.Metadata.Machine.ArchiveKey);
-            if (archives != null && archives.Length > 0)
+            if (archives is not null && archives.Length > 0)
                 gameBase.Archive = Array.ConvertAll(archives, ConvertFromInternalModel);
 
             var chips = item.Read<Data.Models.Metadata.Chip[]>(Data.Models.Metadata.Machine.ChipKey);
-            if (chips != null && chips.Length > 0)
+            if (chips is not null && chips.Length > 0)
                 gameBase.Chip = Array.ConvertAll(chips, ConvertFromInternalModel);
 
             var videos = item.Read<Data.Models.Metadata.Video[]>(Data.Models.Metadata.Machine.VideoKey);
-            if (videos != null && videos.Length > 0)
+            if (videos is not null && videos.Length > 0)
                 gameBase.Video = Array.ConvertAll(videos, ConvertFromInternalModel);
 
             var sound = item.Read<Data.Models.Metadata.Sound>(Data.Models.Metadata.Machine.SoundKey);
-            if (sound != null)
+            if (sound is not null)
                 gameBase.Sound = ConvertFromInternalModel(sound);
 
             var input = item.Read<Data.Models.Metadata.Input>(Data.Models.Metadata.Machine.InputKey);
-            if (input != null)
+            if (input is not null)
                 gameBase.Input = ConvertFromInternalModel(input);
 
             var dipSwitches = item.Read<Data.Models.Metadata.DipSwitch[]>(Data.Models.Metadata.Machine.DipSwitchKey);
-            if (dipSwitches != null && dipSwitches.Length > 0)
+            if (dipSwitches is not null && dipSwitches.Length > 0)
                 gameBase.DipSwitch = Array.ConvertAll(dipSwitches, ConvertFromInternalModel);
 
             var driver = item.Read<Data.Models.Metadata.Driver>(Data.Models.Metadata.Machine.DriverKey);
-            if (driver != null)
+            if (driver is not null)
                 gameBase.Driver = ConvertFromInternalModel(driver);
 
             return gameBase;
@@ -357,7 +357,7 @@ namespace SabreTools.Serialization.CrossModel
             var info = new Info();
 
             var sources = item.Read<string[]>(Data.Models.Metadata.InfoSource.SourceKey);
-            if (sources != null && sources.Length > 0)
+            if (sources is not null && sources.Length > 0)
                 info.Source = [.. sources];
 
             return info;

@@ -183,7 +183,7 @@ namespace SabreTools.Serialization.Wrappers
         public uint GetDirectoryIndexFromFile(int index)
         {
             FileDescriptor? descriptor = GetFileDescriptor(index);
-            if (descriptor != null)
+            if (descriptor is not null)
                 return descriptor.DirectoryIndex;
             else
                 return uint.MaxValue;
@@ -223,7 +223,7 @@ namespace SabreTools.Serialization.Wrappers
         public ulong GetExpandedFileSize(int index)
         {
             FileDescriptor? descriptor = GetFileDescriptor(index);
-            if (descriptor != null)
+            if (descriptor is not null)
                 return descriptor.ExpandedSize;
             else
                 return 0;

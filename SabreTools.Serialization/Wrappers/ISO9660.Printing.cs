@@ -135,7 +135,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(encoding.GetString(vd.VolumeIdentifier), "    Volume Identifier");
 
 
-            if (vd.Unused8Bytes != null && Array.TrueForAll(vd.Unused8Bytes, b => b == 0))
+            if (vd.Unused8Bytes is not null && Array.TrueForAll(vd.Unused8Bytes, b => b == 0))
                 builder.AppendLine("Zeroed", "    Unused 8 Bytes");
             else
                 builder.AppendLine(vd.Unused8Bytes, "    Unused 8 Bytes");
@@ -144,7 +144,7 @@ namespace SabreTools.Serialization.Wrappers
 
             if (vd is PrimaryVolumeDescriptor pvd2)
             {
-                if (pvd2.Unused32Bytes != null && Array.TrueForAll(pvd2.Unused32Bytes, b => b == 0))
+                if (pvd2.Unused32Bytes is not null && Array.TrueForAll(pvd2.Unused32Bytes, b => b == 0))
                     builder.AppendLine("Zeroed", "    Unused 32 Bytes");
                 else
                     builder.AppendLine(pvd2.Unused32Bytes, "    Unused 32 Bytes");
@@ -268,7 +268,7 @@ namespace SabreTools.Serialization.Wrappers
 
             for (int tableNum = 0; tableNum < ptgs.Length; tableNum++)
             {
-                if (ptgs[tableNum].PathTableL != null)
+                if (ptgs[tableNum].PathTableL is not null)
                 {
                     builder.AppendLine($"    Type-L Path Table {tableNum}:");
                     builder.AppendLine("    -------------------------");
@@ -279,7 +279,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine($"    No Type-L Path Table {tableNum}:");
                     builder.AppendLine();
                 }
-                if (ptgs[tableNum].OptionalPathTableL != null)
+                if (ptgs[tableNum].OptionalPathTableL is not null)
                 {
                     builder.AppendLine($"    Optional Type-L Path Table {tableNum}:");
                     builder.AppendLine("    -------------------------");
@@ -290,7 +290,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine($"    No Optional Type-L Path Table {tableNum}:");
                     builder.AppendLine();
                 }
-                if (ptgs[tableNum].PathTableM != null)
+                if (ptgs[tableNum].PathTableM is not null)
                 {
                     builder.AppendLine($"    Type-M Path Table {tableNum}:");
                     builder.AppendLine("    -------------------------");
@@ -301,7 +301,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine($"    No Type-M Path Table {tableNum}:");
                     builder.AppendLine();
                 }
-                if (ptgs[tableNum].OptionalPathTableM != null)
+                if (ptgs[tableNum].OptionalPathTableM is not null)
                 {
                     builder.AppendLine($"    Optional Type-M Path Table {tableNum}:");
                     builder.AppendLine("    -------------------------");
@@ -333,7 +333,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(records[recordNum].ExtendedAttributeRecordLength, "      Extended Attribute Record Length");
                 builder.AppendLine(records[recordNum].ExtentLocation, "      Extent Location");
                 builder.AppendLine(records[recordNum].DirectoryIdentifier, "      Directory Identifier");
-                if (records[recordNum].PaddingField != null)
+                if (records[recordNum].PaddingField is not null)
                     builder.AppendLine(records[recordNum].PaddingField, "      Padding Field");
             }
 

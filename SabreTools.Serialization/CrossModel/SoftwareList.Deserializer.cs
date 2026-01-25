@@ -12,10 +12,10 @@ namespace SabreTools.Serialization.CrossModel
                 return null;
 
             var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
-            var metadataFile = header != null ? ConvertHeaderFromInternalModel(header) : new Data.Models.SoftwareList.SoftwareList();
+            var metadataFile = header is not null ? ConvertHeaderFromInternalModel(header) : new Data.Models.SoftwareList.SoftwareList();
 
             var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
+            if (machines is not null && machines.Length > 0)
                 metadataFile.Software = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 
             return metadataFile;
@@ -52,15 +52,15 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var infos = item.Read<Data.Models.Metadata.Info[]>(Data.Models.Metadata.Machine.InfoKey);
-            if (infos != null && infos.Length > 0)
+            if (infos is not null && infos.Length > 0)
                 software.Info = Array.ConvertAll(infos, ConvertFromInternalModel);
 
             var sharedFeats = item.Read<Data.Models.Metadata.SharedFeat[]>(Data.Models.Metadata.Machine.SharedFeatKey);
-            if (sharedFeats != null && sharedFeats.Length > 0)
+            if (sharedFeats is not null && sharedFeats.Length > 0)
                 software.SharedFeat = Array.ConvertAll(sharedFeats, ConvertFromInternalModel);
 
             var parts = item.Read<Data.Models.Metadata.Part[]>(Data.Models.Metadata.Machine.PartKey);
-            if (parts != null && parts.Length > 0)
+            if (parts is not null && parts.Length > 0)
                 software.Part = Array.ConvertAll(parts, ConvertFromInternalModel);
 
             return software;
@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.DataArea.RomKey);
-            if (roms != null && roms.Length > 0)
+            if (roms is not null && roms.Length > 0)
                 dataArea.Rom = Array.ConvertAll(roms, ConvertFromInternalModel);
 
             return dataArea;
@@ -99,7 +99,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var dipValues = item.Read<Data.Models.Metadata.DipValue[]>(Data.Models.Metadata.DipSwitch.DipValueKey);
-            if (dipValues != null && dipValues.Length > 0)
+            if (dipValues is not null && dipValues.Length > 0)
                 dipSwitch.DipValue = Array.ConvertAll(dipValues, ConvertFromInternalModel);
 
             return dipSwitch;
@@ -146,7 +146,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var disks = item.Read<Data.Models.Metadata.Disk[]>(Data.Models.Metadata.DiskArea.DiskKey);
-            if (disks != null && disks.Length > 0)
+            if (disks is not null && disks.Length > 0)
                 diskArea.Disk = Array.ConvertAll(disks, ConvertFromInternalModel);
 
             return diskArea;
@@ -190,19 +190,19 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var features = item.Read<Data.Models.Metadata.Feature[]>(Data.Models.Metadata.Part.FeatureKey);
-            if (features != null && features.Length > 0)
+            if (features is not null && features.Length > 0)
                 part.Feature = Array.ConvertAll(features, ConvertFromInternalModel);
 
             var dataAreas = item.Read<Data.Models.Metadata.DataArea[]>(Data.Models.Metadata.Part.DataAreaKey);
-            if (dataAreas != null && dataAreas.Length > 0)
+            if (dataAreas is not null && dataAreas.Length > 0)
                 part.DataArea = Array.ConvertAll(dataAreas, ConvertFromInternalModel);
 
             var diskAreas = item.Read<Data.Models.Metadata.DiskArea[]>(Data.Models.Metadata.Part.DiskAreaKey);
-            if (diskAreas != null && diskAreas.Length > 0)
+            if (diskAreas is not null && diskAreas.Length > 0)
                 part.DiskArea = Array.ConvertAll(diskAreas, ConvertFromInternalModel);
 
             var dipSwitches = item.Read<Data.Models.Metadata.DipSwitch[]>(Data.Models.Metadata.Part.DipSwitchKey);
-            if (dipSwitches != null && dipSwitches.Length > 0)
+            if (dipSwitches is not null && dipSwitches.Length > 0)
                 part.DipSwitch = Array.ConvertAll(dipSwitches, ConvertFromInternalModel);
 
             return part;

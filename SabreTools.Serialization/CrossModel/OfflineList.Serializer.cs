@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
-            if (item?.Games?.Game != null && item.Games.Game.Length > 0)
+            if (item?.Games?.Game is not null && item.Games.Game.Length > 0)
             {
                 metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(item.Games.Game, ConvertMachineToInternalModel);
@@ -35,7 +35,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Header.SchemaLocationKey] = item.NoNamespaceSchemaLocation,
             };
 
-            if (item.Configuration != null)
+            if (item.Configuration is not null)
             {
                 header[Data.Models.Metadata.Header.NameKey] = item.Configuration.DatName;
                 header[Data.Models.Metadata.Header.ImFolderKey] = item.Configuration.ImFolder;
@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.CrossModel
                 header[Data.Models.Metadata.Header.RomTitleKey] = item.Configuration.RomTitle;
             }
 
-            if (item.GUI != null)
+            if (item.GUI is not null)
             {
                 header[Data.Models.Metadata.Header.ImagesKey] = item.GUI.Images;
             }
@@ -79,7 +79,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Machine.DuplicateIDKey] = item.DuplicateID,
             };
 
-            if (item.Files?.RomCRC != null && item.Files.RomCRC.Length > 0)
+            if (item.Files?.RomCRC is not null && item.Files.RomCRC.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.RomKey]
                     = Array.ConvertAll(item.Files.RomCRC, romCRC =>

@@ -38,27 +38,27 @@ namespace SabreTools.Serialization.CrossModel
 
             foreach (var hashfile in hashfiles)
             {
-                if (hashfile.SFV != null && hashfile.SFV.Length > 0)
+                if (hashfile.SFV is not null && hashfile.SFV.Length > 0)
                     sfvs.AddRange(hashfile.SFV);
-                if (hashfile.MD2 != null && hashfile.MD2.Length > 0)
+                if (hashfile.MD2 is not null && hashfile.MD2.Length > 0)
                     md2s.AddRange(hashfile.MD2);
-                if (hashfile.MD4 != null && hashfile.MD4.Length > 0)
+                if (hashfile.MD4 is not null && hashfile.MD4.Length > 0)
                     md4s.AddRange(hashfile.MD4);
-                if (hashfile.MD5 != null && hashfile.MD5.Length > 0)
+                if (hashfile.MD5 is not null && hashfile.MD5.Length > 0)
                     md5s.AddRange(hashfile.MD5);
-                if (hashfile.RIPEMD128 != null && hashfile.RIPEMD128.Length > 0)
+                if (hashfile.RIPEMD128 is not null && hashfile.RIPEMD128.Length > 0)
                     ripemd128s.AddRange(hashfile.RIPEMD128);
-                if (hashfile.RIPEMD160 != null && hashfile.RIPEMD160.Length > 0)
+                if (hashfile.RIPEMD160 is not null && hashfile.RIPEMD160.Length > 0)
                     ripemd160s.AddRange(hashfile.RIPEMD160);
-                if (hashfile.SHA1 != null && hashfile.SHA1.Length > 0)
+                if (hashfile.SHA1 is not null && hashfile.SHA1.Length > 0)
                     sha1s.AddRange(hashfile.SHA1);
-                if (hashfile.SHA256 != null && hashfile.SHA256.Length > 0)
+                if (hashfile.SHA256 is not null && hashfile.SHA256.Length > 0)
                     sha256s.AddRange(hashfile.SHA256);
-                if (hashfile.SHA384 != null && hashfile.SHA384.Length > 0)
+                if (hashfile.SHA384 is not null && hashfile.SHA384.Length > 0)
                     sha384s.AddRange(hashfile.SHA384);
-                if (hashfile.SHA512 != null && hashfile.SHA512.Length > 0)
+                if (hashfile.SHA512 is not null && hashfile.SHA512.Length > 0)
                     sha512s.AddRange(hashfile.SHA512);
-                if (hashfile.SpamSum != null && hashfile.SpamSum.Length > 0)
+                if (hashfile.SpamSum is not null && hashfile.SpamSum.Length > 0)
                     spamsums.AddRange(hashfile.SpamSum);
             }
 

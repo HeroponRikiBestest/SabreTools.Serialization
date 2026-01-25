@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached value, if it exists
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 // If we don't have a source filename

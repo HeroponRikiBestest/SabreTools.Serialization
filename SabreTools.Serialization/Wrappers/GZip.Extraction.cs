@@ -37,7 +37,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Ensure directory separators are consistent
                 string filename = Header.OriginalFileName
-                    ?? (Filename != null ? Path.GetFileName(Filename).Replace(".gz", string.Empty) : null)
+                    ?? (Filename is not null ? Path.GetFileName(Filename).Replace(".gz", string.Empty) : null)
                     ?? $"extracted_file";
 
                 if (Path.DirectorySeparatorChar == '\\')
@@ -48,7 +48,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Ensure the full output directory exists
                 filename = Path.Combine(outputDirectory, filename);
                 var directoryName = Path.GetDirectoryName(filename);
-                if (directoryName != null && !Directory.Exists(directoryName))
+                if (directoryName is not null && !Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
 
                 // Open the source as a DEFLATE stream

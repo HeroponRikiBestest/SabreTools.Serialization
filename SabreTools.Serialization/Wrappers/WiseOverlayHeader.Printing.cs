@@ -47,7 +47,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(Model.DibDeflatedSize, "DIB deflated size");
             builder.AppendLine(Model.DibInflatedSize, "DIB inflated size");
             builder.AppendLine(Model.InstallScriptDeflatedSize, "Install script deflated size");
-            if (Model.CharacterSet != null)
+            if (Model.CharacterSet is not null)
                 builder.AppendLine($"Character set: {Model.CharacterSet} (0x{(uint)Model.CharacterSet:X8})");
             else
                 builder.AppendLine((uint?)null, $"Character set");

@@ -161,7 +161,7 @@ namespace SabreTools.Serialization.Wrappers
             // Ensure the full output directory exists
             var filepath = Path.Combine(outputDirectory, filename);
             var directoryName = Path.GetDirectoryName(filepath);
-            if (directoryName != null && !Directory.Exists(directoryName))
+            if (directoryName is not null && !Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
             bool multiExtent = false;

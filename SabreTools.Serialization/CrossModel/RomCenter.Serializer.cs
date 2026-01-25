@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(obj),
             };
 
-            if (obj?.Games?.Rom != null && obj.Games.Rom.Length > 0)
+            if (obj?.Games?.Rom is not null && obj.Games.Rom.Length > 0)
             {
                 metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(obj.Games.Rom, ConvertMachineToInternalModel);
@@ -32,7 +32,7 @@ namespace SabreTools.Serialization.CrossModel
         {
             var header = new Data.Models.Metadata.Header();
 
-            if (item.Credits != null)
+            if (item.Credits is not null)
             {
                 header[Data.Models.Metadata.Header.AuthorKey] = item.Credits.Author;
                 header[Data.Models.Metadata.Header.VersionKey] = item.Credits.Version;
@@ -43,7 +43,7 @@ namespace SabreTools.Serialization.CrossModel
                 header[Data.Models.Metadata.Header.CommentKey] = item.Credits.Comment;
             }
 
-            if (item.Dat != null)
+            if (item.Dat is not null)
             {
                 header[Data.Models.Metadata.Header.DatVersionKey] = item.Dat.Version;
                 header[Data.Models.Metadata.Header.PluginKey] = item.Dat.Plugin;
@@ -54,7 +54,7 @@ namespace SabreTools.Serialization.CrossModel
                     header[Data.Models.Metadata.Header.ForceMergingKey] = "merge";
             }
 
-            if (item.Emulator != null)
+            if (item.Emulator is not null)
             {
                 header[Data.Models.Metadata.Header.RefNameKey] = item.Emulator.RefName;
                 header[Data.Models.Metadata.Header.EmulatorVersionKey] = item.Emulator.Version;

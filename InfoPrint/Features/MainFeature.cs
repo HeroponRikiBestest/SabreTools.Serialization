@@ -142,7 +142,7 @@ namespace InfoPrint.Features
             if (Hash)
             {
                 var hashBuilder = PrintHashInfo(file);
-                if (hashBuilder != null)
+                if (hashBuilder is not null)
                 {
                     // Create the output data
                     string hashData = hashBuilder.ToString();
@@ -243,29 +243,29 @@ namespace InfoPrint.Features
 
                 // Output subset of available hashes
                 var builder = new StringBuilder();
-                if (hashes.TryGetValue(HashType.CRC16, out string? crc16) && crc16 != null)
+                if (hashes.TryGetValue(HashType.CRC16, out string? crc16) && crc16 is not null)
                     builder.AppendLine($"CRC-16 checksum: {crc16}");
-                if (hashes.TryGetValue(HashType.CRC32, out string? crc32) && crc32 != null)
+                if (hashes.TryGetValue(HashType.CRC32, out string? crc32) && crc32 is not null)
                     builder.AppendLine($"CRC-32 checksum: {crc32}");
-                if (hashes.TryGetValue(HashType.CRC64, out string? crc64) && crc64 != null)
+                if (hashes.TryGetValue(HashType.CRC64, out string? crc64) && crc64 is not null)
                     builder.AppendLine($"CRC-64 checksum: {crc64}");
-                if (hashes.TryGetValue(HashType.MD2, out string? md2) && md2 != null)
+                if (hashes.TryGetValue(HashType.MD2, out string? md2) && md2 is not null)
                     builder.AppendLine($"MD2 hash: {md2}");
-                if (hashes.TryGetValue(HashType.MD4, out string? md4) && md4 != null)
+                if (hashes.TryGetValue(HashType.MD4, out string? md4) && md4 is not null)
                     builder.AppendLine($"MD4 hash: {md4}");
-                if (hashes.TryGetValue(HashType.MD5, out string? md5) && md5 != null)
+                if (hashes.TryGetValue(HashType.MD5, out string? md5) && md5 is not null)
                     builder.AppendLine($"MD5 hash: {md5}");
-                if (hashes.TryGetValue(HashType.RIPEMD128, out string? ripemd128) && ripemd128 != null)
+                if (hashes.TryGetValue(HashType.RIPEMD128, out string? ripemd128) && ripemd128 is not null)
                     builder.AppendLine($"RIPEMD-128 hash: {ripemd128}");
-                if (hashes.TryGetValue(HashType.RIPEMD160, out string? ripemd160) && ripemd160 != null)
+                if (hashes.TryGetValue(HashType.RIPEMD160, out string? ripemd160) && ripemd160 is not null)
                     builder.AppendLine($"RIPEMD-160 hash: {ripemd160}");
-                if (hashes.TryGetValue(HashType.SHA1, out string? sha1) && sha1 != null)
+                if (hashes.TryGetValue(HashType.SHA1, out string? sha1) && sha1 is not null)
                     builder.AppendLine($"SHA-1 hash: {sha1}");
-                if (hashes.TryGetValue(HashType.SHA256, out string? sha256) && sha256 != null)
+                if (hashes.TryGetValue(HashType.SHA256, out string? sha256) && sha256 is not null)
                     builder.AppendLine($"SHA-256 hash: {sha256}");
-                if (hashes.TryGetValue(HashType.SHA384, out string? sha384) && sha384 != null)
+                if (hashes.TryGetValue(HashType.SHA384, out string? sha384) && sha384 is not null)
                     builder.AppendLine($"SHA-384 hash: {sha384}");
-                if (hashes.TryGetValue(HashType.SHA512, out string? sha512) && sha512 != null)
+                if (hashes.TryGetValue(HashType.SHA512, out string? sha512) && sha512 is not null)
                     builder.AppendLine($"SHA-512 hash: {sha512}");
 
                 return builder;

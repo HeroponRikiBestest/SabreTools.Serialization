@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string filename, string outputDirectory, bool includeDebug)
         {
             // Ensure the filename
-            if (filename.Length == 0 && Filename != null)
+            if (filename.Length == 0 && Filename is not null)
                 filename = Filename;
 
             // Get the length of the compressed data
@@ -49,7 +49,7 @@ namespace SabreTools.Serialization.Wrappers
             // Ensure the full output directory exists
             filename = Path.Combine(outputDirectory, filename);
             var directoryName = Path.GetDirectoryName(filename);
-            if (directoryName != null && !Directory.Exists(directoryName))
+            if (directoryName is not null && !Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
             // Try to write the data

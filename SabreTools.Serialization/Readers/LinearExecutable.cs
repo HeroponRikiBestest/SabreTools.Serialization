@@ -184,7 +184,7 @@ namespace SabreTools.Serialization.Readers
                     while (true)
                     {
                         var bundle = ParseEntryTableBundle(data);
-                        if (bundle != null)
+                        if (bundle is not null)
                             entryTable.Add(bundle);
 
                         // If we have a 0-length entry

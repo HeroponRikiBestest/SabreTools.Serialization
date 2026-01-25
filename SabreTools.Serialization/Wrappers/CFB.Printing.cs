@@ -99,7 +99,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 builder.AppendLine($"  Directory Entry {i}");
                 builder.AppendLine(entry.Name?.TrimEnd('\0'), "    Name");
-                if (entry.Name != null)
+                if (entry.Name is not null)
                     builder.AppendLine(Encoding.UTF8.GetBytes(entry.Name), "    Name (bytes)");
                 builder.AppendLine(entry.NameLength, "    Name length");
                 builder.AppendLine($"    Object type: {entry.ObjectType} (0x{entry.ObjectType:X})");

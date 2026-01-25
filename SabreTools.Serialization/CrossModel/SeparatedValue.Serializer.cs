@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(obj),
             };
 
-            if (obj?.Row != null && obj.Row.Length > 0)
+            if (obj?.Row is not null && obj.Row.Length > 0)
             {
                 metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(obj.Row, ConvertMachineToInternalModel);
@@ -35,7 +35,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Header.HeaderKey] = item.Header,
             };
 
-            if (item.Row != null && item.Row.Length > 0)
+            if (item.Row is not null && item.Row.Length > 0)
             {
                 var first = item.Row[0];
                 header["FILENAME"] = first.FileName; // TODO: Make this an actual key to retrieve on an item -- OriginalFilename

@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
-            if (item?.Software != null && item.Software.Length > 0)
+            if (item?.Software is not null && item.Software.Length > 0)
             {
                 metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(item.Software, ConvertMachineToInternalModel);
@@ -55,13 +55,13 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Machine.NotesKey] = item.Notes,
             };
 
-            if (item.Info != null && item.Info.Length > 0)
+            if (item.Info is not null && item.Info.Length > 0)
                 machine[Data.Models.Metadata.Machine.InfoKey] = Array.ConvertAll(item.Info, ConvertToInternalModel);
 
-            if (item.SharedFeat != null && item.SharedFeat.Length > 0)
+            if (item.SharedFeat is not null && item.SharedFeat.Length > 0)
                 machine[Data.Models.Metadata.Machine.SharedFeatKey] = Array.ConvertAll(item.SharedFeat, ConvertToInternalModel);
 
-            if (item.Part != null && item.Part.Length > 0)
+            if (item.Part is not null && item.Part.Length > 0)
                 machine[Data.Models.Metadata.Machine.PartKey] = Array.ConvertAll(item.Part, ConvertToInternalModel);
 
             return machine;
@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.DataArea.EndiannessKey] = item.Endianness,
             };
 
-            if (item.Rom != null && item.Rom.Length > 0)
+            if (item.Rom is not null && item.Rom.Length > 0)
                 dataArea[Data.Models.Metadata.DataArea.RomKey] = Array.ConvertAll(item.Rom, ConvertToInternalModel);
 
             return dataArea;
@@ -98,7 +98,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.DipSwitch.MaskKey] = item.Mask,
             };
 
-            if (item.DipValue != null && item.DipValue.Length > 0)
+            if (item.DipValue is not null && item.DipValue.Length > 0)
                 dipSwitch[Data.Models.Metadata.DipSwitch.DipValueKey] = Array.ConvertAll(item.DipValue, ConvertToInternalModel);
 
             return dipSwitch;
@@ -144,7 +144,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.DiskArea.NameKey] = item.Name,
             };
 
-            if (item.Disk != null && item.Disk.Length > 0)
+            if (item.Disk is not null && item.Disk.Length > 0)
                 diskArea[Data.Models.Metadata.DiskArea.DiskKey] = Array.ConvertAll(item.Disk, ConvertToInternalModel);
 
             return diskArea;
@@ -187,16 +187,16 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Part.InterfaceKey] = item.Interface,
             };
 
-            if (item.Feature != null && item.Feature.Length > 0)
+            if (item.Feature is not null && item.Feature.Length > 0)
                 part[Data.Models.Metadata.Part.FeatureKey] = Array.ConvertAll(item.Feature, ConvertToInternalModel);
 
-            if (item.DataArea != null && item.DataArea.Length > 0)
+            if (item.DataArea is not null && item.DataArea.Length > 0)
                 part[Data.Models.Metadata.Part.DataAreaKey] = Array.ConvertAll(item.DataArea, ConvertToInternalModel);
 
-            if (item.DiskArea != null && item.DiskArea.Length > 0)
+            if (item.DiskArea is not null && item.DiskArea.Length > 0)
                 part[Data.Models.Metadata.Part.DiskAreaKey] = Array.ConvertAll(item.DiskArea, ConvertToInternalModel);
 
-            if (item.DipSwitch != null && item.DipSwitch.Length > 0)
+            if (item.DipSwitch is not null && item.DipSwitch.Length > 0)
                 part[Data.Models.Metadata.Part.DipSwitchKey] = Array.ConvertAll(item.DipSwitch, ConvertToInternalModel);
 
             return part;

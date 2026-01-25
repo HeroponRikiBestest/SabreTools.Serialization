@@ -227,7 +227,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Strip the extension and rebuild
                 string? directory = Path.GetDirectoryName(filename);
                 filename = Path.GetFileNameWithoutExtension(filename);
-                if (directory != null)
+                if (directory is not null)
                     filename = Path.Combine(directory, filename);
             }
 

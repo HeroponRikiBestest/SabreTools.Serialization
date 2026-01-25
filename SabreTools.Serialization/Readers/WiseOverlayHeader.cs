@@ -23,7 +23,7 @@ namespace SabreTools.Serialization.Readers
                 var overlayHeader = ParseOverlayHeader(data);
 
                 // DllName
-                if (overlayHeader.DllName != null && overlayHeader.DllName.IndexOfAny(Path.GetInvalidFileNameChars()) > 0)
+                if (overlayHeader.DllName is not null && overlayHeader.DllName.IndexOfAny(Path.GetInvalidFileNameChars()) > 0)
                     return null;
 
                 // WiseColors.dib

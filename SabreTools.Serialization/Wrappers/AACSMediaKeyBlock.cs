@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached value, if it exists
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 // Find the type and version record, if possible

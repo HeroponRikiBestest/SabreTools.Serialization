@@ -78,7 +78,7 @@ namespace SabreTools.Serialization.Wrappers
             for (ushort i = 1; iterate; i++)
             {
                 var file = OpenFileForReading(pattern, i, HEADER_SUFFIX);
-                if (file != null)
+                if (file is not null)
                     iterate = false;
                 else
                     file = OpenFileForReading(pattern, i, CABINET_SUFFIX);
@@ -91,7 +91,7 @@ namespace SabreTools.Serialization.Wrappers
                     break;
 
                 current.VolumeID = i;
-                if (previous != null)
+                if (previous is not null)
                 {
                     previous.Next = current;
                     current.Prev = previous;
@@ -161,7 +161,7 @@ namespace SabreTools.Serialization.Wrappers
                 return pattern;
 
             string? directory = Path.GetDirectoryName(Path.GetFullPath(filename));
-            if (directory != null)
+            if (directory is not null)
                 pattern = Path.Combine(directory, Path.GetFileNameWithoutExtension(filename));
             else
                 pattern = Path.GetFileNameWithoutExtension(filename);
@@ -204,7 +204,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Open the full set if possible
             var cabinet = this;
-            if (Filename != null)
+            if (Filename is not null)
             {
                 // Get the name of the first cabinet file or header
                 string pattern = CreateFilenamePattern(Filename)!;
@@ -245,7 +245,7 @@ namespace SabreTools.Serialization.Wrappers
                         // Ensure the full output directory exists
                         filename = Path.Combine(outputDirectory, filename);
                         var directoryName = Path.GetDirectoryName(filename);
-                        if (directoryName != null && !Directory.Exists(directoryName))
+                        if (directoryName is not null && !Directory.Exists(directoryName))
                             Directory.CreateDirectory(directoryName);
 
                         cabinet.FileSave(i, filename, includeDebug);

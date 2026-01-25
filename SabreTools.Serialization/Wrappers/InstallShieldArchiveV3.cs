@@ -39,7 +39,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Return the prebuilt map
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 // Build the file map
@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Return the prebuilt map
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 // Build the file map

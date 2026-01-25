@@ -161,7 +161,7 @@ namespace SabreTools.Serialization.Readers
                 }
 
                 // Add extra pieces and return
-                if (dat.Games != null && roms.Count > 0)
+                if (dat.Games is not null && roms.Count > 0)
                 {
                     dat.Games.Rom = [.. roms];
                     return dat;

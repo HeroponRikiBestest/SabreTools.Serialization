@@ -63,7 +63,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_entryPointDataLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // If we have no entry point
@@ -114,7 +114,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_headerPaddingDataLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // TODO: Don't scan the known header data as well
@@ -157,7 +157,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_headerPaddingStringsLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // Get the header padding data, if possible
@@ -197,7 +197,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_matroschkaPackageLock)
                 {
                     // Use the cached data if possible
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // Check to see if creation has already been attempted
@@ -268,7 +268,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_installshieldExecutableLock)
                 {
                     // Use the cached data if possible
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // Check to see if creation has already been attempted
@@ -334,7 +334,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // If we have certificate data, use that as the end
-                    if (OptionalHeader.CertificateTable != null)
+                    if (OptionalHeader.CertificateTable is not null)
                     {
                         long certificateTableAddress = OptionalHeader.CertificateTable.VirtualAddress;
                         if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
@@ -372,7 +372,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_overlayDataLock)
                 {
                     // Use the cached data if possible
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // Get the available source length, if possible
@@ -384,7 +384,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // If we have certificate data, use that as the end
-                    if (OptionalHeader.CertificateTable != null)
+                    if (OptionalHeader.CertificateTable is not null)
                     {
                         long certificateTableAddress = OptionalHeader.CertificateTable.VirtualAddress;
                         if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
@@ -441,7 +441,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // If we have certificate data, use that as the end
-                    if (OptionalHeader.CertificateTable != null)
+                    if (OptionalHeader.CertificateTable is not null)
                     {
                         long certificateTableAddress = OptionalHeader.CertificateTable.VirtualAddress;
                         if (certificateTableAddress != 0 && certificateTableAddress < dataLength)
@@ -482,7 +482,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_overlayStringsLock)
                 {
                     // Use the cached data if possible
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // Get the overlay data, if possible
@@ -513,7 +513,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_sectionNamesLock)
                 {
                     // Use the cached data if possible
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // Otherwise, build and return the cached array
@@ -544,7 +544,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_sectionTableTrailerDataLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // Get the offset from the end of the section table
@@ -577,7 +577,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_stubExecutableDataLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // Populate the raw stub executable data based on the source
@@ -629,7 +629,7 @@ namespace SabreTools.Serialization.Wrappers
                 lock (_wiseSectionHeaderLock)
                 {
                     // If we already have cached data, just use that immediately
-                    if (field != null)
+                    if (field is not null)
                         return field;
 
                     // If the header will not be found due to missing section data
@@ -692,7 +692,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("BuildGuid");
@@ -708,7 +708,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("BuildSignature");
@@ -724,7 +724,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("Comments");
@@ -741,7 +741,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("CompanyName");
@@ -757,7 +757,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("DebugVersion");
@@ -775,7 +775,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("FileDescription");
@@ -792,7 +792,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("FileVersion");
@@ -810,7 +810,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("InternalName");
@@ -827,7 +827,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("LegalCopyright");
@@ -845,7 +845,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("LegalTrademarks");
@@ -864,7 +864,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("OriginalFilename");
@@ -882,7 +882,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("PrivateBuild");
@@ -898,7 +898,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("ProductGuid");
@@ -914,7 +914,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("ProductName");
@@ -931,7 +931,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("ProductVersion");
@@ -950,7 +950,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("SpecialBuild") ?? GetVersionInfoString("Special Build");
@@ -966,7 +966,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached data if possible
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 field = GetVersionInfoString("TradeName");
@@ -1311,7 +1311,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Return the match if found
                 match = Array.Find(st.Children, sd => key.Equals(sd.Key, StringComparison.OrdinalIgnoreCase));
-                if (match != null)
+                if (match is not null)
                     return match.Value?.TrimEnd('\0');
             }
 
@@ -1325,7 +1325,7 @@ namespace SabreTools.Serialization.Wrappers
         private AssemblyManifest? GetAssemblyManifest()
         {
             // Use the cached data if possible
-            if (_assemblyManifest != null)
+            if (_assemblyManifest is not null)
                 return _assemblyManifest;
 
             // Cache the resource data for easier reading
@@ -1485,7 +1485,7 @@ namespace SabreTools.Serialization.Wrappers
                     if (signature == 0x3031424E)
                     {
                         var nb10ProgramDatabase = entryData.ParseNB10ProgramDatabase(ref offset);
-                        if (nb10ProgramDatabase != null)
+                        if (nb10ProgramDatabase is not null)
                         {
                             debugData[i] = nb10ProgramDatabase;
                             continue;
@@ -1496,7 +1496,7 @@ namespace SabreTools.Serialization.Wrappers
                     else if (signature == 0x53445352)
                     {
                         var rsdsProgramDatabase = entryData.ParseRSDSProgramDatabase(ref offset);
-                        if (rsdsProgramDatabase != null)
+                        if (rsdsProgramDatabase is not null)
                         {
                             debugData[i] = rsdsProgramDatabase;
                             continue;
@@ -1565,15 +1565,15 @@ namespace SabreTools.Serialization.Wrappers
                 if (resource is not DialogBoxResource dbr || dbr is null)
                     continue;
 
-                if (dbr.DialogItemTemplates != null)
+                if (dbr.DialogItemTemplates is not null)
                 {
-                    var templates = Array.FindAll(dbr.DialogItemTemplates, dit => dit?.TitleResource != null);
+                    var templates = Array.FindAll(dbr.DialogItemTemplates, dit => dit?.TitleResource is not null);
                     if (Array.FindIndex(templates, dit => dit?.TitleResource?.Contains(title) == true) > -1)
                         resources.Add(dbr);
                 }
-                else if (dbr.ExtendedDialogItemTemplates != null)
+                else if (dbr.ExtendedDialogItemTemplates is not null)
                 {
-                    var templates = Array.FindAll(dbr.ExtendedDialogItemTemplates, edit => edit?.TitleResource != null);
+                    var templates = Array.FindAll(dbr.ExtendedDialogItemTemplates, edit => edit?.TitleResource is not null);
                     if (Array.FindIndex(templates, edit => edit?.TitleResource?.Contains(title) == true) > -1)
                         resources.Add(dbr);
                 }
@@ -1718,7 +1718,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     _dataSource.SeekIfPossible(overlayOffset, SeekOrigin.Begin);
                     var header = WiseOverlayHeader.Create(_dataSource);
-                    if (header != null)
+                    if (header is not null)
                         return overlayOffset;
                 }
 
@@ -1730,7 +1730,7 @@ namespace SabreTools.Serialization.Wrappers
                     _dataSource.SeekIfPossible(sectionOffset, SeekOrigin.Begin);
 
                     var header = WiseOverlayHeader.Create(_dataSource);
-                    if (header != null)
+                    if (header is not null)
                         return sectionOffset;
 
                     // Check after the resource table
@@ -1741,7 +1741,7 @@ namespace SabreTools.Serialization.Wrappers
                         _dataSource.SeekIfPossible(afterResourceOffset, SeekOrigin.Begin);
 
                         header = WiseOverlayHeader.Create(_dataSource);
-                        if (header != null)
+                        if (header is not null)
                             return afterResourceOffset;
 
                         // Data following padding data
@@ -1750,7 +1750,7 @@ namespace SabreTools.Serialization.Wrappers
 
                         afterResourceOffset = _dataSource.Position;
                         header = WiseOverlayHeader.Create(_dataSource);
-                        if (header != null)
+                        if (header is not null)
                             return afterResourceOffset;
                     }
                 }
@@ -1832,7 +1832,7 @@ namespace SabreTools.Serialization.Wrappers
                 var entry = table.Entries[i];
                 var newTypes = new List<object>(types ?? []);
 
-                if (entry.Name?.UnicodeString != null)
+                if (entry.Name?.UnicodeString is not null)
                     newTypes.Add(Encoding.Unicode.GetString(entry.Name.UnicodeString));
                 else
                     newTypes.Add(entry.IntegerID);
@@ -1846,9 +1846,9 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         private void ParseResourceDirectoryEntry(Data.Models.PortableExecutable.Resource.DirectoryEntry entry, List<object> types)
         {
-            if (entry.DataEntry != null)
+            if (entry.DataEntry is not null)
                 ParseResourceDataEntry(entry.DataEntry, types);
-            else if (entry.Subdirectory != null)
+            else if (entry.Subdirectory is not null)
                 ParseResourceDirectoryTable(entry.Subdirectory, types);
         }
 
@@ -1870,7 +1870,7 @@ namespace SabreTools.Serialization.Wrappers
             object? value = entry.Data;
 
             // If we have a known resource type
-            if (types != null && types.Count > 0 && types[0] is uint resourceType)
+            if (types is not null && types.Count > 0 && types[0] is uint resourceType)
             {
                 try
                 {
@@ -1954,7 +1954,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // If we have a custom resource type
-            else if (types != null && types.Count > 0 && types[0] is string)
+            else if (types is not null && types.Count > 0 && types[0] is string)
             {
                 value = entry.Data;
             }
@@ -2145,7 +2145,7 @@ namespace SabreTools.Serialization.Wrappers
             _sectionData ??= new byte[SectionNames.Length][];
 
             // If we already have cached data, just use that immediately
-            if (_sectionData[index] != null && _sectionData[index].Length > 0)
+            if (_sectionData[index] is not null && _sectionData[index].Length > 0)
                 return _sectionData[index];
 
             // Populate the raw section data based on the source
@@ -2219,7 +2219,7 @@ namespace SabreTools.Serialization.Wrappers
                 _sectionStringData ??= new List<string>?[SectionNames.Length];
 
                 // If we already have cached data, just use that immediately
-                if (_sectionStringData[index] != null)
+                if (_sectionStringData[index] is not null)
                     return _sectionStringData[index];
 
                 // Get the section data, if possible
@@ -2287,7 +2287,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // If we already have cached data, just use that immediately
-            if (_tableData[index] != null && _tableData[index].Length > 0)
+            if (_tableData[index] is not null && _tableData[index].Length > 0)
                 return _tableData[index];
 
             // Get the table from the optional header
@@ -2322,7 +2322,7 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // If we already have cached data, just use that immediately
-            if (_tableStringData[index] != null)
+            if (_tableStringData[index] is not null)
                 return _tableStringData[index];
 
             // Get the table data, if possible

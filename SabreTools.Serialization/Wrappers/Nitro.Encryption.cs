@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.Wrappers
             else
             {
                 bool? isDecrypted = CheckIfDecrypted(out string? message);
-                if (message != null)
+                if (message is not null)
                     Console.WriteLine(message);
 
                 if (isDecrypted is null)
@@ -149,7 +149,7 @@ namespace SabreTools.Serialization.Wrappers
             else
             {
                 bool? isDecrypted = CheckIfDecrypted(out string? message);
-                if (message != null)
+                if (message is not null)
                     Console.WriteLine(message);
 
                 if (isDecrypted is null)

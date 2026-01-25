@@ -89,7 +89,7 @@ namespace SabreTools.Serialization.Wrappers
                     // Ensure the full output directory exists
                     filename = Path.Combine(outputDirectory, filename);
                     var directoryName = Path.GetDirectoryName(filename);
-                    if (directoryName != null && !Directory.Exists(directoryName))
+                    if (directoryName is not null && !Directory.Exists(directoryName))
                         Directory.CreateDirectory(directoryName);
 
                     // Write the output file
@@ -144,7 +144,7 @@ namespace SabreTools.Serialization.Wrappers
                 string tempFile = string.IsNullOrEmpty(Filename) ? "temp.sxe" : $"{Path.GetFileNameWithoutExtension(Filename)}.sxe";
                 tempFile = Path.Combine(outputDirectory, tempFile);
                 var directoryName = Path.GetDirectoryName(tempFile);
-                if (directoryName != null && !Directory.Exists(directoryName))
+                if (directoryName is not null && !Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
 
                 // Write the file data to a temp file
@@ -291,12 +291,12 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Create the temp filename
                 string tempFile = $"embedded_overlay.{extension}";
-                if (Filename != null)
+                if (Filename is not null)
                     tempFile = $"{Path.GetFileName(Filename)}-{tempFile}";
 
                 tempFile = Path.Combine(outputDirectory, tempFile);
                 var directoryName = Path.GetDirectoryName(tempFile);
-                if (directoryName != null && !Directory.Exists(directoryName))
+                if (directoryName is not null && !Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
 
                 // Write the resource data to a temp file
@@ -496,12 +496,12 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         // Create the temp filename
                         string tempFile = $"embedded_resource_{i++} ({resourceKey}).{extension}";
-                        if (Filename != null)
+                        if (Filename is not null)
                             tempFile = $"{Path.GetFileName(Filename)}-{tempFile}";
 
                         tempFile = Path.Combine(outputDirectory, tempFile);
                         var directoryName = Path.GetDirectoryName(tempFile);
-                        if (directoryName != null && !Directory.Exists(directoryName))
+                        if (directoryName is not null && !Directory.Exists(directoryName))
                             Directory.CreateDirectory(directoryName);
 
                         // Write the resource data to a temp file
@@ -607,7 +607,7 @@ namespace SabreTools.Serialization.Wrappers
                     // Ensure the full output directory exists
                     filename = Path.Combine(outputDirectory, filename);
                     var directoryName = Path.GetDirectoryName(filename);
-                    if (directoryName != null && !Directory.Exists(directoryName))
+                    if (directoryName is not null && !Directory.Exists(directoryName))
                         Directory.CreateDirectory(directoryName);
 
                     // Write the output file
@@ -635,10 +635,10 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Get the source data for reading
             Stream source = _dataSource;
-            if (Filename != null)
+            if (Filename is not null)
             {
                 // Try to open a multipart file
-                if (WiseOverlayHeader.OpenFile(Filename, includeDebug, out var temp) && temp != null)
+                if (WiseOverlayHeader.OpenFile(Filename, includeDebug, out var temp) && temp is not null)
                     source = temp;
             }
 
@@ -675,7 +675,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the source directory
             string? sourceDirectory = null;
-            if (Filename != null)
+            if (Filename is not null)
                 sourceDirectory = Path.GetDirectoryName(Path.GetFullPath(Filename));
 
             // Process the state machine

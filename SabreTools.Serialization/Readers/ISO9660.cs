@@ -473,7 +473,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // If no valid path tables were found, don't add the table group
-            if (groupL.PathTableL != null || groupL.OptionalPathTableL != null || groupL.PathTableM != null || groupL.OptionalPathTableM != null)
+            if (groupL.PathTableL is not null || groupL.OptionalPathTableL is not null || groupL.PathTableM is not null || groupL.OptionalPathTableM is not null)
                 groups.Add(groupL);
 
             // If the both-endian path table size value is consistent, return the single path table group
@@ -504,7 +504,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // If no valid path tables were found, don't add the table group
-            if (groupB.PathTableL != null || groupB.OptionalPathTableL != null || groupB.PathTableM != null || groupB.OptionalPathTableM != null)
+            if (groupB.PathTableL is not null || groupB.OptionalPathTableL is not null || groupB.PathTableM is not null || groupB.OptionalPathTableM is not null)
                 groups.Add(groupB);
 
             return groups;
@@ -743,7 +743,7 @@ namespace SabreTools.Serialization.Readers
                 if (dr.ExtendedAttributeRecordLength > 0)
                 {
                     var ear = ParseExtendedAttributeRecord(data);
-                    if (ear != null)
+                    if (ear is not null)
                     {
                         fileExtent.ExtendedAttributeRecord = ear;
                     }
@@ -759,7 +759,7 @@ namespace SabreTools.Serialization.Readers
             if (!bigEndian && dr.ExtentLocation.IsValid)
             {
                 var bigEndianDir = ParseDirectory(data, sectorLength, blockLength, dr, true);
-                if (bigEndianDir != null)
+                if (bigEndianDir is not null)
                 {
                     // Add new directories to dictionary
                     foreach (var kvp in bigEndianDir)

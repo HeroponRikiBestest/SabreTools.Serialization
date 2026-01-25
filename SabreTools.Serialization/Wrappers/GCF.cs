@@ -26,7 +26,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached value, if it exists
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 // Otherwise, build the data block set
@@ -50,7 +50,7 @@ namespace SabreTools.Serialization.Wrappers
             get
             {
                 // Use the cached value, if it exists
-                if (field != null)
+                if (field is not null)
                     return field;
 
                 // Otherwise, scan and build the files

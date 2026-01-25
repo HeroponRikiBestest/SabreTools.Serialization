@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
-            if (item?.Software != null && item.Software.Length > 0)
+            if (item?.Software is not null && item.Software.Length > 0)
             {
                 metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(item.Software, ConvertMachineToInternalModel);
@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Machine.CountryKey] = item.Country,
             };
 
-            if (item.Dump != null && item.Dump.Length > 0)
+            if (item.Dump is not null && item.Dump.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.DumpKey]
                     = Array.ConvertAll(item.Dump, ConvertToInternalModel);
@@ -68,10 +68,10 @@ namespace SabreTools.Serialization.CrossModel
         {
             var dump = new Data.Models.Metadata.Dump();
 
-            if (item.Original != null)
+            if (item.Original is not null)
                 dump[Data.Models.Metadata.Dump.OriginalKey] = ConvertToInternalModel(item.Original);
 
-            if (item.Rom != null)
+            if (item.Rom is not null)
             {
                 switch (item.Rom)
                 {

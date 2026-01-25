@@ -113,7 +113,7 @@ namespace SabreTools.Serialization.Readers
 
                     // Create and add the file descriptor
                     string? directoryName = ParseDirectoryName(data, majorVersion);
-                    if (directoryName != null)
+                    if (directoryName is not null)
                         cabinet.DirectoryNames[i] = directoryName;
                 }
 

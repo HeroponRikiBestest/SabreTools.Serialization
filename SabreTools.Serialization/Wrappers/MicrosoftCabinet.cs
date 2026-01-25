@@ -278,7 +278,7 @@ namespace SabreTools.Serialization.Wrappers
                     Prev = OpenPrevious(filename, includeDebug);
 
                 // Get all files from Prev
-                if (Prev?.Header != null && Prev.Folders != null)
+                if (Prev?.Header is not null && Prev.Folders is not null)
                 {
                     int prevFolderIndex = Prev.FolderCount - 1;
                     prevFiles = Prev.GetSpannedFiles(filename, prevFolderIndex, includeDebug, skipNext: true) ?? [];
@@ -294,7 +294,7 @@ namespace SabreTools.Serialization.Wrappers
                     Next = OpenNext(filename);
 
                 // Get all files from Prev
-                if (Next?.Header != null && Next.Folders != null)
+                if (Next?.Header is not null && Next.Folders is not null)
                 {
                     var nextFolder = Next.Folders[0];
                     nextFiles = Next.GetSpannedFiles(filename, 0, includeDebug, skipPrev: true) ?? [];

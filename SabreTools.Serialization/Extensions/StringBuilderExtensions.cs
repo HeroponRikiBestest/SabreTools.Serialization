@@ -281,7 +281,7 @@ namespace SabreTools.Data.Extensions
         public static StringBuilder AppendLine(this StringBuilder sb, char[]? value, string prefixString)
         {
             string valueString = "[NULL]";
-            if (value != null)
+            if (value is not null)
             {
                 var valueArr = Array.ConvertAll(value, c => c.ToString());
                 valueString = string.Join(", ", valueArr);
@@ -299,7 +299,7 @@ namespace SabreTools.Data.Extensions
         public static StringBuilder AppendLine(this StringBuilder sb, short[]? value, string prefixString)
         {
             string valueString = "[NULL]";
-            if (value != null)
+            if (value is not null)
             {
                 var valueArr = Array.ConvertAll(value, s => s.ToString());
                 valueString = string.Join(", ", valueArr);
@@ -317,7 +317,7 @@ namespace SabreTools.Data.Extensions
         public static StringBuilder AppendLine(this StringBuilder sb, ushort[]? value, string prefixString)
         {
             string valueString = "[NULL]";
-            if (value != null)
+            if (value is not null)
             {
                 var valueArr = Array.ConvertAll(value, u => u.ToString());
                 valueString = string.Join(", ", valueArr);
@@ -335,7 +335,7 @@ namespace SabreTools.Data.Extensions
         public static StringBuilder AppendLine(this StringBuilder sb, int[]? value, string prefixString)
         {
             string valueString = "[NULL]";
-            if (value != null)
+            if (value is not null)
             {
                 var valueArr = Array.ConvertAll(value, i => i.ToString());
                 valueString = string.Join(", ", valueArr);
@@ -353,7 +353,7 @@ namespace SabreTools.Data.Extensions
         public static StringBuilder AppendLine(this StringBuilder sb, uint[]? value, string prefixString)
         {
             string valueString = "[NULL]";
-            if (value != null)
+            if (value is not null)
             {
                 var valueArr = Array.ConvertAll(value, u => u.ToString());
                 valueString = string.Join(", ", valueArr);
@@ -371,7 +371,7 @@ namespace SabreTools.Data.Extensions
         public static StringBuilder AppendLine(this StringBuilder sb, float[]? value, string prefixString)
         {
             string valueString = "[NULL]";
-            if (value != null)
+            if (value is not null)
             {
                 var valueArr = Array.ConvertAll(value, u => u.ToString());
                 valueString = string.Join(", ", valueArr);
@@ -389,7 +389,7 @@ namespace SabreTools.Data.Extensions
         public static StringBuilder AppendLine(this StringBuilder sb, long[]? value, string prefixString)
         {
             string valueString = "[NULL]";
-            if (value != null)
+            if (value is not null)
             {
                 var valueArr = Array.ConvertAll(value, l => l.ToString());
                 valueString = string.Join(", ", valueArr);
@@ -407,7 +407,7 @@ namespace SabreTools.Data.Extensions
         public static StringBuilder AppendLine(this StringBuilder sb, ulong[]? value, string prefixString)
         {
             string valueString = "[NULL]";
-            if (value != null)
+            if (value is not null)
             {
                 var valueArr = Array.ConvertAll(value, u => u.ToString());
                 valueString = string.Join(", ", valueArr);
@@ -425,7 +425,7 @@ namespace SabreTools.Data.Extensions
         public static StringBuilder AppendLine(this StringBuilder sb, double[]? value, string prefixString)
         {
             string valueString = "[NULL]";
-            if (value != null)
+            if (value is not null)
             {
                 var valueArr = Array.ConvertAll(value, u => u.ToString());
                 valueString = string.Join(", ", valueArr);
@@ -443,7 +443,7 @@ namespace SabreTools.Data.Extensions
         public static StringBuilder AppendLine(this StringBuilder sb, Guid[]? value, string prefixString)
         {
             string valueString = "[NULL]";
-            if (value != null)
+            if (value is not null)
             {
                 var valueArr = Array.ConvertAll(value, g => g.ToString());
                 valueString = string.Join(", ", valueArr);

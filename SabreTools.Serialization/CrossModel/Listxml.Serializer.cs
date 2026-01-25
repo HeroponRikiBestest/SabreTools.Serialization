@@ -16,7 +16,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.MetadataFile.HeaderKey] = ConvertHeaderToInternalModel(item),
             };
 
-            if (item?.Game != null && item.Game.Length > 0)
+            if (item?.Game is not null && item.Game.Length > 0)
             {
                 metadataFile[Data.Models.Metadata.MetadataFile.MachineKey]
                     = Array.ConvertAll(item.Game, ConvertMachineToInternalModel);
@@ -61,112 +61,112 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Machine.HistoryKey] = item.History,
             };
 
-            if (item.BiosSet != null && item.BiosSet.Length > 0)
+            if (item.BiosSet is not null && item.BiosSet.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.BiosSetKey]
                     = Array.ConvertAll(item.BiosSet, ConvertToInternalModel);
             }
 
-            if (item.Rom != null && item.Rom.Length > 0)
+            if (item.Rom is not null && item.Rom.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.RomKey]
                     = Array.ConvertAll(item.Rom, ConvertToInternalModel);
             }
 
-            if (item.Disk != null && item.Disk.Length > 0)
+            if (item.Disk is not null && item.Disk.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.DiskKey]
                     = Array.ConvertAll(item.Disk, ConvertToInternalModel);
             }
 
-            if (item.DeviceRef != null && item.DeviceRef.Length > 0)
+            if (item.DeviceRef is not null && item.DeviceRef.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.DeviceRefKey]
                     = Array.ConvertAll(item.DeviceRef, ConvertToInternalModel);
             }
 
-            if (item.Sample != null && item.Sample.Length > 0)
+            if (item.Sample is not null && item.Sample.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.SampleKey]
                     = Array.ConvertAll(item.Sample, ConvertToInternalModel);
             }
 
-            if (item.Chip != null && item.Chip.Length > 0)
+            if (item.Chip is not null && item.Chip.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.ChipKey]
                     = Array.ConvertAll(item.Chip, ConvertToInternalModel);
             }
 
-            if (item.Display != null && item.Display.Length > 0)
+            if (item.Display is not null && item.Display.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.DisplayKey]
                     = Array.ConvertAll(item.Display, ConvertToInternalModel);
             }
 
-            if (item.Video != null && item.Video.Length > 0)
+            if (item.Video is not null && item.Video.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.VideoKey]
                     = Array.ConvertAll(item.Video, ConvertToInternalModel);
             }
 
-            if (item.Sound != null)
+            if (item.Sound is not null)
                 machine[Data.Models.Metadata.Machine.SoundKey] = ConvertToInternalModel(item.Sound);
 
-            if (item.Input != null)
+            if (item.Input is not null)
                 machine[Data.Models.Metadata.Machine.InputKey] = ConvertToInternalModel(item.Input);
 
-            if (item.DipSwitch != null && item.DipSwitch.Length > 0)
+            if (item.DipSwitch is not null && item.DipSwitch.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.DipSwitchKey]
                     = Array.ConvertAll(item.DipSwitch, ConvertToInternalModel);
             }
 
-            if (item.Configuration != null && item.Configuration.Length > 0)
+            if (item.Configuration is not null && item.Configuration.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.ConfigurationKey]
                     = Array.ConvertAll(item.Configuration, ConvertToInternalModel);
             }
 
-            if (item.Port != null && item.Port.Length > 0)
+            if (item.Port is not null && item.Port.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.PortKey]
                     = Array.ConvertAll(item.Port, ConvertToInternalModel);
             }
 
-            if (item.Adjuster != null && item.Adjuster.Length > 0)
+            if (item.Adjuster is not null && item.Adjuster.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.AdjusterKey]
                     = Array.ConvertAll(item.Adjuster, ConvertToInternalModel);
             }
 
-            if (item.Driver != null)
+            if (item.Driver is not null)
                 machine[Data.Models.Metadata.Machine.DriverKey] = ConvertToInternalModel(item.Driver);
 
-            if (item.Feature != null && item.Feature.Length > 0)
+            if (item.Feature is not null && item.Feature.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.FeatureKey]
                     = Array.ConvertAll(item.Feature, ConvertToInternalModel);
             }
 
-            if (item.Device != null && item.Device.Length > 0)
+            if (item.Device is not null && item.Device.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.DeviceKey]
                     = Array.ConvertAll(item.Device, ConvertToInternalModel);
             }
 
-            if (item.Slot != null && item.Slot.Length > 0)
+            if (item.Slot is not null && item.Slot.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.SlotKey]
                     = Array.ConvertAll(item.Slot, ConvertToInternalModel);
             }
 
-            if (item.SoftwareList != null && item.SoftwareList.Length > 0)
+            if (item.SoftwareList is not null && item.SoftwareList.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.SoftwareListKey]
                     = Array.ConvertAll(item.SoftwareList, ConvertToInternalModel);
             }
 
-            if (item.RamOption != null && item.RamOption.Length > 0)
+            if (item.RamOption is not null && item.RamOption.Length > 0)
             {
                 machine[Data.Models.Metadata.Machine.RamOptionKey]
                     = Array.ConvertAll(item.RamOption, ConvertToInternalModel);
@@ -186,7 +186,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Adjuster.DefaultKey] = item.Default,
             };
 
-            if (item.Condition != null)
+            if (item.Condition is not null)
                 adjuster[Data.Models.Metadata.Adjuster.ConditionKey] = ConvertToInternalModel(item.Condition);
 
             return adjuster;
@@ -261,16 +261,16 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Configuration.MaskKey] = item.Mask,
             };
 
-            if (item.Condition != null)
+            if (item.Condition is not null)
                 configuration[Data.Models.Metadata.Configuration.ConditionKey] = ConvertToInternalModel(item.Condition);
 
-            if (item.ConfLocation != null && item.ConfLocation.Length > 0)
+            if (item.ConfLocation is not null && item.ConfLocation.Length > 0)
             {
                 configuration[Data.Models.Metadata.Configuration.ConfLocationKey]
                     = Array.ConvertAll(item.ConfLocation, ConvertToInternalModel);
             }
 
-            if (item.ConfSetting != null && item.ConfSetting.Length > 0)
+            if (item.ConfSetting is not null && item.ConfSetting.Length > 0)
             {
                 configuration[Data.Models.Metadata.Configuration.ConfSettingKey]
                     = Array.ConvertAll(item.ConfSetting, ConvertToInternalModel);
@@ -305,7 +305,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.ConfSetting.DefaultKey] = item.Default,
             };
 
-            if (item.Condition != null)
+            if (item.Condition is not null)
                 confSetting[Data.Models.Metadata.ConfSetting.ConditionKey] = ConvertToInternalModel(item.Condition);
 
             return confSetting;
@@ -348,10 +348,10 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Device.InterfaceKey] = item.Interface,
             };
 
-            if (item.Instance != null)
+            if (item.Instance is not null)
                 device[Data.Models.Metadata.Device.InstanceKey] = ConvertToInternalModel(item.Instance);
 
-            if (item.Extension != null && item.Extension.Length > 0)
+            if (item.Extension is not null && item.Extension.Length > 0)
             {
                 device[Data.Models.Metadata.Device.ExtensionKey]
                     = Array.ConvertAll(item.Extension, ConvertToInternalModel);
@@ -398,16 +398,16 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.DipSwitch.MaskKey] = item.Mask,
             };
 
-            if (item.Condition != null)
+            if (item.Condition is not null)
                 dipSwitch[Data.Models.Metadata.DipSwitch.ConditionKey] = ConvertToInternalModel(item.Condition);
 
-            if (item.DipLocation != null && item.DipLocation.Length > 0)
+            if (item.DipLocation is not null && item.DipLocation.Length > 0)
             {
                 dipSwitch[Data.Models.Metadata.DipSwitch.DipLocationKey]
                     = Array.ConvertAll(item.DipLocation, ConvertToInternalModel);
             }
 
-            if (item.DipValue != null && item.DipValue.Length > 0)
+            if (item.DipValue is not null && item.DipValue.Length > 0)
             {
                 dipSwitch[Data.Models.Metadata.DipSwitch.DipValueKey]
                     = Array.ConvertAll(item.DipValue, ConvertToInternalModel);
@@ -428,7 +428,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.DipValue.DefaultKey] = item.Default,
             };
 
-            if (item.Condition != null)
+            if (item.Condition is not null)
                 dipValue[Data.Models.Metadata.DipValue.ConditionKey] = ConvertToInternalModel(item.Condition);
 
             return dipValue;
@@ -542,7 +542,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Input.CoinsKey] = item.Coins,
             };
 
-            if (item.Control != null && item.Control.Length > 0)
+            if (item.Control is not null && item.Control.Length > 0)
             {
                 input[Data.Models.Metadata.Input.ControlKey]
                     = Array.ConvertAll(item.Control, ConvertToInternalModel);
@@ -574,7 +574,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Port.TagKey] = item.Tag,
             };
 
-            if (item.Analog != null && item.Analog.Length > 0)
+            if (item.Analog is not null && item.Analog.Length > 0)
             {
                 port[Data.Models.Metadata.Port.AnalogKey]
                     = Array.ConvertAll(item.Analog, ConvertToInternalModel);
@@ -642,7 +642,7 @@ namespace SabreTools.Serialization.CrossModel
                 [Data.Models.Metadata.Slot.NameKey] = item.Name,
             };
 
-            if (item.SlotOption != null && item.SlotOption.Length > 0)
+            if (item.SlotOption is not null && item.SlotOption.Length > 0)
             {
                 slot[Data.Models.Metadata.Slot.SlotOptionKey]
                     = Array.ConvertAll(item.SlotOption, ConvertToInternalModel);

@@ -122,7 +122,7 @@ namespace SabreTools.Serialization.Writers
             if (!string.IsNullOrEmpty(cueTrack.Title))
                 sw.WriteLine($"    TITLE {cueTrack.Title}");
 
-            if (cueTrack.PreGap != null)
+            if (cueTrack.PreGap is not null)
                 WritePreGap(cueTrack.PreGap, sw);
 
             foreach (var index in cueTrack.Indices)
@@ -130,7 +130,7 @@ namespace SabreTools.Serialization.Writers
                 WriteCueIndex(index, sw);
             }
 
-            if (cueTrack.PostGap != null)
+            if (cueTrack.PostGap is not null)
                 WritePostGap(cueTrack.PostGap, sw);
         }
 

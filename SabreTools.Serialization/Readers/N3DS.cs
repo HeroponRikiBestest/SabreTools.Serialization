@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Cache the media unit size for further use
                 long mediaUnitSize = 0;
-                if (header.PartitionFlags != null)
+                if (header.PartitionFlags is not null)
                     mediaUnitSize = (uint)(0x200 * Math.Pow(2, header.PartitionFlags[(int)NCSDFlags.MediaUnitSize]));
 
                 #region Partitions

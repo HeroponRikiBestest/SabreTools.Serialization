@@ -12,10 +12,10 @@ namespace SabreTools.Serialization.CrossModel
                 return null;
 
             var header = obj.Read<Data.Models.Metadata.Header>(Data.Models.Metadata.MetadataFile.HeaderKey);
-            var softwareDb = header != null ? ConvertHeaderFromInternalModel(header) : new SoftwareDb();
+            var softwareDb = header is not null ? ConvertHeaderFromInternalModel(header) : new SoftwareDb();
 
             var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
-            if (machines != null && machines.Length > 0)
+            if (machines is not null && machines.Length > 0)
                 softwareDb.Software = Array.ConvertAll(machines, ConvertMachineFromInternalModel);
 
             return softwareDb;
@@ -49,7 +49,7 @@ namespace SabreTools.Serialization.CrossModel
             };
 
             var dumps = item.Read<Data.Models.Metadata.Dump[]>(Data.Models.Metadata.Machine.DumpKey);
-            if (dumps != null && dumps.Length > 0)
+            if (dumps is not null && dumps.Length > 0)
                 game.Dump = Array.ConvertAll(dumps, ConvertFromInternalModel);
 
             return game;
@@ -63,19 +63,19 @@ namespace SabreTools.Serialization.CrossModel
             var dump = new Dump();
 
             var original = item.Read<Data.Models.Metadata.Original>(Data.Models.Metadata.Dump.OriginalKey);
-            if (original != null)
+            if (original is not null)
                 dump.Original = ConvertFromInternalModel(original);
 
             var rom = item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.RomKey);
-            if (rom != null)
+            if (rom is not null)
                 dump.Rom = ConvertRomFromInternalModel(rom);
 
             var megaRom = item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.MegaRomKey);
-            if (megaRom != null)
+            if (megaRom is not null)
                 dump.Rom = ConvertMegaRomFromInternalModel(megaRom);
 
             var sccPlusCart = item.Read<Data.Models.Metadata.Rom>(Data.Models.Metadata.Dump.SCCPlusCartKey);
-            if (sccPlusCart != null)
+            if (sccPlusCart is not null)
                 dump.Rom = ConvertSCCPlusCartFromInternalModel(sccPlusCart);
 
             return dump;

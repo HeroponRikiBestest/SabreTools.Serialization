@@ -35,7 +35,7 @@ namespace SabreTools.Data.Models.Metadata
                 return null;
 
             bool? asBool = Read<bool?>(key);
-            if (asBool != null)
+            if (asBool is not null)
                 return asBool;
 
             string? asString = Read<string>(key);
@@ -56,11 +56,11 @@ namespace SabreTools.Data.Models.Metadata
                 return null;
 
             double? asDouble = Read<double?>(key);
-            if (asDouble != null)
+            if (asDouble is not null)
                 return asDouble;
 
             string? asString = Read<string>(key);
-            if (asString != null && double.TryParse(asString, out double asStringDouble))
+            if (asString is not null && double.TryParse(asString, out double asStringDouble))
                 return asStringDouble;
 
             return null;
@@ -76,11 +76,11 @@ namespace SabreTools.Data.Models.Metadata
                 return null;
 
             long? asLong = Read<long?>(key);
-            if (asLong != null)
+            if (asLong is not null)
                 return asLong;
 
             string? asString = Read<string>(key);
-            if (asString != null && long.TryParse(asString, out long asStringLong))
+            if (asString is not null && long.TryParse(asString, out long asStringLong))
                 return asStringLong;
 
             return null;
@@ -95,11 +95,11 @@ namespace SabreTools.Data.Models.Metadata
                 return null;
 
             string? asString = Read<string>(key);
-            if (asString != null)
+            if (asString is not null)
                 return asString;
 
             string[]? asArray = Read<string[]>(key);
-            if (asArray != null)
+            if (asArray is not null)
 #if NETFRAMEWORK || NETSTANDARD2_0
                 return string.Join(",", asArray);
 #else
@@ -121,15 +121,15 @@ namespace SabreTools.Data.Models.Metadata
                 return null;
 
             string[]? asArray = Read<string[]>(key);
-            if (asArray != null)
+            if (asArray is not null)
                 return asArray;
 
             string? asString = Read<string>(key);
-            if (asString != null)
+            if (asString is not null)
                 return [asString];
 
             asString = this[key]!.ToString();
-            if (asString != null)
+            if (asString is not null)
                 return [asString];
 
             return null;
