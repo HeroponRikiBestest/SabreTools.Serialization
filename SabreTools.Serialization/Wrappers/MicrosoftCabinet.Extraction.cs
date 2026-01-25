@@ -259,7 +259,7 @@ namespace SabreTools.Serialization.Wrappers
 
                         var folder = cabinet.Folders[f];
                         var files = cabinet.GetSpannedFilesArray(currentCabFilename, f, includeDebug);
-                        
+
                         // Ensure folder contains data
                         if (folder.DataCount == 0)
                             return false;
@@ -270,9 +270,9 @@ namespace SabreTools.Serialization.Wrappers
                         var compressionType = GetCompressionType(folder);
                         if (compressionType == CompressionType.TYPE_QUANTUM || compressionType == CompressionType.TYPE_LZX)
                             continue;
-                        
+
                         var reader = new Reader(cabinet, folder, files);
-                        
+
                         reader.ExtractData(outputDirectory, compressionType, f, includeDebug);
                     }
 
@@ -295,14 +295,14 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
             }
         }
-        
+
         /// <summary>
         /// Helper to extract files from a cabinet set
         /// </summary>
         private class Reader
         {
             #region Private Instance Variables
-            
+
             /// <summary>
             /// Current cabinet file being read from
             /// </summary>
@@ -316,8 +316,8 @@ namespace SabreTools.Serialization.Wrappers
             /// <summary>
             /// Current array of files to be extracted
             /// </summary>
-            private CFFILE[] _files;
-            
+            private readonly CFFILE[] _files;
+
             /// <summary>
             /// Current number of bytes left to write of the current file
             /// </summary>
@@ -332,12 +332,12 @@ namespace SabreTools.Serialization.Wrappers
             /// Current offset in the cabinet being read from
             /// </summary>
             private long _offset;
-        
+
             /// <summary>
             /// Current output filestream being written to
             /// </summary>
             private FileStream? _fileStream;
-            
+
             #endregion
 
             #region Constructors
@@ -354,7 +354,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             #endregion
-            
+
             /// <summary>
             /// Get stream representing the output file
             /// </summary>
@@ -378,8 +378,7 @@ namespace SabreTools.Serialization.Wrappers
                 // Open the output file for writing
                 return File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
             }
-            
-            
+
             /// <summary>
             /// Read a datablock from a cabinet
             /// </summary>
@@ -417,7 +416,7 @@ namespace SabreTools.Serialization.Wrappers
                     return null;
                 }
             }
-            
+
             /// <summary>
             /// Extract the data from a folder
             /// </summary>
@@ -455,7 +454,7 @@ namespace SabreTools.Serialization.Wrappers
                         {
                             if (_cabinet.Next == null)
                                 break; // Next cab is missing, continue
-                            
+
                             _cabinet = _cabinet.Next;
 
                             // CompressionType not updated because there's no way it's possible that it can swap on continued blocks
@@ -516,7 +515,7 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     if (_fileStream == null)
                         return;
-                    
+
                     _fileStream.Write(data);
                     _bytesLeft -= data.Length;
                 }
@@ -525,15 +524,15 @@ namespace SabreTools.Serialization.Wrappers
                     long tempBytesLeft = _bytesLeft;
                     if (_fileStream == null)
                         return;
-                    
+
                     // If there are still bytes left to write, but less bytes than the length of the current data to be written
                     if (_bytesLeft > 0 && _bytesLeft < data.Length)
                         _fileStream.Write(data, 0, (int)_bytesLeft);
-                    
+
                     // Close and iterate file.
                     if (EndFile(outputDirectory))
                         return;
-                    
+
                     // While the file still has bytes that need to be written to it, but less bytes than the input data still has to be written.
                     while (_bytesLeft < data.Length - tempBytesLeft)
                     {
@@ -565,7 +564,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 if (_fileStream == null)
                     return false;
-                
+
                 _fileStream.Close();
 
                 // reached end of folder
@@ -575,11 +574,11 @@ namespace SabreTools.Serialization.Wrappers
                 ++_fileCounter;
                 _bytesLeft = (int)_files[_fileCounter].FileSize;
                 _fileStream = GetFileStream(_files[_fileCounter].Name, outputDirectory);
-                
+
                 return false;
             }
         }
-        
+
         #endregion
 
         #region Checksumming
