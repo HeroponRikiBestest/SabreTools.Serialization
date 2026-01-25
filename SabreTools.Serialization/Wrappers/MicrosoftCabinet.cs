@@ -43,65 +43,22 @@ namespace SabreTools.Serialization.Wrappers
         #region Constructors
 
         /// <inheritdoc/>
-        public MicrosoftCabinet(Cabinet model, byte[] data) : base(model, data)
-        {
-                _fileStream = null;
-                _file = new CFFILE();
-                _files = [];
-                _folder = new CFFOLDER();
-                _cabinet = this;
-        }
+        public MicrosoftCabinet(Cabinet model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public MicrosoftCabinet(Cabinet model, byte[] data, int offset) : base(model, data, offset)
-        {
-            _fileStream = null;
-            _file = new CFFILE();
-            _files = [];
-            _folder = new CFFOLDER();
-            _cabinet = this;
-        }
+        public MicrosoftCabinet(Cabinet model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public MicrosoftCabinet(Cabinet model, byte[] data, int offset, int length) : base(model, data, offset, length)
-        {
-            _fileStream = null;
-            _file = new CFFILE();
-            _files = [];
-            _folder = new CFFOLDER();
-            _cabinet = this;
-        }
+        public MicrosoftCabinet(Cabinet model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public MicrosoftCabinet(Cabinet model, Stream data) : base(model, data)
-        {
-            _fileStream = null;
-            _file = new CFFILE();
-            _files = [];
-            _folder = new CFFOLDER();
-            _cabinet = this;
-        }
+        public MicrosoftCabinet(Cabinet model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public MicrosoftCabinet(Cabinet model, Stream data, long offset) : base(model, data, offset)
-        {
-            _fileStream = null;
-            _file = new CFFILE();
-            _files = [];
-            _folder = new CFFOLDER();
-            _cabinet = this;
-        }
+        public MicrosoftCabinet(Cabinet model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public MicrosoftCabinet(Cabinet model, Stream data, long offset, long length) : base(model, data, offset,
-            length)
-        {
-            _fileStream = null;
-            _file = new CFFILE();
-            _files = [];
-            _folder = new CFFOLDER();
-            _cabinet = this;
-        }
+        public MicrosoftCabinet(Cabinet model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 

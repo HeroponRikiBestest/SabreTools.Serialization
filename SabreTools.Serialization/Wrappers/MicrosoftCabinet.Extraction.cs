@@ -23,46 +23,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <remarks>Only used in multi-file</remarks>
         public MicrosoftCabinet? Prev { get; set; }
         
-        /// <summary>
-        /// Current cabinet file being read from
-        /// </summary>
-        private MicrosoftCabinet _cabinet;
-
-        /// <summary>
-        /// Current folder being read from
-        /// </summary>
-        private CFFOLDER _folder;
-
-        /// <summary>
-        /// Current array of files to be extracted
-        /// </summary>
-        private CFFILE[] _files;
-
-        /// <summary>
-        /// Current file being extracted
-        /// </summary>
-        private CFFILE _file;
-
-        /// <summary>
-        /// Current number of bytes left to write of the current file
-        /// </summary>
-        private int _bytesLeft;
-
-        /// <summary>
-        /// Current index in the folder of files to extract
-        /// </summary>
-        private int _fileCounter;
-
-        /// <summary>
-        /// Current offset in the cabinet being read from
-        /// </summary>
-        private long _offset;
-        
-        /// <summary>
-        /// Current output filestream being written to
-        /// </summary>
-        private FileStream? _fileStream;
-        
         #endregion
 
         #region Cabinet Set
@@ -272,69 +232,6 @@ namespace SabreTools.Serialization.Wrappers
         }
 
         /// <summary>
-        /// Get stream representing the output file
-        /// </summary>
-        /// <param name="filename">Filename for the file that will be extracted to</param>
-        /// <param name="outputDirectory">Path to the output directory</param>
-        /// <returns>Filestream opened for the file</returns>
-        private FileStream GetFileStream(string filename, string outputDirectory)
-        {
-            // Ensure directory separators are consistent
-            if (Path.DirectorySeparatorChar == '\\')
-                filename = filename.Replace('/', '\\');
-            else if (Path.DirectorySeparatorChar == '/')
-                filename = filename.Replace('\\', '/');
-
-            // Ensure the full output directory exists
-            filename = Path.Combine(outputDirectory, filename);
-            var directoryName = Path.GetDirectoryName(filename);
-            if (directoryName != null && !Directory.Exists(directoryName))
-                Directory.CreateDirectory(directoryName);
-
-            // Open the output file for writing
-            return File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-        }
-
-        /// <summary>
-        /// Read a datablock from a cabinet
-        /// </summary>
-        /// <param name="offset">Offset to be read from</param>
-        /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        /// <returns>Read datablock</returns>
-        private CFDATA? ReadBlock(bool includeDebug)
-        {
-            try
-            {
-                lock (_cabinet._dataSourceLock)
-                {
-                    _cabinet._dataSource.SeekIfPossible(_offset, SeekOrigin.Begin);
-                    var dataBlock = new CFDATA();
-
-                    var dataReservedSize = _cabinet.Header.DataReservedSize;
-
-                    dataBlock.Checksum = _cabinet._dataSource.ReadUInt32LittleEndian();
-                    dataBlock.CompressedSize = _cabinet._dataSource.ReadUInt16LittleEndian();
-                    dataBlock.UncompressedSize = _cabinet._dataSource.ReadUInt16LittleEndian();
-
-                    if (dataReservedSize > 0)
-                        dataBlock.ReservedData = _cabinet._dataSource.ReadBytes(dataReservedSize);
-
-                    if (dataBlock.CompressedSize > 0)
-                        dataBlock.CompressedData = _cabinet._dataSource.ReadBytes(dataBlock.CompressedSize);
-
-                    _offset = _cabinet._dataSource.Position;
-
-                    return dataBlock;
-                }
-            }
-            catch (Exception ex)
-            {
-                if (includeDebug) Console.Error.WriteLine(ex);
-                return null;
-            }
-        }
-
-        /// <summary>
         /// Extract the contents of a cabinet set
         /// </summary>
         /// <param name="cabFilename">Filename for one cabinet in the set, if available</param>
@@ -345,7 +242,6 @@ namespace SabreTools.Serialization.Wrappers
         {
             var cabinet = this;
             var currentCabFilename = cabFilename;
-            _offset = 0;
             try
             {
                 // Loop through the folders
@@ -361,31 +257,33 @@ namespace SabreTools.Serialization.Wrappers
                             continue;
                         }
 
-                        _folder = cabinet.Folders[f];
-                        _files = cabinet.GetSpannedFilesArray(currentCabFilename, f, includeDebug);
-                        _file = _files[0];
-                        _bytesLeft = (int)_file.FileSize;
-                        _fileCounter = 0;
+                        var folder = cabinet.Folders[f];
+                        var files = cabinet.GetSpannedFilesArray(currentCabFilename, f, includeDebug);
+                        var file = files[0];
+                        var bytesLeft = (int)file.FileSize;
+                        int fileCounter = 0;
 
                         // Cache starting position
-                        _offset = _folder.CabStartOffset;
+                        long offset = folder.CabStartOffset;
                         
                         // Ensure folder contains data
-                        if (_folder.DataCount == 0)
+                        if (folder.DataCount == 0)
                             return false;
-                        if (_folder.CabStartOffset <= 0)
+                        if (folder.CabStartOffset <= 0)
                             return false;
 
                         // Skip unsupported compression types to avoid opening a blank filestream. This can be altered/removed if these types are ever supported.
-                        var compressionType = GetCompressionType(_folder);
+                        var compressionType = GetCompressionType(folder);
                         if (compressionType == CompressionType.TYPE_QUANTUM || compressionType == CompressionType.TYPE_LZX)
                             continue;
                         
-                        _cabinet = cabinet;
-
                         //uint quantumWindowBits = (uint)(((ushort)folder.CompressionType >> 8) & 0x1f);
+                        
+                        var reader = Reader.Create(cabinet, folder, files, file, bytesLeft, fileCounter, offset);
+                        
+                        //var reader = new Reader(cabinet, folder, files, file, bytesLeft, fileCounter, offset);
 
-                        ExtractData(outputDirectory, compressionType, f, includeDebug);
+                        reader.ExtractData(outputDirectory, compressionType, f, includeDebug);
                     }
 
                     // Move to the next cabinet, if possible
@@ -407,7 +305,144 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
             }
         }
+        
+        
+        private class Reader
+        {
+            #region Private Instance Variables
+            
+            /// <summary>
+            /// Current cabinet file being read from
+            /// </summary>
+            private MicrosoftCabinet _cabinet;
 
+            /// <summary>
+            /// Current folder being read from
+            /// </summary>
+            private CFFOLDER _folder;
+
+            /// <summary>
+            /// Current array of files to be extracted
+            /// </summary>
+            private CFFILE[] _files;
+
+            /// <summary>
+            /// Current file being extracted
+            /// </summary>
+            private CFFILE _file;
+
+            /// <summary>
+            /// Current number of bytes left to write of the current file
+            /// </summary>
+            private int _bytesLeft;
+
+            /// <summary>
+            /// Current index in the folder of files to extract
+            /// </summary>
+            private int _fileCounter;
+
+            /// <summary>
+            /// Current offset in the cabinet being read from
+            /// </summary>
+            private long _offset;
+        
+            /// <summary>
+            /// Current output filestream being written to
+            /// </summary>
+            private FileStream? _fileStream;
+            
+            #endregion
+
+            #region Constructors
+
+            private Reader(MicrosoftCabinet cabinet, CFFOLDER folder, CFFILE[] files, CFFILE file, int bytesLeft, int fileCounter, long offset)
+            {
+                _cabinet = cabinet;
+                _folder = folder;
+                _files = files;
+                _file = file;
+                _bytesLeft = bytesLeft;
+                _fileCounter = fileCounter;
+                _offset = offset;
+                _fileStream = null;
+            }
+
+            #endregion
+            
+            /// <summary>
+            /// Create a new <see cref="Reader"> from an existing cabinet, index, and file descriptor
+            /// </summary>
+            public static Reader Create(MicrosoftCabinet cabinet, CFFOLDER folder, CFFILE[] files, CFFILE file, int bytesLeft, int fileCounter, long offset)
+            {
+                var reader = new Reader(cabinet, folder, files, file, bytesLeft, fileCounter, offset);
+                
+                return reader;
+            }
+            
+            /// <summary>
+            /// Get stream representing the output file
+            /// </summary>
+            /// <param name="filename">Filename for the file that will be extracted to</param>
+            /// <param name="outputDirectory">Path to the output directory</param>
+            /// <returns>Filestream opened for the file</returns>
+            private FileStream GetFileStream(string filename, string outputDirectory)
+            {
+                // Ensure directory separators are consistent
+                if (Path.DirectorySeparatorChar == '\\')
+                    filename = filename.Replace('/', '\\');
+                else if (Path.DirectorySeparatorChar == '/')
+                    filename = filename.Replace('\\', '/');
+
+                // Ensure the full output directory exists
+                filename = Path.Combine(outputDirectory, filename);
+                var directoryName = Path.GetDirectoryName(filename);
+                if (directoryName != null && !Directory.Exists(directoryName))
+                    Directory.CreateDirectory(directoryName);
+
+                // Open the output file for writing
+                return File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+            }
+            
+            
+            /// <summary>
+            /// Read a datablock from a cabinet
+            /// </summary>
+            /// <param name="offset">Offset to be read from</param>
+            /// <param name="includeDebug">True to include debug data, false otherwise</param>
+            /// <returns>Read datablock</returns>
+            private CFDATA? ReadBlock(bool includeDebug)
+            {
+                try
+                {
+                    lock (_cabinet._dataSourceLock)
+                    {
+                        _cabinet._dataSource.SeekIfPossible(_offset, SeekOrigin.Begin);
+                        var dataBlock = new CFDATA();
+
+                        var dataReservedSize = _cabinet.Header.DataReservedSize;
+
+                        dataBlock.Checksum = _cabinet._dataSource.ReadUInt32LittleEndian();
+                        dataBlock.CompressedSize = _cabinet._dataSource.ReadUInt16LittleEndian();
+                        dataBlock.UncompressedSize = _cabinet._dataSource.ReadUInt16LittleEndian();
+
+                        if (dataReservedSize > 0)
+                            dataBlock.ReservedData = _cabinet._dataSource.ReadBytes(dataReservedSize);
+
+                        if (dataBlock.CompressedSize > 0)
+                            dataBlock.CompressedData = _cabinet._dataSource.ReadBytes(dataBlock.CompressedSize);
+
+                        _offset = _cabinet._dataSource.Position;
+
+                        return dataBlock;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (includeDebug) Console.Error.WriteLine(ex);
+                    return null;
+                }
+            }
+            
         /// <summary>
         /// Extract the data from a folder
         /// </summary>
@@ -415,7 +450,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="compressionType">Type of compression that the folder uses</param>
         /// <param name="folderIndex">Index of the folder in the cabinet</param>
         /// <param name="includeDebug">True to include debug data, false otherwise</param>
-        private void ExtractData(string outputDirectory, CompressionType compressionType, int folderIndex, bool includeDebug)
+        public void ExtractData(string outputDirectory, CompressionType compressionType, int folderIndex, bool includeDebug)
         {
             var mszip = Decompressor.Create();
 
@@ -566,6 +601,10 @@ namespace SabreTools.Serialization.Wrappers
             
             return false;
         }
+            
+        }
+
+        
 
         #endregion
 
