@@ -105,7 +105,6 @@ namespace SabreTools.Data.ObjectIdentifier
                 case 9: return $"{oidPath}/Data";
                 default: return $"{oidPath}/{values[index - 1]}";
             }
-            ;
 
         // recommendation
         #region 0.0.*
