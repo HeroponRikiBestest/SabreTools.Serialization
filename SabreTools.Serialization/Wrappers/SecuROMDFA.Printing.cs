@@ -20,7 +20,6 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(Model.BlockOrHeaderSize, "Block or header size");
             builder.AppendLine();
 
-
             Print(builder, Model.Entries);
         }
 

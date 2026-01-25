@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Byte array representing the CDROM data track</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>A CDROM data track wrapper on success, null on failure</returns>
-        public new static CDROM? Create(byte[]? data, int offset)
+        public static new CDROM? Create(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data is null || data.Length == 0)
@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="data">Seekable Stream representing the CDROM data track</param>
         /// <returns>A CDROM data track wrapper on success, null on failure</returns>
-        public new static CDROM? Create(Stream? data)
+        public static new CDROM? Create(Stream? data)
         {
             // If the data is invalid
             if (data is null || !data.CanRead || !data.CanSeek)

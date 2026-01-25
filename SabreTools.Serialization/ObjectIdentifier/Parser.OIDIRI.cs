@@ -86,10 +86,10 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return oidPath;
             }
 
-        #endregion
+            #endregion
 
-        // itu-t, ccitt, itu-r
-        #region 0.*
+            // itu-t, ccitt, itu-r
+            #region 0.*
 
         oid_0:
 
@@ -106,8 +106,8 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // recommendation
-        #region 0.0.*
+            // recommendation
+            #region 0.0.*
 
         oid_0_0:
 
@@ -143,12 +143,12 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        #endregion
+            #endregion
 
-        // iso
-        #region 1.*
+            // iso
+            #region 1.*
 
         oid_1:
 
@@ -163,8 +163,8 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // member-body
-        #region 1.2.*
+            // member-body
+            #region 1.2.*
 
         oid_1_2:
 
@@ -202,12 +202,12 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        #endregion
+            #endregion
 
-        // joint-iso-itu-t, joint-iso-ccitt
-        #region 2.*
+            // joint-iso-itu-t, joint-iso-ccitt
+            #region 2.*
 
         oid_2:
 
@@ -233,8 +233,8 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // country
-        #region 2.16.*
+            // country
+            #region 2.16.*
 
         oid_2_16:
 
@@ -444,10 +444,10 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        // uuid [TODO: Requires 128-bit values]
-        #region 2.25.*
+            // uuid [TODO: Requires 128-bit values]
+            #region 2.25.*
 
         oid_2_25:
 
@@ -466,10 +466,10 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        // telebiometrics
-        #region 2.42.*
+            // telebiometrics
+            #region 2.42.*
 
         oid_2_42:
 
@@ -484,8 +484,8 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // modules
-        #region 2.42.0.*
+            // modules
+            #region 2.42.0.*
 
         oid_2_42_0:
 
@@ -497,8 +497,8 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // main
-        #region 2.42.0.0.*
+            // main
+            #region 2.42.0.0.*
 
         oid_2_42_0_0:
 
@@ -510,12 +510,12 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        #endregion
+            #endregion
 
-        // tmm
-        #region 2.42.1.*
+            // tmm
+            #region 2.42.1.*
 
         oid_2_42_1:
 
@@ -531,8 +531,8 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // modules
-        #region 2.42.1.0.*
+            // modules
+            #region 2.42.1.0.*
 
         oid_2_42_1_0:
 
@@ -544,8 +544,8 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // main
-        #region 2.42.1.0.0.*
+            // main
+            #region 2.42.1.0.0.*
 
         oid_2_42_1_0_0:
 
@@ -557,12 +557,12 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        #endregion
+            #endregion
 
-        // measures, metric
-        #region 2.42.1.1.*
+            // measures, metric
+            #region 2.42.1.1.*
 
         oid_2_42_1_1:
 
@@ -578,8 +578,8 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // quantities
-        #region 2.42.1.1.1.*
+            // quantities
+            #region 2.42.1.1.1.*
 
         oid_2_42_1_1_1:
 
@@ -595,10 +595,10 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        // methods
-        #region 2.42.1.1.5.*
+            // methods
+            #region 2.42.1.1.5.*
 
         oid_2_42_1_1_5:
 
@@ -614,12 +614,12 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        #endregion
+            #endregion
 
-        // fields-of-study, scientific
-        #region 2.42.1.2.*
+            // fields-of-study, scientific
+            #region 2.42.1.2.*
 
         oid_2_42_1_2:
 
@@ -635,10 +635,10 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        // modalities, sensory
-        #region 2.42.1.3.*
+            // modalities, sensory
+            #region 2.42.1.3.*
 
         oid_2_42_1_3:
 
@@ -656,12 +656,12 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        #endregion
+            #endregion
 
-        // human-physiology
-        #region 2.42.2.*
+            // human-physiology
+            #region 2.42.2.*
 
         oid_2_42_2:
 
@@ -675,8 +675,8 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // modules
-        #region 2.42.2.0.*
+            // modules
+            #region 2.42.2.0.*
 
         oid_2_42_2_0:
 
@@ -688,8 +688,8 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // main
-        #region 2.42.2.0.0.*
+            // main
+            #region 2.42.2.0.0.*
 
         oid_2_42_2_0_0:
 
@@ -701,12 +701,12 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        #endregion
+            #endregion
 
-        // symbols
-        #region 2.42.2.1.*
+            // symbols
+            #region 2.42.2.1.*
 
         oid_2_42_2_1:
 
@@ -731,12 +731,12 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        #endregion
+            #endregion
 
-        // obj-cat, telehealth, e-health-protocol, th
-        #region 2.42.3.*
+            // obj-cat, telehealth, e-health-protocol, th
+            #region 2.42.3.*
 
         oid_2_42_3:
 
@@ -758,8 +758,8 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // obj-cat, telehealth, e-health-protocol, th
-        #region 2.42.3.0.*
+            // obj-cat, telehealth, e-health-protocol, th
+            #region 2.42.3.0.*
 
         oid_2_42_3_0:
 
@@ -776,8 +776,8 @@ namespace SabreTools.Data.ObjectIdentifier
                 default: return $"{oidPath}/{values[index - 1]}";
             }
 
-        // identification
-        #region 2.42.3.0.0.*
+            // identification
+            #region 2.42.3.0.0.*
 
         oid_2_42_3_0_0:
 
@@ -789,10 +789,10 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        // set-up
-        #region 2.42.3.0.1.*
+            // set-up
+            #region 2.42.3.0.1.*
 
         oid_2_42_3_0_1:
 
@@ -804,10 +804,10 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        // send-and-ack
-        #region 2.42.3.0.2.*
+            // send-and-ack
+            #region 2.42.3.0.2.*
 
         oid_2_42_3_0_2:
 
@@ -819,10 +819,10 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        // command-response
-        #region 2.42.3.0.3.*
+            // command-response
+            #region 2.42.3.0.3.*
 
         oid_2_42_3_0_3:
 
@@ -834,10 +834,10 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        // quantity-and-units
-        #region 2.42.3.0.4.*
+            // quantity-and-units
+            #region 2.42.3.0.4.*
 
         oid_2_42_3_0_4:
 
@@ -849,10 +849,10 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        // examples
-        #region 2.42.3.0.5.*
+            // examples
+            #region 2.42.3.0.5.*
 
         oid_2_42_3_0_5:
 
@@ -865,16 +865,16 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        #endregion
+            #endregion
 
-        #endregion
+            #endregion
 
-        #endregion
+            #endregion
 
-        // cybersecurity
-        #region 2.48.*
+            // cybersecurity
+            #region 2.48.*
 
         oid_2_48:
 
@@ -887,10 +887,10 @@ namespace SabreTools.Data.ObjectIdentifier
                 _ => $"{oidPath}/{values[index - 1]}",
             };
 
-        #endregion
+            #endregion
 
-        // alerting
-        #region 2.49.*
+            // alerting
+            #region 2.49.*
 
         oid_2_49:
 

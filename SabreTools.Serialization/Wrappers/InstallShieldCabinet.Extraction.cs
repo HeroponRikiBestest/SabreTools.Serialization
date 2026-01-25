@@ -452,7 +452,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Uncompress a source byte array to a destination
         /// </summary>
-        private unsafe static int Uncompress(byte[] dest, ref uint destLen, byte[] source, ref uint sourceLen)
+        private static unsafe int Uncompress(byte[] dest, ref uint destLen, byte[] source, ref uint sourceLen)
         {
             fixed (byte* sourcePtr = source, destPtr = dest)
             {
@@ -485,7 +485,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Uncompress a source byte array to a destination (old version)
         /// </summary>
-        private unsafe static int UncompressOld(byte[] dest, ref uint destLen, byte[] source, ref uint sourceLen)
+        private static unsafe int UncompressOld(byte[] dest, ref uint destLen, byte[] source, ref uint sourceLen)
         {
             fixed (byte* sourcePtr = source, destPtr = dest)
             {

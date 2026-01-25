@@ -69,9 +69,9 @@ namespace SabreTools.Serialization.Readers
             data.SeekIfPossible(current, SeekOrigin.Begin);
 
             // If the strings are valid
-            if ((ftpUrl is not null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2))
-                && (logPath is not null && (logPath.Length == 0 || logPath.StartsWith("%")))
-                && (messageFont is not null && (messageFont.Length == 0 || !IsTypicalControlCode(messageFont, strict: true)))
+            if (ftpUrl is not null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2)
+                && logPath is not null && (logPath.Length == 0 || logPath.StartsWith("%"))
+                && messageFont is not null && (messageFont.Length == 0 || !IsTypicalControlCode(messageFont, strict: true))
                 && !(ftpUrl.Length == 0 && logPath.Length == 0 && messageFont.Length == 0))
             {
                 // TODO: Figure out if this maps to existing fields
@@ -92,9 +92,9 @@ namespace SabreTools.Serialization.Readers
             data.SeekIfPossible(current, SeekOrigin.Begin);
 
             // If the strings are valid
-            if ((ftpUrl is not null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2))
-                && (logPath is not null && (logPath.Length == 0 || logPath.StartsWith("%")))
-                && (messageFont is not null && (messageFont.Length == 0 || !IsTypicalControlCode(messageFont, strict: true)))
+            if (ftpUrl is not null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2)
+                && logPath is not null && (logPath.Length == 0 || logPath.StartsWith("%"))
+                && messageFont is not null && (messageFont.Length == 0 || !IsTypicalControlCode(messageFont, strict: true))
                 && !(ftpUrl.Length == 0 && logPath.Length == 0 && messageFont.Length == 0))
             {
                 header.Flags = data.ReadByteValue();
@@ -117,9 +117,9 @@ namespace SabreTools.Serialization.Readers
             data.SeekIfPossible(current, SeekOrigin.Begin);
 
             // If the strings are valid
-            if ((ftpUrl is not null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2))
-                && (logPath is not null && (logPath.Length == 0 || logPath.StartsWith("%")))
-                && (messageFont is not null && (messageFont.Length == 0 || !IsTypicalControlCode(messageFont, strict: true)))
+            if (ftpUrl is not null && (ftpUrl.Length == 0 || ftpUrl.Split('.').Length > 2)
+                && logPath is not null && (logPath.Length == 0 || logPath.StartsWith("%"))
+                && messageFont is not null && (messageFont.Length == 0 || !IsTypicalControlCode(messageFont, strict: true))
                 && !(ftpUrl.Length == 0 && logPath.Length == 0 && messageFont.Length == 0))
             {
                 header.Flags = data.ReadByteValue();

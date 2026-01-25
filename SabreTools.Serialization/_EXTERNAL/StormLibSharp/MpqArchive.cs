@@ -258,7 +258,6 @@ namespace StormLibSharp
             return (MpqArchiveVerificationResult)NativeMethods.SFileVerifyArchive(_handle);
         }
 
-
         #region IDisposable implementation
 
         public void Dispose()

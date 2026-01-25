@@ -286,6 +286,7 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.Lumps[i] = ParseVbspLumpEntry(data);
             }
+
             obj.MapRevision = data.ReadInt32LittleEndian();
 
             return obj;
@@ -572,6 +573,7 @@ namespace SabreTools.Serialization.Readers
                 if (occluderData is not null)
                     lump.Data[i] = occluderData;
             }
+
             lump.PolyDataCount = data.ReadInt32LittleEndian();
             lump.PolyData = new OccluderPolyData[lump.Count];
             for (int i = 0; i < lump.Count; i++)
@@ -580,6 +582,7 @@ namespace SabreTools.Serialization.Readers
                 if (polyData is not null)
                     lump.PolyData[i] = polyData;
             }
+
             lump.VertexIndexCount = data.ReadInt32LittleEndian();
             lump.VertexIndicies = new int[lump.VertexIndexCount];
             for (int i = 0; i < lump.VertexIndexCount; i++)
@@ -625,11 +628,13 @@ namespace SabreTools.Serialization.Readers
             {
                 leaf.Mins[i] = data.ReadInt16LittleEndian();
             }
+
             leaf.Maxs = new short[3];
             for (int i = 0; i < leaf.Maxs.Length; i++)
             {
                 leaf.Maxs[i] = data.ReadInt16LittleEndian();
             }
+
             leaf.FirstLeafFace = data.ReadUInt16LittleEndian();
             leaf.NumLeafFaces = data.ReadUInt16LittleEndian();
             leaf.FirstLeafBrush = data.ReadUInt16LittleEndian();

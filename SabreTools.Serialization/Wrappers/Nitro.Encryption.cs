@@ -395,7 +395,7 @@ namespace SabreTools.Serialization.Wrappers
                 for (int i = 0; i < 4; i++)
                 {
                     r3 <<= 8;
-                    r3 |= arg1[(j * 4 + i) & 7];
+                    r3 |= arg1[((j * 4) + i) & 7];
                 }
 
                 _cardHash[j] ^= r3;
@@ -409,6 +409,7 @@ namespace SabreTools.Serialization.Wrappers
                 _cardHash[i + 0] = tmp1;
                 _cardHash[i + 1] = tmp2;
             }
+
             for (int i = 0; i < 0x400; i += 2)
             {
                 Encrypt(ref tmp1, ref tmp2);

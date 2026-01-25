@@ -217,7 +217,7 @@ namespace SabreTools.Serialization.Readers
         public static BlockEntry[]? ParseBlockTable(Stream data, long initialOffset, ArchiveHeader header, MoPaQDecrypter decrypter)
         {
             // Get the block table offset
-            long offset = initialOffset + ((uint)header.BlockTablePositionHi << 23) | header.BlockTablePosition;
+            long offset = initialOffset + (((uint)header.BlockTablePositionHi << 23) | header.BlockTablePosition);
             if (offset <= initialOffset || offset >= data.Length)
                 return null;
 

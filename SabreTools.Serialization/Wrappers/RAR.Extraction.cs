@@ -257,6 +257,7 @@ namespace SabreTools.Serialization.Wrappers
                     if (includeDebug) Console.Error.WriteLine(ex);
                 }
             }
+
             return true;
         }
 

@@ -367,6 +367,7 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.Guid[i] = data.ReadGuid();
             }
+
             obj.CLSIDOffset = data.ReadUInt32LittleEndian();
             obj.Reserved2 = data.ReadBytes(28);
             obj.Reserved3 = data.ReadBytes(majorVersion <= 5 ? 2 : 1);
@@ -502,11 +503,13 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.FileGroupOffsets[i] = data.ReadUInt32LittleEndian();
             }
+
             obj.ComponentOffsets = new uint[71];
             for (int i = 0; i < 71; i++)
             {
                 obj.ComponentOffsets[i] = data.ReadUInt32LittleEndian();
             }
+
             obj.SetupTypesOffset = data.ReadUInt32LittleEndian();
             obj.SetupTableOffset = data.ReadUInt32LittleEndian();
             obj.Reserved7 = data.ReadUInt32LittleEndian();

@@ -149,8 +149,22 @@ namespace SabreTools.Serialization.Readers
                                     dat.Info?.Source = [.. sources];
                                     sources.Clear();
                                     break;
+
+                                default:
+                                    // TODO: Log invalid values
+                                    break;
                             }
+
                             continue;
+
+                        case CmpRowType.TopLevel:
+                        case CmpRowType.Standalone:
+                        case CmpRowType.Internal:
+                            break;
+
+                        default:
+                            // TODO: Log invalid values
+                            break;
                     }
 
                     // If we're at the root
@@ -176,6 +190,9 @@ namespace SabreTools.Serialization.Readers
                                 break;
                             case "set":
                                 game = new Set();
+                                break;
+                            default:
+                                // TODO: Log invalid values
                                 break;
                         }
                     }
@@ -234,6 +251,9 @@ namespace SabreTools.Serialization.Readers
                             case "forcepacking":
                                 dat.ClrMamePro.ForcePacking = reader.Standalone?.Value;
                                 break;
+                            default:
+                                // TODO: Log invalid values
+                                break;
                         }
                     }
 
@@ -287,6 +307,9 @@ namespace SabreTools.Serialization.Readers
                                 };
                                 samples.Add(sample);
                                 break;
+                            default:
+                                // TODO: Log invalid values
+                                break;
                         }
                     }
 
@@ -301,6 +324,9 @@ namespace SabreTools.Serialization.Readers
                                 if (source is not null)
                                     sources.Add(source);
 
+                                break;
+                            default:
+                                // TODO: Log invalid values
                                 break;
                         }
                     }
@@ -382,7 +408,8 @@ namespace SabreTools.Serialization.Readers
                                     game.Driver = driver;
                                 break;
                             default:
-                                continue;
+                                // TODO: Log invalid values
+                                break;
                         }
                     }
                 }
@@ -466,6 +493,9 @@ namespace SabreTools.Serialization.Readers
                         break;
                     case "default":
                         biosset.Default = kvp.Value;
+                        break;
+                    default:
+                        // TODO: Log invalid values
                         break;
                 }
             }
@@ -569,6 +599,9 @@ namespace SabreTools.Serialization.Readers
                     case "mia":
                         rom.MIA = kvp.Value;
                         break;
+                    default:
+                        // TODO: Log invalid values
+                        break;
                 }
             }
 
@@ -608,6 +641,9 @@ namespace SabreTools.Serialization.Readers
                     case "flags":
                         disk.Flags = kvp.Value;
                         break;
+                    default:
+                        // TODO: Log invalid values
+                        break;
                 }
             }
 
@@ -644,6 +680,9 @@ namespace SabreTools.Serialization.Readers
                     case "spamsum":
                         media.SpamSum = kvp.Value;
                         break;
+                    default:
+                        // TODO: Log invalid values
+                        break;
                 }
             }
 
@@ -668,6 +707,9 @@ namespace SabreTools.Serialization.Readers
                     case "name":
                         sample.Name = kvp.Value;
                         break;
+                    default:
+                        // TODO: Log invalid values
+                        break;
                 }
             }
 
@@ -691,6 +733,9 @@ namespace SabreTools.Serialization.Readers
                 {
                     case "name":
                         archive.Name = kvp.Value;
+                        break;
+                    default:
+                        // TODO: Log invalid values
                         break;
                 }
             }
@@ -724,6 +769,9 @@ namespace SabreTools.Serialization.Readers
                         break;
                     case "clock":
                         chip.Clock = kvp.Value;
+                        break;
+                    default:
+                        // TODO: Log invalid values
                         break;
                 }
             }
@@ -767,6 +815,9 @@ namespace SabreTools.Serialization.Readers
                     case "freq":
                         video.Freq = kvp.Value;
                         break;
+                    default:
+                        // TODO: Log invalid values
+                        break;
                 }
             }
 
@@ -790,6 +841,9 @@ namespace SabreTools.Serialization.Readers
                 {
                     case "channels":
                         sound.Channels = kvp.Value;
+                        break;
+                    default:
+                        // TODO: Log invalid values
                         break;
                 }
             }
@@ -830,6 +884,9 @@ namespace SabreTools.Serialization.Readers
                     case "service":
                         input.Service = kvp.Value;
                         break;
+                    default:
+                        // TODO: Log invalid values
+                        break;
                 }
             }
 
@@ -860,6 +917,9 @@ namespace SabreTools.Serialization.Readers
                         break;
                     case "default":
                         dipswitch.Default = kvp.Value;
+                        break;
+                    default:
+                        // TODO: Log invalid values
                         break;
                 }
             }
@@ -897,6 +957,9 @@ namespace SabreTools.Serialization.Readers
                         break;
                     case "blit":
                         driver.Blit = kvp.Value;
+                        break;
+                    default:
+                        // TODO: Log invalid values
                         break;
                 }
             }

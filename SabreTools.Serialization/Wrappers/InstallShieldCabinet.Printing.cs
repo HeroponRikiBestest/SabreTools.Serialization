@@ -85,6 +85,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.LastFileSizeCompressed, "  Last file size compressed");
                 builder.AppendLine(header.LastFileSizeCompressedHigh, "  Last file size compressed high");
             }
+
             builder.AppendLine();
         }
 

@@ -48,6 +48,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Create the filename
             string filename = $"lump_{index}.bin";
+#pragma warning disable IDE0010
             switch ((LumpType)index)
             {
                 case LumpType.LUMP_ENTITIES:
@@ -57,6 +58,7 @@ namespace SabreTools.Serialization.Wrappers
                     filename = "texture_data.bin";
                     break;
             }
+#pragma warning restore IDE0010
 
             // If we have an invalid output directory
             if (string.IsNullOrEmpty(outputDirectory))

@@ -175,16 +175,19 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.GlobalMBK15Settings[i] = data.ReadUInt32LittleEndian();
             }
+
             obj.LocalMBK68SettingsARM9 = new uint[3];
             for (int i = 0; i < 3; i++)
             {
                 obj.LocalMBK68SettingsARM9[i] = data.ReadUInt32LittleEndian();
             }
+
             obj.LocalMBK68SettingsARM7 = new uint[3];
             for (int i = 0; i < 3; i++)
             {
                 obj.LocalMBK68SettingsARM7[i] = data.ReadUInt32LittleEndian();
             }
+
             obj.GlobalMBK9Setting = data.ReadUInt32LittleEndian();
             obj.RegionFlags = data.ReadUInt32LittleEndian();
             obj.AccessControl = data.ReadUInt32LittleEndian();

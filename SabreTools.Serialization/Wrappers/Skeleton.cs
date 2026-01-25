@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <param name="data">Byte array representing the archive</param>
         /// <param name="offset">Offset within the array to parse</param>
         /// <returns>An Skeleton Volume wrapper on success, null on failure</returns>
-        public new static Skeleton? Create(byte[]? data, int offset)
+        public static new Skeleton? Create(byte[]? data, int offset)
         {
             // If the data is invalid
             if (data is null || data.Length == 0)
@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         /// <param name="data">Stream representing the archive</param>
         /// <returns>An Skeleton Volume wrapper on success, null on failure</returns>
-        public new static Skeleton? Create(Stream? data)
+        public static new Skeleton? Create(Stream? data)
         {
             // If the data is invalid
             if (data is null || !data.CanRead)

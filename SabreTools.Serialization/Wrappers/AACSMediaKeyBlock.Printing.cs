@@ -82,6 +82,10 @@ namespace SabreTools.Serialization.Wrappers
                 case CopyrightRecord c:
                     Print(builder, c);
                     break;
+
+                default:
+                    // TODO: Log invalid values
+                    break;
             }
         }
 

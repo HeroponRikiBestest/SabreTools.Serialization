@@ -301,6 +301,7 @@ namespace SabreTools.Serialization.Wrappers
                         builder.AppendLine(entry.ImportOrdinalNumber, "      Import ordinal number");
                         break;
 
+                    case BundleType.ParameterTypingInformationPresent:
                     default:
                         builder.AppendLine($"      Unknown entry type {type}");
                         break;
@@ -601,6 +602,7 @@ namespace SabreTools.Serialization.Wrappers
                         builder.AppendLine(entry.SourceOffsetList[j], $"    Source Offset List Entry {j}");
                     }
                 }
+
                 builder.AppendLine();
             }
         }

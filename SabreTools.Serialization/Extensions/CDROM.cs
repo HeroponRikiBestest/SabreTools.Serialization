@@ -44,7 +44,6 @@ namespace SabreTools.Data.Extensions
                 // Ignore the actual error
                 return SectorMode.UNKNOWN;
             }
-
         }
 
         /// <summary>
@@ -56,6 +55,7 @@ namespace SabreTools.Data.Extensions
         {
             return mode switch
             {
+                SectorMode.UNKNOWN => Constants.Mode0DataSize,
                 SectorMode.MODE0 => Constants.Mode0DataSize,
                 SectorMode.MODE1 => Constants.Mode1DataSize,
                 SectorMode.MODE2 => Constants.Mode0DataSize,
@@ -74,6 +74,7 @@ namespace SabreTools.Data.Extensions
         {
             return mode switch
             {
+                SectorMode.UNKNOWN => Constants.Mode0UserDataEnd,
                 SectorMode.MODE0 => Constants.Mode0UserDataEnd, // TODO: Support flexible sector length (2352)
                 SectorMode.MODE1 => Constants.Mode1UserDataEnd,
                 SectorMode.MODE2 => Constants.Mode0UserDataEnd, // TODO: Support flexible sector length (2352)
@@ -92,6 +93,7 @@ namespace SabreTools.Data.Extensions
         {
             return mode switch
             {
+                SectorMode.UNKNOWN => Constants.Mode0UserDataStart,
                 SectorMode.MODE0 => Constants.Mode0UserDataStart,
                 SectorMode.MODE1 => Constants.Mode1UserDataStart,
                 SectorMode.MODE2 => Constants.Mode0UserDataStart,
@@ -114,7 +116,9 @@ namespace SabreTools.Data.Extensions
             private SectorMode _currentMode = SectorMode.UNKNOWN;
             private long _userDataStart = Constants.Mode1UserDataStart;
             private long _userDataEnd = Constants.Mode1UserDataEnd;
+#pragma warning disable IDE0044
             private long _isoSectorSize = Constants.Mode1DataSize;
+#pragma warning restore IDE0044
 
             public ISO9660Stream(Stream inputStream)
             {
@@ -138,7 +142,7 @@ namespace SabreTools.Data.Extensions
 
             /// <inheritdoc/>
             public override long Length
-                => (_baseStream.Length / Constants.CDROMSectorSize) * _isoSectorSize;
+                => _baseStream.Length / Constants.CDROMSectorSize * _isoSectorSize;
 
             /// <inheritdoc/>
             public override void SetLength(long value)
@@ -167,7 +171,7 @@ namespace SabreTools.Data.Extensions
                     SetState(_position);
 
                     // Get the number of ISO sectors before current position
-                    long isoPosition = (_position / Constants.CDROMSectorSize) * _isoSectorSize;
+                    long isoPosition = _position / Constants.CDROMSectorSize * _isoSectorSize;
 
                     // Add the within-sector position
                     long remainder = _position % Constants.CDROMSectorSize;
@@ -242,7 +246,7 @@ namespace SabreTools.Data.Extensions
                     // Update state for base stream
                     _position = _baseStream.Position;
                     if (bytesToRead == (_isoSectorSize - sectorOffset))
-                        _position += (Constants.CDROMSectorSize - _userDataEnd) + _userDataStart;
+                        _position += Constants.CDROMSectorSize - _userDataEnd + _userDataStart;
 
                     // Update state for ISO stream
                     totalRead += bytesRead;
@@ -268,7 +272,7 @@ namespace SabreTools.Data.Extensions
                 };
 
                 // Get the number of ISO sectors before current position
-                long newPosition = (targetPosition / _isoSectorSize) * Constants.CDROMSectorSize;
+                long newPosition = targetPosition / _isoSectorSize * Constants.CDROMSectorSize;
 
                 // Set the current sector's mode and user data location
                 SetState(newPosition);

@@ -38,6 +38,7 @@ namespace SabreTools.Serialization.Readers
                         case IniRowType.None:
                         case IniRowType.Comment:
                             continue;
+
                         case IniRowType.SectionHeader:
                             switch (reader.Section?.ToLowerInvariant())
                             {
@@ -53,8 +54,16 @@ namespace SabreTools.Serialization.Readers
                                 case "games":
                                     dat.Games ??= new Games();
                                     break;
+                                default:
+                                    break;
                             }
+
                             continue;
+
+                        case IniRowType.KeyValue:
+                        case IniRowType.Invalid:
+                        default:
+                            break;
                     }
 
                     // If we're in credits
@@ -86,6 +95,8 @@ namespace SabreTools.Serialization.Readers
                             case "comment":
                                 dat.Credits.Comment = reader.KeyValuePair?.Value;
                                 break;
+                            default:
+                                break;
                         }
                     }
 
@@ -109,6 +120,8 @@ namespace SabreTools.Serialization.Readers
                             case "merge":
                                 dat.Dat.Merge = reader.KeyValuePair?.Value;
                                 break;
+                            default:
+                                break;
                         }
                     }
 
@@ -125,6 +138,8 @@ namespace SabreTools.Serialization.Readers
                                 break;
                             case "version":
                                 dat.Emulator.Version = reader.KeyValuePair?.Value;
+                                break;
+                            default:
                                 break;
                         }
                     }

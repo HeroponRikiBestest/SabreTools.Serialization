@@ -426,6 +426,7 @@ namespace SabreTools.Serialization.Readers
                 var contentInfoRecord = ParseContentInfoRecord(data);
                 obj.ContentInfoRecords[i] = contentInfoRecord;
             }
+
             obj.ContentChunkRecords = new ContentChunkRecord[obj.ContentCount];
             for (int i = 0; i < obj.ContentCount; i++)
             {

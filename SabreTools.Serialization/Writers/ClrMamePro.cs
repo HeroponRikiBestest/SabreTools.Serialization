@@ -164,6 +164,9 @@ namespace SabreTools.Serialization.Writers
                 case Set:
                     writer.WriteStartElement(name: "set");
                     break;
+                default:
+                    // TODO: Log invalid values
+                    break;
             }
 
             // Write the standalone values
@@ -471,6 +474,7 @@ namespace SabreTools.Serialization.Writers
                 {
                     writer.WriteRequiredAttributeString("entry", entry);
                 }
+
                 writer.WriteOptionalAttributeString("default", dipswitch.Default);
                 writer.WriteEndElement(); // dipswitch
             }

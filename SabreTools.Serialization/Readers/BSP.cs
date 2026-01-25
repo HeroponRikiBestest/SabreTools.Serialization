@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -52,6 +51,7 @@ namespace SabreTools.Serialization.Readers
                     data.SeekIfPossible(initialOffset + lumpEntry.Offset, SeekOrigin.Begin);
 
                     // Read according to the lump type
+#pragma warning disable IDE0010
                     switch ((LumpType)l)
                     {
                         case LumpType.LUMP_ENTITIES:
@@ -102,10 +102,12 @@ namespace SabreTools.Serialization.Readers
                         case LumpType.LUMP_MODELS:
                             file.ModelsLump = ParseModelsLump(data, lumpEntry.Offset, lumpEntry.Length);
                             break;
+
                         default:
                             // Unsupported LumpType value, ignore
                             break;
                     }
+#pragma warning restore IDE0010
                 }
 
                 #endregion
@@ -174,11 +176,13 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.Mins[i] = data.ReadInt16LittleEndian();
             }
+
             obj.Maxs = new short[3];
             for (int i = 0; i < 3; i++)
             {
                 obj.Maxs[i] = data.ReadInt16LittleEndian();
             }
+
             obj.FirstMarkSurfaceIndex = data.ReadUInt16LittleEndian();
             obj.MarkSurfacesCount = data.ReadUInt16LittleEndian();
             obj.AmbientLevels = data.ReadBytes(4);
@@ -218,6 +222,7 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.HeadnodesIndex[i] = data.ReadInt32LittleEndian();
             }
+
             obj.VisLeafsCount = data.ReadInt32LittleEndian();
             obj.FirstFaceIndex = data.ReadInt32LittleEndian();
             obj.FacesCount = data.ReadInt32LittleEndian();
@@ -240,16 +245,19 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.Children[i] = data.ReadUInt16LittleEndian();
             }
+
             obj.Mins = new ushort[3];
             for (int i = 0; i < 3; i++)
             {
                 obj.Mins[i] = data.ReadUInt16LittleEndian();
             }
+
             obj.Maxs = new ushort[3];
             for (int i = 0; i < 3; i++)
             {
                 obj.Maxs[i] = data.ReadUInt16LittleEndian();
             }
+
             obj.FirstFace = data.ReadUInt16LittleEndian();
             obj.FaceCount = data.ReadUInt16LittleEndian();
 

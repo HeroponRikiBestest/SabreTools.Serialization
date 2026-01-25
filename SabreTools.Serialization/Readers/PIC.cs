@@ -108,6 +108,9 @@ namespace SabreTools.Serialization.Readers
                 case DiscTypeIdentifierRecordable:
                     obj.FormatDependentContents = data.ReadBytes(100);
                     break;
+                default:
+                    // TODO: Log invalid values
+                    break;
             }
 
             return obj;

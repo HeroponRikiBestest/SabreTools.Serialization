@@ -414,6 +414,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(descriptorsStr, "        Descriptors");
                 builder.AppendLine(entry.ACIForLimitations.ARM9AccessControl.DescriptorVersion, "        Descriptor version");
             }
+
             builder.AppendLine();
         }
 

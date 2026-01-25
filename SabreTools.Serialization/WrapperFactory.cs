@@ -64,6 +64,11 @@ namespace SabreTools.Serialization
                 WrapperType.XZ => XZ.Create(data),
                 WrapperType.XZP => XZP.Create(data),
                 WrapperType.ZSTD => ZSTD.Create(data),
+
+                // Unimplemented
+                WrapperType.UNKNOWN => null,
+                WrapperType.WiseOverlayHeader => null,
+                WrapperType.WiseScript => null,
                 _ => null,
             };
         }

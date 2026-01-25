@@ -305,6 +305,7 @@ namespace SabreTools.Serialization.Wrappers
                     case MicrosoftOpenPackagingGrowthHint field: Print(builder, field); break;
 
                     case UnknownExtraField field: Print(builder, field); break;
+                    default: break;
                 }
             }
 

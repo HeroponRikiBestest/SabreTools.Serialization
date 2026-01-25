@@ -134,7 +134,6 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(encoding.GetString(vd.SystemIdentifier), "    System Identifier");
             builder.AppendLine(encoding.GetString(vd.VolumeIdentifier), "    Volume Identifier");
 
-
             if (vd.Unused8Bytes is not null && Array.TrueForAll(vd.Unused8Bytes, b => b == 0))
                 builder.AppendLine("Zeroed", "    Unused 8 Bytes");
             else
@@ -149,6 +148,7 @@ namespace SabreTools.Serialization.Wrappers
                 else
                     builder.AppendLine(pvd2.Unused32Bytes, "    Unused 32 Bytes");
             }
+
             if (vd is SupplementaryVolumeDescriptor svd2)
             {
                 // TODO: Trim trailing 0x00 and split array into characters (multi-byte encoding detection)
@@ -279,6 +279,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine($"    No Type-L Path Table {tableNum}:");
                     builder.AppendLine();
                 }
+
                 if (ptgs[tableNum].OptionalPathTableL is not null)
                 {
                     builder.AppendLine($"    Optional Type-L Path Table {tableNum}:");
@@ -290,6 +291,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine($"    No Optional Type-L Path Table {tableNum}:");
                     builder.AppendLine();
                 }
+
                 if (ptgs[tableNum].PathTableM is not null)
                 {
                     builder.AppendLine($"    Type-M Path Table {tableNum}:");
@@ -301,6 +303,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine($"    No Type-M Path Table {tableNum}:");
                     builder.AppendLine();
                 }
+
                 if (ptgs[tableNum].OptionalPathTableM is not null)
                 {
                     builder.AppendLine($"    Optional Type-M Path Table {tableNum}:");
@@ -439,7 +442,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(drdt.Hour, "        Hour");
             builder.AppendLine(drdt.Minute, "        Minute");
             builder.AppendLine(drdt.Second, "        Second");
-            string tz = $"{((drdt.TimezoneOffset - 48) * 15 / 60):+0;-0}:{((drdt.TimezoneOffset - 48) * 15 % 60 + 60) % 60:00} (0x{drdt.TimezoneOffset:X2})";
+            string tz = $"{(drdt.TimezoneOffset - 48) * 15 / 60:+0;-0}:{(((drdt.TimezoneOffset - 48) * 15 % 60) + 60) % 60:00} (0x{drdt.TimezoneOffset:X2})";
             builder.AppendLine(tz, "        Timezone Offset");
         }
 
@@ -465,7 +468,6 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine("        Fixed Bits: All Set");
             else
                 builder.AppendLine("        Fixed Bits: Not All Set");
-
 
             builder.AppendLine(Format(ear.FileCreationDateTime), "        File Creation Date Time");
             builder.AppendLine(Format(ear.FileModificationDateTime), "        File Modification Date Time");
@@ -512,7 +514,7 @@ namespace SabreTools.Serialization.Wrappers
                 ? Encoding.ASCII.GetString(dt.Centisecond)
                 : BitConverter.ToString(dt.Centisecond).Replace('-', ' ');
 
-            string tz = $"{((dt.TimezoneOffset - 48) * 15 / 60):+0;-0}:{((dt.TimezoneOffset - 48) * 15 % 60 + 60) % 60:00} (0x{dt.TimezoneOffset:X2})";
+            string tz = $"{(dt.TimezoneOffset - 48) * 15 / 60:+0;-0}:{(((dt.TimezoneOffset - 48) * 15 % 60) + 60) % 60:00} (0x{dt.TimezoneOffset:X2})";
 
             return $"{year}-{month}-{day} {hour}:{minute}:{second}.{csecond} [{tz}]";
         }

@@ -52,6 +52,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Create the filename
             string filename = $"lump_{index}.bin";
+#pragma warning disable IDE0010
             switch ((LumpType)index)
             {
                 case LumpType.LUMP_ENTITIES:
@@ -61,6 +62,7 @@ namespace SabreTools.Serialization.Wrappers
                     filename = "pakfile.zip";
                     break;
             }
+#pragma warning restore IDE0010
 
             // Ensure directory separators are consistent
             if (Path.DirectorySeparatorChar == '\\')

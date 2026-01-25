@@ -439,7 +439,6 @@ namespace SabreTools.Serialization.Wrappers
                 {
                     _fileStream = GetFileStream(filename, outputDirectory);
 
-
                     // Loop through the data blocks
                     // Has to be a while loop instead of a for loop due to cab spanning continue blocks
                     for (int j = 0; j < _folder.DataCount; j++)
@@ -494,6 +493,7 @@ namespace SabreTools.Serialization.Wrappers
                             CompressionType.TYPE_LZX => [],
 
                             // Should be impossible
+                            CompressionType.MASK_TYPE => [],
                             _ => [],
                         };
 
@@ -549,7 +549,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     _fileStream.Write(data, (int)tempBytesLeft, data.Length - (int)tempBytesLeft);
-                    _bytesLeft -= (data.Length - tempBytesLeft);
+                    _bytesLeft -= data.Length - tempBytesLeft;
                 }
 
                 // Top if block occurs on http://redump.org/disc/107833/ , middle on https://dbox.tools/titles/pc/57520FA0 , bottom still unobserved
@@ -595,6 +595,7 @@ namespace SabreTools.Serialization.Wrappers
         /// not supplied by the cabinet file creating application, the checksum field is set to 0 (zero). Cabinet
         /// extracting applications do not compute or verify the checksum if the field is set to 0 (zero).
         /// </summary>
+#pragma warning disable IDE0051
         private static uint ChecksumData(byte[] data)
         {
             uint[] C =
@@ -607,6 +608,7 @@ namespace SabreTools.Serialization.Wrappers
 
             return C[0] ^ C[1] ^ C[2] ^ C[3];
         }
+#pragma warning restore IDE0051
 
         /// <summary>
         /// Individual algorithmic step

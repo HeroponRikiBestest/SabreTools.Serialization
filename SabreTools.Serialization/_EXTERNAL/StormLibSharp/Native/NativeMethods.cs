@@ -52,7 +52,6 @@ namespace StormLibSharp.Native
         [DllImport(STORMLIB, CallingConvention = CallingConvention.Winapi, ExactSpelling = true, PreserveSig = true, SetLastError = true, ThrowOnUnmappableChar = false)]
         public static extern bool SFileFlushArchive(MpqArchiveSafeHandle? hMpq);
 
-
         [DllImport(STORMLIB, CallingConvention = CallingConvention.Winapi, ExactSpelling = true, PreserveSig = true, SetLastError = true, ThrowOnUnmappableChar = false)]
         public static extern bool SFileCloseArchive(IntPtr hMpq);
 
@@ -461,6 +460,8 @@ namespace StormLibSharp.Native
     }
 
 #pragma warning disable CS0169
+#pragma warning disable IDE0044
+#pragma warning disable IDE0051
     internal struct SFILE_CREATE_MPQ
     {
         public uint cbSize;
@@ -476,6 +477,8 @@ namespace StormLibSharp.Native
         public uint dwMaxFileCount;
     }
 #pragma warning restore CS0169
+#pragma warning restore IDE0044
+#pragma warning restore IDE0051
 
     internal unsafe struct _SFILE_FIND_DATA
     {

@@ -150,6 +150,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.ExportTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.ExportTable.Size, "      Size");
             }
+
             if (header.ImportTable is not null)
             {
                 builder.AppendLine("    Import Table (2)");
@@ -157,6 +158,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.ImportTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.ImportTable.Size, "      Size");
             }
+
             if (header.ResourceTable is not null)
             {
                 builder.AppendLine("    Resource Table (3)");
@@ -164,6 +166,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.ResourceTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.ResourceTable.Size, "      Size");
             }
+
             if (header.ExceptionTable is not null)
             {
                 builder.AppendLine("    Exception Table (4)");
@@ -171,6 +174,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.ExceptionTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.ExceptionTable.Size, "      Size");
             }
+
             if (header.CertificateTable is not null)
             {
                 builder.AppendLine("    Certificate Table (5)");
@@ -178,6 +182,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.CertificateTable.VirtualAddress, "      Physical address");
                 builder.AppendLine(header.CertificateTable.Size, "      Size");
             }
+
             if (header.BaseRelocationTable is not null)
             {
                 builder.AppendLine("    Base Relocation Table (6)");
@@ -185,6 +190,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.BaseRelocationTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.BaseRelocationTable.Size, "      Size");
             }
+
             if (header.Debug is not null)
             {
                 builder.AppendLine("    Debug Table (7)");
@@ -192,6 +198,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.Debug.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.Debug.Size, "      Size");
             }
+
             if (header.NumberOfRvaAndSizes >= 8)
             {
                 builder.AppendLine("    Architecture Table (8)");
@@ -199,6 +206,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine("      Physical address: 0 (0x00000000)");
                 builder.AppendLine("      Size: 0 (0x00000000)");
             }
+
             if (header.GlobalPtr is not null)
             {
                 builder.AppendLine("    Global Pointer Register (9)");
@@ -206,6 +214,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.GlobalPtr.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.GlobalPtr.Size, "      Size");
             }
+
             if (header.ThreadLocalStorageTable is not null)
             {
                 builder.AppendLine("    Thread Local Storage (TLS) Table (10)");
@@ -213,6 +222,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.ThreadLocalStorageTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.ThreadLocalStorageTable.Size, "      Size");
             }
+
             if (header.LoadConfigTable is not null)
             {
                 builder.AppendLine("    Load Config Table (11)");
@@ -220,6 +230,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.LoadConfigTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.LoadConfigTable.Size, "      Size");
             }
+
             if (header.BoundImport is not null)
             {
                 builder.AppendLine("    Bound Import Table (12)");
@@ -227,6 +238,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.BoundImport.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.BoundImport.Size, "      Size");
             }
+
             if (header.ImportAddressTable is not null)
             {
                 builder.AppendLine("    Import Address Table (13)");
@@ -234,6 +246,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.ImportAddressTable.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.ImportAddressTable.Size, "      Size");
             }
+
             if (header.DelayImportDescriptor is not null)
             {
                 builder.AppendLine("    Delay Import Descriptor (14)");
@@ -241,6 +254,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.DelayImportDescriptor.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.DelayImportDescriptor.Size, "      Size");
             }
+
             if (header.CLRRuntimeHeader is not null)
             {
                 builder.AppendLine("    CLR Runtime Header (15)");
@@ -248,6 +262,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(header.CLRRuntimeHeader.VirtualAddress.ConvertVirtualAddress(table), "      Physical address");
                 builder.AppendLine(header.CLRRuntimeHeader.Size, "      Size");
             }
+
             if (header.NumberOfRvaAndSizes >= 16)
             {
                 builder.AppendLine("    Reserved (16)");
@@ -317,6 +332,7 @@ namespace SabreTools.Serialization.Wrappers
                     case FileRecord item: Print(builder, item, i); break;
                     case SectionDefinition item: Print(builder, item, i); break;
                     case CLRTokenDefinition item: Print(builder, item, i); break;
+                    default: break;
                 }
             }
 
@@ -335,6 +351,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(entry.Zeroes, "    Zeroes");
                 builder.AppendLine(entry.Offset, "    Offset");
             }
+
             builder.AppendLine(entry.Value, "    Value");
             builder.AppendLine($"    Section number: {entry.SectionNumber} (0x{entry.SectionNumber:X})");
             builder.AppendLine($"    Symbol type: {entry.SymbolType} (0x{entry.SymbolType:X})");
@@ -612,6 +629,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(table.OrdinalTableRVA, "    Ordinal table RVA");
                 builder.AppendLine(table.OrdinalTableRVA.ConvertVirtualAddress(sections), "  Ordinal table physical address");
             }
+
             builder.AppendLine();
         }
 
@@ -946,15 +964,18 @@ namespace SabreTools.Serialization.Wrappers
                         PrintResourceRT_CURSOR(entry, level, builder);
                         break;
                     case ResourceType.RT_BITMAP:
+                    case ResourceType.RT_NEWBITMAP:
                         PrintResourceRT_BITMAP(entry, level, builder);
                         break;
                     case ResourceType.RT_ICON:
                         PrintResourceRT_ICON(entry, level, builder);
                         break;
                     case ResourceType.RT_MENU:
+                    case ResourceType.RT_NEWMENU:
                         PrintResourceRT_MENU(entry, level, builder);
                         break;
                     case ResourceType.RT_DIALOG:
+                    case ResourceType.RT_NEWDIALOG:
                         PrintResourceRT_DIALOG(entry, level, builder);
                         break;
                     case ResourceType.RT_STRING:
@@ -1005,6 +1026,16 @@ namespace SabreTools.Serialization.Wrappers
                     case ResourceType.RT_MANIFEST:
                         PrintResourceRT_MANIFEST(entry, level, builder);
                         break;
+
+                    // Bitflag, ignore
+                    case ResourceType.RT_NEWRESOURCE:
+                        break;
+
+                    // Error state, ignore
+                    case ResourceType.RT_ERROR:
+                        PrintResourceUNKNOWN(entry, level, types[0], builder);
+                        break;
+
                     default:
                         PrintResourceUNKNOWN(entry, level, types[0], builder);
                         break;
@@ -1042,6 +1073,7 @@ namespace SabreTools.Serialization.Wrappers
 
             MenuResource? menu = null;
             try { menu = entry.AsMenu(); } catch { }
+
             if (menu is null)
             {
                 builder.AppendLine($"{padding}Menu resource found, but malformed");
@@ -1063,6 +1095,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 builder.AppendLine($"{padding}Menu header found, but malformed");
             }
+
             builder.AppendLine();
 
             builder.AppendLine($"{padding}Menu items");
@@ -1117,6 +1150,7 @@ namespace SabreTools.Serialization.Wrappers
 
             DialogBoxResource? dialogBox = null;
             try { dialogBox = entry.AsDialogBox(); } catch { }
+
             if (dialogBox is null)
             {
                 builder.AppendLine($"{padding}Dialog box resource found, but malformed");
@@ -1252,6 +1286,7 @@ namespace SabreTools.Serialization.Wrappers
 
             Dictionary<int, string?>? stringTable = null;
             try { stringTable = entry.AsStringTable(); } catch { }
+
             if (stringTable is null)
             {
                 builder.AppendLine($"{padding}String table resource found, but malformed");
@@ -1284,6 +1319,7 @@ namespace SabreTools.Serialization.Wrappers
 
             AcceleratorTableEntry[]? acceleratorTable = null;
             try { acceleratorTable = entry.AsAcceleratorTableResource(); } catch { }
+
             if (acceleratorTable is null)
             {
                 builder.AppendLine($"{padding}Accelerator table resource found, but malformed");
@@ -1366,6 +1402,7 @@ namespace SabreTools.Serialization.Wrappers
 
             MessageResourceData? messageTable = null;
             try { messageTable = entry.AsMessageResourceData(); } catch { }
+
             if (messageTable is null)
             {
                 builder.AppendLine($"{padding}Message resource data found, but malformed");
@@ -1397,6 +1434,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine(messageResourceBlock.OffsetToEntries, $"{padding}  Offset to entries");
                 }
             }
+
             builder.AppendLine();
 
             builder.AppendLine($"{padding}Message resource entries");
@@ -1443,6 +1481,7 @@ namespace SabreTools.Serialization.Wrappers
 
             VersionInfo? versionInfo = null;
             try { versionInfo = entry.AsVersionInfo(); } catch { }
+
             if (versionInfo is null)
             {
                 builder.AppendLine($"{padding}Version info resource found, but malformed");
@@ -1607,6 +1646,7 @@ namespace SabreTools.Serialization.Wrappers
 
             AssemblyManifest? assemblyManifest = null;
             try { assemblyManifest = entry.AsAssemblyManifest(); } catch { }
+
             if (assemblyManifest is null)
             {
                 builder.AppendLine($"{padding}Assembly manifest found, but malformed");
@@ -1663,6 +1703,7 @@ namespace SabreTools.Serialization.Wrappers
                             builder.AppendLine(dependency.DependentAssembly.AssemblyIdentity.PublicKeyToken, $"{padding}[Dependency {i} Assembly Identity] Public key token");
                             builder.AppendLine(dependency.DependentAssembly.AssemblyIdentity.Language, $"{padding}[Dependency {i} Assembly Identity] Language");
                         }
+
                         if (dependency.DependentAssembly.BindingRedirect is not null && dependency.DependentAssembly.BindingRedirect.Length > 0)
                         {
                             for (int j = 0; j < dependency.DependentAssembly.BindingRedirect.Length; j++)

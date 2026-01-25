@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Interfaces
         /// <typeparam name="U">Type of object to deserialize from</typeparam>
         /// <param name="obj">Object to deserialize from</param>
         /// <returns>Filled object on success, null on error</returns>
-        TSource? Deserialize(TDest? obj);
+        public TSource? Deserialize(TDest? obj);
 
         /// <summary>
         /// Serialize a <typeparamref name="TSource"/> into <typeparamref name="TDest"/>
@@ -21,6 +21,6 @@ namespace SabreTools.Serialization.Interfaces
         /// <typeparam name="U">Type of object to serialize to</typeparam>
         /// <param name="obj">Object to serialize from</param>
         /// <returns>Filled object on success, null on error</returns>
-        TDest? Serialize(TSource? obj);
+        public TDest? Serialize(TSource? obj);
     }
 }

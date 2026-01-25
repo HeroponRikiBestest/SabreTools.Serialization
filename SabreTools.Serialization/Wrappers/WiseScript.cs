@@ -162,6 +162,7 @@ namespace SabreTools.Serialization.Wrappers
             // Loop through the state machine and process
             foreach (var state in States)
             {
+#pragma warning disable IDE0010
                 switch (state.Op)
                 {
                     case OperationCode.InstallFile:
@@ -234,6 +235,7 @@ namespace SabreTools.Serialization.Wrappers
                         {
                             if (includeDebug) Console.WriteLine($"Directory {createDirectory.Pathname} could not be created!");
                         }
+
                         break;
 
                     case OperationCode.CopyLocalFile:
@@ -326,6 +328,7 @@ namespace SabreTools.Serialization.Wrappers
                     default:
                         break;
                 }
+#pragma warning restore IDE0010
             }
 
             return true;

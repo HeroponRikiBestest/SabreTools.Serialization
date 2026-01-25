@@ -8,6 +8,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get a human-readable description of the wrapper
         /// </summary>
-        string Description();
+        public string Description();
     }
 }

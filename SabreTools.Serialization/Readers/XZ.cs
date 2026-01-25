@@ -237,7 +237,7 @@ namespace SabreTools.Serialization.Readers
             }
 
             // Parse the padding as needed
-            int paddingLength = 4 - (int)(data.Position - currentOffset) % 4;
+            int paddingLength = 4 - ((int)(data.Position - currentOffset) % 4);
             if (paddingLength >= 0)
                 obj.Padding = data.ReadBytes(paddingLength);
 

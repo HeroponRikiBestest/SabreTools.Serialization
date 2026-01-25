@@ -11,13 +11,13 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Export the item information as JSON
         /// </summary>
-        string ExportJSON();
+        public string ExportJSON();
 #endif
 
         /// <summary>
         /// Print information associated with a model
         /// </summary>
         /// <param name="builder">StringBuilder to append information to</param>
-        void PrintInformation(StringBuilder builder);
+        public void PrintInformation(StringBuilder builder);
     }
 }

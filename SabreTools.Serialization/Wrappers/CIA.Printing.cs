@@ -63,6 +63,7 @@ namespace SabreTools.Serialization.Wrappers
                     case 0: certificateName = " (CA)"; break;
                     case 1: certificateName = " (Ticket)"; break;
                     case 2: certificateName = " (TMD)"; break;
+                    default: break;
                 }
 
                 builder.AppendLine($"  Certificate {i}{certificateName}");
@@ -86,6 +87,9 @@ namespace SabreTools.Serialization.Wrappers
                     case PublicKeyType.EllipticCurve:
                         builder.AppendLine(certificate.ECCPublicKey, "    Public key");
                         builder.AppendLine(certificate.ECCPadding, "    Padding");
+                        break;
+                    default:
+                        builder.AppendLine($"Key type '{certificate.KeyType}' not recognized");
                         break;
                 }
             }
@@ -134,6 +138,7 @@ namespace SabreTools.Serialization.Wrappers
                     builder.AppendLine(ticket.Limits[i], $"    Limit {i}");
                 }
             }
+
             builder.AppendLine(ticket.ContentIndexSize, "    Content index size");
             builder.AppendLine(ticket.ContentIndex, "    Content index");
             builder.AppendLine();
@@ -155,6 +160,7 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         case 0: certificateName = " (Ticket)"; break;
                         case 1: certificateName = " (CA)"; break;
+                        default: break;
                     }
 
                     builder.AppendLine($"  Certificate {i}{certificateName}");
@@ -178,6 +184,9 @@ namespace SabreTools.Serialization.Wrappers
                         case PublicKeyType.EllipticCurve:
                             builder.AppendLine(certificate.ECCPublicKey, "    Public key");
                             builder.AppendLine(certificate.ECCPadding, "    Padding");
+                            break;
+                        default:
+                            builder.AppendLine($"Key type '{certificate.KeyType}' not recognized");
                             break;
                     }
                 }
@@ -278,6 +287,7 @@ namespace SabreTools.Serialization.Wrappers
                     {
                         case 0: certificateName = " (TMD)"; break;
                         case 1: certificateName = " (CA)"; break;
+                        default: break;
                     }
 
                     builder.AppendLine($"  Certificate {i}{certificateName}");
@@ -301,6 +311,9 @@ namespace SabreTools.Serialization.Wrappers
                         case PublicKeyType.EllipticCurve:
                             builder.AppendLine(certificate.ECCPublicKey, "    Public key");
                             builder.AppendLine(certificate.ECCPadding, "    Padding");
+                            break;
+                        default:
+                            builder.AppendLine($"Key type '{certificate.KeyType}' not recognized");
                             break;
                     }
                 }

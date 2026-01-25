@@ -9,6 +9,6 @@ namespace SabreTools.Serialization.Wrappers
         /// <summary>
         /// Get the backing model
         /// </summary>
-        TModel GetModel();
+        public TModel GetModel();
     }
 }

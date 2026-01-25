@@ -157,6 +157,7 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.Descriptors[i] = (ARM9AccessControlDescriptors)data.ReadByteValue();
             }
+
             obj.DescriptorVersion = data.ReadByteValue();
 
             return obj;
@@ -176,6 +177,7 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.Descriptors[i] = data.ReadUInt32LittleEndian();
             }
+
             obj.Reserved = data.ReadBytes(0x10);
 
             return obj;
@@ -201,17 +203,20 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.ResourceLimitDescriptors[i] = data.ReadUInt16LittleEndian();
             }
+
             obj.StorageInfo = ParseStorageInfo(data);
             obj.ServiceAccessControl = new ulong[32];
             for (int i = 0; i < 32; i++)
             {
                 obj.ServiceAccessControl[i] = data.ReadUInt64LittleEndian();
             }
+
             obj.ExtendedServiceAccessControl = new ulong[2];
             for (int i = 0; i < 2; i++)
             {
                 obj.ExtendedServiceAccessControl[i] = data.ReadUInt64LittleEndian();
             }
+
             obj.Reserved = data.ReadBytes(0x0F);
             obj.ResourceLimitCategory = (ResourceLimitCategory)data.ReadByteValue();
 
@@ -307,6 +312,7 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.FileHeaders[i] = ParseExeFSFileHeader(data);
             }
+
             obj.Reserved = data.ReadBytes(0x20);
             obj.FileHashes = new byte[10][];
             for (int i = 0; i < 10; i++)
@@ -561,6 +567,7 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.DependencyModuleList[i] = data.ReadUInt64LittleEndian();
             }
+
             obj.SystemInfo = ParseSystemInfo(data);
 
             return obj;

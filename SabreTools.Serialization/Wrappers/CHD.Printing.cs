@@ -138,6 +138,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 compressorsLine += string.Join(", ", [.. compressors]);
             }
+
             builder.AppendLine(compressorsLine);
 
             builder.AppendLine(header.LogicalBytes, $"Logical bytes");

@@ -68,6 +68,7 @@ namespace SabreTools.Serialization.Readers
         /// <inheritdoc cref="Deserialize(Stream)"/>
         public Data.Models.Hashfile.Hashfile? Deserialize(Stream? data, HashType hash)
         {
+#pragma warning disable IDE0072
             return hash switch
             {
                 HashType.CRC32 => DeserializeSFV(data),
@@ -84,6 +85,7 @@ namespace SabreTools.Serialization.Readers
 
                 _ => null,
             };
+#pragma warning restore IDE0072
         }
 
         /// <inheritdoc cref="Deserialize(Stream)"/>

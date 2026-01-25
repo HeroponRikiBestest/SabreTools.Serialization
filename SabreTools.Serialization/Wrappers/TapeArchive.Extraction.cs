@@ -81,9 +81,16 @@ namespace SabreTools.Serialization.Wrappers
                             else if (Path.DirectorySeparatorChar == '/')
                                 entryDirectory = entryDirectory.Replace('\\', '/');
 
-                            // Create the director
+                            // Create the directory
                             Directory.CreateDirectory(entryDirectory);
                             continue;
+
+                        // File types have no special handling
+                        case TypeFlag.REGTYPE:
+                        case TypeFlag.AREGTYPE:
+                        case TypeFlag.CONTTYPE:
+                        default:
+                            break;
                     }
 
                     // Get the file size

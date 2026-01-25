@@ -104,6 +104,7 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.Reserved1[i] = data.ReadUInt16LittleEndian();
             }
+
             obj.OEMIdentifier = data.ReadUInt16LittleEndian();
             obj.OEMInformation = data.ReadUInt16LittleEndian();
             obj.Reserved2 = new ushort[10];
@@ -111,6 +112,7 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.Reserved2[i] = data.ReadUInt16LittleEndian();
             }
+
             obj.NewExeHeaderAddr = data.ReadUInt32LittleEndian();
 
             #endregion

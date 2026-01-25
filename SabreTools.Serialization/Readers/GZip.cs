@@ -116,7 +116,6 @@ namespace SabreTools.Serialization.Readers
 #endif
                 obj.FileComment = data.ReadNullTerminatedAnsiString();
 
-
 #if NET20 || NET35
             if ((obj.Flags & Flags.FHCRC) != 0)
 #else
