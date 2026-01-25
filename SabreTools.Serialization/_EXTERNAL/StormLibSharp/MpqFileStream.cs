@@ -21,7 +21,7 @@ namespace StormLibSharp
 
         private void VerifyHandle()
         {
-            if (_handle == null || _handle.IsInvalid || _handle.IsClosed)
+            if (_handle is null || _handle.IsInvalid || _handle.IsClosed)
                 throw new ObjectDisposedException("MpqFileStream");
         }
 
@@ -77,7 +77,7 @@ namespace StormLibSharp
 
         public override unsafe int Read(byte[] buffer, int offset, int count)
         {
-            if (buffer == null)
+            if (buffer is null)
                 throw new ArgumentNullException(nameof(buffer));
             if (offset > buffer.Length || (offset + count) > buffer.Length)
                 throw new ArgumentException();
@@ -122,7 +122,7 @@ namespace StormLibSharp
         {
             VerifyHandle();
 
-            if (buffer == null)
+            if (buffer is null)
                 throw new ArgumentNullException(nameof(buffer));
             if (offset > buffer.Length || (offset + count) > buffer.Length)
                 throw new ArgumentException();

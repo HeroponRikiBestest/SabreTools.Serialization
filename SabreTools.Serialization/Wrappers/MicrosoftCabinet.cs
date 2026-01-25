@@ -73,7 +73,7 @@ namespace SabreTools.Serialization.Wrappers
         public static MicrosoftCabinet? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -93,7 +93,7 @@ namespace SabreTools.Serialization.Wrappers
         public static MicrosoftCabinet? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -102,7 +102,7 @@ namespace SabreTools.Serialization.Wrappers
                 long currentOffset = data.Position;
 
                 var model = new Readers.MicrosoftCabinet().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 return new MicrosoftCabinet(model, data, currentOffset);
@@ -125,7 +125,7 @@ namespace SabreTools.Serialization.Wrappers
         public DateTime? GetDateTime(int fileIndex)
         {
             // If we have an invalid file index
-            if (fileIndex < 0 || Files == null || fileIndex >= Files.Length)
+            if (fileIndex < 0 || Files is null || fileIndex >= Files.Length)
                 return null;
 
             // If we have an invalid DateTime
@@ -274,7 +274,7 @@ namespace SabreTools.Serialization.Wrappers
             if (!skipPrev && spanPrev)
             {
                 // Try to get Prev if it doesn't exist
-                if (Prev?.Header == null)
+                if (Prev?.Header is null)
                     Prev = OpenPrevious(filename, includeDebug);
 
                 // Get all files from Prev
@@ -290,7 +290,7 @@ namespace SabreTools.Serialization.Wrappers
             if (!skipNext && spanNext)
             {
                 // Try to get Next if it doesn't exist
-                if (Next?.Header == null)
+                if (Next?.Header is null)
                     Next = OpenNext(filename);
 
                 // Get all files from Prev
@@ -314,7 +314,7 @@ namespace SabreTools.Serialization.Wrappers
         private CFFILE[] GetFiles(int folderIndex, bool ignorePrev = false)
         {
             // Ignore invalid archives
-            if (Files == null)
+            if (Files is null)
                 return [];
 
             // Get all files with a name and matching index

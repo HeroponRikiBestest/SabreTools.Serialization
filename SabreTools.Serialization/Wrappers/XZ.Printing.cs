@@ -57,7 +57,7 @@ namespace SabreTools.Serialization.Wrappers
                 // TODO: Print filter flags
                 builder.AppendLine(block.HeaderPadding, "    Header padding");
                 builder.AppendLine(block.Crc32, "    CRC-32");
-                if (block.CompressedData == null)
+                if (block.CompressedData is null)
                     builder.AppendLine("    Compressed data length: [NULL]");
                 else
                     builder.AppendLine(block.CompressedData.Length, "    Compressed data length");

@@ -11,7 +11,7 @@ namespace SabreTools.Serialization.Readers
         public override TypeLengthValue[]? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -24,7 +24,7 @@ namespace SabreTools.Serialization.Readers
                 while (data.Position < data.Length)
                 {
                     var topLevelValue = ParseTypeLengthValue(data);
-                    if (topLevelValue == null)
+                    if (topLevelValue is null)
                         break;
 
                     topLevelValues.Add(topLevelValue);
@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Readers
 
             // Get the length of the value
             ulong? length = ReadLength(data);
-            if (length == null)
+            if (length is null)
                 return null;
 
             // Set the length

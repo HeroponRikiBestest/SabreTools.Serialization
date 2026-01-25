@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Readers
         public T? Deserialize(byte[]? data, int offset, Encoding encoding)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return default;
 
             // If the offset is out of bounds
@@ -91,7 +91,7 @@ namespace SabreTools.Serialization.Readers
         public T? Deserialize(Stream? data, Encoding encoding)
         {
             // If the stream is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return default;
 
             try

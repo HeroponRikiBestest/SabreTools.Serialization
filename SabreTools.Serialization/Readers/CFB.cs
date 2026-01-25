@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Readers
         public override Binary? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.Readers
 
                     // Try to parse the sectors
                     var sectorNumbers = ParseSectorNumbers(data, fileHeader.SectorShift);
-                    if (sectorNumbers == null)
+                    if (sectorNumbers is null)
                         return null;
 
                     // Add all but the last sector number that was parsed
@@ -124,7 +124,7 @@ namespace SabreTools.Serialization.Readers
 
                     // Try to parse the sectors
                     var sectorNumbers = ParseSectorNumbers(data, fileHeader.SectorShift);
-                    if (sectorNumbers == null)
+                    if (sectorNumbers is null)
                         return null;
 
                     // Add the sector shifts
@@ -160,7 +160,7 @@ namespace SabreTools.Serialization.Readers
 
                     // Try to parse the sectors
                     var sectorNumbers = ParseSectorNumbers(data, fileHeader.SectorShift);
-                    if (sectorNumbers == null)
+                    if (sectorNumbers is null)
                         return null;
 
                     // Add the sector shifts
@@ -215,7 +215,7 @@ namespace SabreTools.Serialization.Readers
 
                     // Try to parse the sectors
                     var directoryEntries = ParseDirectoryEntries(data, fileHeader.SectorShift, fileHeader.MajorVersion);
-                    if (directoryEntries == null)
+                    if (directoryEntries is null)
                         return null;
 
                     // Add the sector shifts

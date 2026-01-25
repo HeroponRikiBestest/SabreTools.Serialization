@@ -11,7 +11,7 @@ namespace SabreTools.Serialization.Readers
         public override Data.Models.GCF.File? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -310,7 +310,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the data block header
                 var dataBlockHeader = ParseDataBlockHeader(data, header.MinorVersion);
-                if (dataBlockHeader == null)
+                if (dataBlockHeader is null)
                     return null;
 
                 // Set the game cache data block header

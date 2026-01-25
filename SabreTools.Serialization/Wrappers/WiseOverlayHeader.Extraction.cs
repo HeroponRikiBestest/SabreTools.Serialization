@@ -144,7 +144,7 @@ namespace SabreTools.Serialization.Wrappers
             string baseName = $"CustomBillboardSet_{obj.Flags:X4}-{obj.Operand_2}-{obj.Operand_3}";
 
             // If there are no deflate objects
-            if (obj.DeflateInfo == null)
+            if (obj.DeflateInfo is null)
             {
                 if (includeDebug) Console.WriteLine($"Skipping {baseName} because the deflate object array is null!");
                 return ExtractionStatus.FAIL;

@@ -11,7 +11,7 @@ namespace SabreTools.Serialization.Writers
         public override Stream? SerializeStream(MetadataFile? obj)
         {
             // If the metadata file is null
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             // Setup the writer and output
@@ -34,7 +34,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteSets(Set[]? sets, StreamWriter writer)
         {
             // If the games information is missing, we can't do anything
-            if (sets == null || sets.Length == 0)
+            if (sets is null || sets.Length == 0)
                 return;
 
             // Loop through and write out the games
@@ -53,7 +53,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteSet(Set set, StreamWriter writer)
         {
             // If the set information is missing, we can't do anything
-            if (set == null)
+            if (set is null)
                 return;
 
             if (!string.IsNullOrEmpty(set.Driver))
@@ -106,7 +106,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteRows(Row[]? rows, StreamWriter writer)
         {
             // If the array is missing, we can't do anything
-            if (rows == null)
+            if (rows is null)
                 return;
 
             foreach (var row in rows)

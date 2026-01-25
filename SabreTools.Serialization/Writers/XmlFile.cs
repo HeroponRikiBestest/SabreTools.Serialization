@@ -30,7 +30,7 @@ namespace SabreTools.Serialization.Writers
         public byte[]? SerializeArray(T? obj, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
         {
             using var stream = Serialize(obj, name, pubid, sysid, subset);
-            if (stream == null)
+            if (stream is null)
                 return null;
 
             byte[] bytes = new byte[stream.Length];
@@ -62,7 +62,7 @@ namespace SabreTools.Serialization.Writers
                 return false;
 
             using var stream = Serialize(obj, name, pubid, sysid, subset);
-            if (stream == null)
+            if (stream is null)
                 return false;
 
             using var fs = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.Writers
         public Stream? Serialize(T? obj, string? name = null, string? pubid = null, string? sysid = null, string? subset = null)
         {
             // If the object is null
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             // Setup the serializer and the writer

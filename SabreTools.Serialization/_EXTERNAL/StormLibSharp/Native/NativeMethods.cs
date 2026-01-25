@@ -153,7 +153,7 @@ namespace StormLibSharp.Native
             MpqFileSafeHandle? hFile
             )
         {
-            if (hFile == null || hFile.IsInvalid || hFile.IsClosed)
+            if (hFile is null || hFile.IsInvalid || hFile.IsClosed)
                 throw new InvalidOperationException();
 
             IntPtr handle = hFile.DangerousGetHandle();

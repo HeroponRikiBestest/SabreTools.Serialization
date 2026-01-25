@@ -34,7 +34,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (message != null)
                     Console.WriteLine(message);
 
-                if (isDecrypted == null)
+                if (isDecrypted is null)
                 {
                     Console.WriteLine("File has an empty secure area, cannot proceed");
                     return;
@@ -152,7 +152,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (message != null)
                     Console.WriteLine(message);
 
-                if (isDecrypted == null)
+                if (isDecrypted is null)
                 {
                     Console.WriteLine("File has an empty secure area, cannot proceed");
                     return;

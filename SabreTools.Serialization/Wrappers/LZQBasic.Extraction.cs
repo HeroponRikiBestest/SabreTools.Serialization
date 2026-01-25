@@ -21,7 +21,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the decompressor
             var decompressor = Decompressor.CreateQBasic(contents);
-            if (decompressor == null)
+            if (decompressor is null)
                 return false;
 
             // If we have an invalid output directory

@@ -11,7 +11,7 @@ namespace SabreTools.Serialization.Readers
         public override Data.Models.N3DS.CIA? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -52,7 +52,7 @@ namespace SabreTools.Serialization.Readers
                 for (int i = 0; i < 3; i++)
                 {
                     var certificate = ParseCertificate(data);
-                    if (certificate == null)
+                    if (certificate is null)
                         return null;
 
                     cia.CertificateChain[i] = certificate;
@@ -68,7 +68,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the ticket
                 var ticket = ParseTicket(data);
-                if (ticket == null)
+                if (ticket is null)
                     return null;
 
                 // Set the ticket
@@ -84,7 +84,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the title metadata
                 var titleMetadata = ParseTitleMetadata(data);
-                if (titleMetadata == null)
+                if (titleMetadata is null)
                     return null;
 
                 // Set the title metadata
@@ -352,7 +352,7 @@ namespace SabreTools.Serialization.Readers
                 for (int i = 0; i < 2; i++)
                 {
                     var certificate = ParseCertificate(data);
-                    if (certificate == null)
+                    if (certificate is null)
                         return null;
 
                     obj.CertificateChain[i] = certificate;
@@ -440,7 +440,7 @@ namespace SabreTools.Serialization.Readers
                 for (int i = 0; i < 2; i++)
                 {
                     var certificate = ParseCertificate(data);
-                    if (certificate == null)
+                    if (certificate is null)
                         return null;
 
                     obj.CertificateChain[i] = certificate;

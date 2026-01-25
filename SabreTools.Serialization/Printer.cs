@@ -16,7 +16,7 @@ namespace SabreTools.Serialization
         public static void PrintToConsole(this IWrapper wrapper)
         {
             var sb = ExportStringBuilder(wrapper);
-            if (sb == null)
+            if (sb is null)
             {
                 Console.WriteLine("No item information could be generated");
                 return;

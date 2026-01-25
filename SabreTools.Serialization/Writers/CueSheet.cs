@@ -12,11 +12,11 @@ namespace SabreTools.Serialization.Writers
         public override Stream? SerializeStream(Data.Models.CueSheets.CueSheet? obj)
         {
             // If the cuesheet is null
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             // If we don't have any files, it's invalid
-            if (obj?.Files == null)
+            if (obj?.Files is null)
                 throw new InvalidDataException(nameof(obj.Files));
             else if (obj.Files.Length == 0)
                 throw new ArgumentException("No files provided to write");
@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteCueSheet(Data.Models.CueSheets.CueSheet cueSheet, StreamWriter sw)
         {
             // If we don't have any files, it's invalid
-            if (cueSheet.Files == null)
+            if (cueSheet.Files is null)
                 throw new InvalidDataException(nameof(cueSheet.Files));
             else if (cueSheet.Files.Length == 0)
                 throw new ArgumentException("No files provided to write");
@@ -79,7 +79,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteCueFile(CueFile? cueFile, StreamWriter sw)
         {
             // If we don't have any tracks, it's invalid
-            if (cueFile?.Tracks == null)
+            if (cueFile?.Tracks is null)
                 throw new InvalidDataException(nameof(cueFile.Tracks));
             else if (cueFile.Tracks.Length == 0)
                 throw new ArgumentException("No tracks provided to write");
@@ -100,7 +100,7 @@ namespace SabreTools.Serialization.Writers
         private static void WriteCueTrack(CueTrack? cueTrack, StreamWriter sw)
         {
             // If we don't have any indices, it's invalid
-            if (cueTrack?.Indices == null)
+            if (cueTrack?.Indices is null)
                 throw new InvalidDataException(nameof(cueTrack.Indices));
             else if (cueTrack.Indices.Length == 0)
                 throw new ArgumentException("No indices provided to write");
@@ -151,7 +151,7 @@ namespace SabreTools.Serialization.Writers
         /// <param name="sw">StreamWriter to write to</param>
         private static void WriteCueIndex(CueIndex? cueIndex, StreamWriter sw)
         {
-            if (cueIndex == null)
+            if (cueIndex is null)
                 throw new ArgumentNullException(nameof(cueIndex));
 
             sw.WriteLine($"    INDEX {cueIndex.Index:D2} {cueIndex.Minutes:D2}:{cueIndex.Seconds:D2}:{cueIndex.Frames:D2}");

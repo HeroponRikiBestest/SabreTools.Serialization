@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Wrappers
         private static void Print(StringBuilder builder, Record? record, int index)
         {
             builder.AppendLine($"  Record Entry {index}");
-            if (record == null)
+            if (record is null)
             {
                 builder.AppendLine("    [NULL]");
                 return;

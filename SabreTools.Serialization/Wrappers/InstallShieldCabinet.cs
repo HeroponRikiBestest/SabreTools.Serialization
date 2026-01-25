@@ -99,7 +99,7 @@ namespace SabreTools.Serialization.Wrappers
         public static InstallShieldCabinet? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -119,7 +119,7 @@ namespace SabreTools.Serialization.Wrappers
         public static InstallShieldCabinet? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -128,7 +128,7 @@ namespace SabreTools.Serialization.Wrappers
                 long currentOffset = data.Position;
 
                 var model = new Readers.InstallShieldCabinet().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 return new InstallShieldCabinet(model, data, currentOffset);
@@ -148,14 +148,14 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public string? GetComponentName(int index)
         {
-            if (Components == null)
+            if (Components is null)
                 return null;
 
             if (index < 0 || index >= ComponentCount)
                 return null;
 
             var component = Components[index];
-            if (component?.Identifier == null)
+            if (component?.Identifier is null)
                 return null;
 
             return component.Identifier.Replace('\\', '/');
@@ -202,7 +202,7 @@ namespace SabreTools.Serialization.Wrappers
                 return false;
 
             FileDescriptor? descriptor = GetFileDescriptor(index);
-            if (descriptor == null)
+            if (descriptor is null)
                 return false;
 
             if (descriptor.IsInvalid())
@@ -247,7 +247,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool TryGetFileDescriptor(int index, out FileDescriptor? fileDescriptor)
         {
             fileDescriptor = GetFileDescriptor(index);
-            if (fileDescriptor == null)
+            if (fileDescriptor is null)
             {
                 Console.Error.WriteLine($"Failed to get file descriptor for file {index}");
                 return false;
@@ -268,7 +268,7 @@ namespace SabreTools.Serialization.Wrappers
         public string? GetFileName(int index)
         {
             var descriptor = GetFileDescriptor(index);
-            if (descriptor == null || descriptor.IsInvalid())
+            if (descriptor is null || descriptor.IsInvalid())
                 return null;
 
             return descriptor.Name;
@@ -279,7 +279,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public static ulong GetReadableBytes(FileDescriptor? descriptor)
         {
-            if (descriptor == null)
+            if (descriptor is null)
                 return 0;
 
             return descriptor.IsCompressed()
@@ -292,7 +292,7 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public static ulong GetWritableBytes(FileDescriptor? descriptor)
         {
-            if (descriptor == null)
+            if (descriptor is null)
                 return 0;
 
             return descriptor.ExpandedSize;
@@ -330,7 +330,7 @@ namespace SabreTools.Serialization.Wrappers
             for (int i = 0; i < FileGroupCount; i++)
             {
                 var fileGroup = GetFileGroup(i);
-                if (fileGroup == null)
+                if (fileGroup is null)
                     continue;
 
                 if (fileGroup.FirstFile > index || fileGroup.LastFile < index)

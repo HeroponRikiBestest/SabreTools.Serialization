@@ -14,7 +14,7 @@ namespace SabreTools.Serialization.Readers
         public override Executable? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -29,7 +29,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Parse the MS-DOS stub
                 var stub = new MSDOS().Deserialize(data);
-                if (stub?.Header == null || stub.Header.NewExeHeaderAddr == 0)
+                if (stub?.Header is null || stub.Header.NewExeHeaderAddr == 0)
                     return null;
 
                 // Set the MS-DOS stub
@@ -425,7 +425,7 @@ namespace SabreTools.Serialization.Readers
                     break;
 
                 var record = ParseRelocationRecord(data);
-                if (record == null)
+                if (record is null)
                     break;
 
                 obj.RelocationRecords[i] = record;
@@ -541,7 +541,7 @@ namespace SabreTools.Serialization.Readers
             foreach (var rtie in resourceTable.ResourceTypes)
             {
                 // Skip invalid entries
-                if (rtie == null || rtie.TypeID == 0)
+                if (rtie is null || rtie.TypeID == 0)
                     continue;
 
                 // Handle offset types
@@ -552,7 +552,7 @@ namespace SabreTools.Serialization.Readers
                 foreach (var rtre in rtie.Resources)
                 {
                     // Skip invalid entries
-                    if (rtre == null || rtre.IsIntegerType() || rtre.ResourceID == 0)
+                    if (rtre is null || rtre.IsIntegerType() || rtre.ResourceID == 0)
                         continue;
 
                     // Skip already added entries

@@ -18,7 +18,7 @@ namespace SabreTools.Data.ObjectIdentifier
         public static string? ParseOIDToOIDIRINotation(ulong[]? values)
         {
             // If we have an invalid set of values, we can't do anything
-            if (values == null || values.Length == 0)
+            if (values is null || values.Length == 0)
                 return null;
 
             // Set the initial index
@@ -29,7 +29,7 @@ namespace SabreTools.Data.ObjectIdentifier
 
             // Try to parse the standard value
             string? standard = ParseOIDToOIDIRINotation(values, ref index);
-            if (standard == null)
+            if (standard is null)
                 return null;
 
             // Add the standard value to the output
@@ -68,7 +68,7 @@ namespace SabreTools.Data.ObjectIdentifier
         private static string? ParseOIDToOIDIRINotation(ulong[]? values, ref int index)
         {
             // If we have an invalid set of values, we can't do anything
-            if (values == null || values.Length == 0)
+            if (values is null || values.Length == 0)
                 return null;
 
             // If we have an invalid index, we can't do anything

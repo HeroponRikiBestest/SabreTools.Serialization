@@ -8,7 +8,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <inheritdoc/>
         public override Data.Models.Metadata.MetadataFile? Serialize(MetadataFile? obj)
         {
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             var metadataFile = new Data.Models.Metadata.MetadataFile();
@@ -59,7 +59,7 @@ namespace SabreTools.Serialization.CrossModel
         /// </summary>
         private static Data.Models.Metadata.Machine? ConvertMachineToInternalModel(GameBase? item)
         {
-            if (item == null)
+            if (item is null)
                 return null;
 
             var machine = new Data.Models.Metadata.Machine

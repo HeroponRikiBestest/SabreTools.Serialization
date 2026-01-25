@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.Wrappers
             // Get the associated directory item
             var directoryEntry = DirectoryEntries[index];
             var directoryItem = Array.Find(DirectoryItems, di => di?.FileNameCRC == directoryEntry.FileNameCRC);
-            if (directoryItem == null)
+            if (directoryItem is null)
                 return false;
 
             // Load the item data

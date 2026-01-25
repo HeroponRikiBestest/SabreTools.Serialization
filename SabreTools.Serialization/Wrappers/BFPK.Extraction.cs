@@ -10,7 +10,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool Extract(string outputDirectory, bool includeDebug)
         {
             // If we have no files
-            if (Files == null || Files.Length == 0)
+            if (Files is null || Files.Length == 0)
                 return false;
 
             // Loop through and extract all files to the output
@@ -33,7 +33,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool ExtractFile(int index, string outputDirectory, bool includeDebug)
         {
             // If we have no files
-            if (Files == null || Files.Length == 0)
+            if (Files is null || Files.Length == 0)
                 return false;
 
             // If we have an invalid index
@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the file information
             var file = Files[index];
-            if (file == null)
+            if (file is null)
                 return false;
 
             // Get the read index and length

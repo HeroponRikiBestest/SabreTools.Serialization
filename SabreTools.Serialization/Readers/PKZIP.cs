@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Readers
         public override Archive? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -42,7 +42,7 @@ namespace SabreTools.Serialization.Readers
                         // Central Directory File Header
                         case CentralDirectoryFileHeaderSignature:
                             var cdr = ParseCentralDirectoryFileHeader(data);
-                            if (cdr == null)
+                            if (cdr is null)
                                 return null;
 
                             // Add the central directory record
@@ -53,7 +53,7 @@ namespace SabreTools.Serialization.Readers
                         // Local File
                         case LocalFileHeaderSignature:
                             var lf = ParseLocalFile(data);
-                            if (lf == null)
+                            if (lf is null)
                                 return null;
 
                             // Add the local file
@@ -68,7 +68,7 @@ namespace SabreTools.Serialization.Readers
                         // End of Central Directory Record
                         case EndOfCentralDirectoryRecordSignature:
                             var eocdr = ParseEndOfCentralDirectoryRecord(data);
-                            if (eocdr == null)
+                            if (eocdr is null)
                                 return null;
 
                             // Assign the end of central directory record
@@ -79,7 +79,7 @@ namespace SabreTools.Serialization.Readers
                         // ZIP64 End of Central Directory
                         case EndOfCentralDirectoryRecord64Signature:
                             var eocdr64 = ParseEndOfCentralDirectoryRecord64(data);
-                            if (eocdr64 == null)
+                            if (eocdr64 is null)
                                 return null;
 
                             // Assign the ZIP64 end of central directory record
@@ -90,7 +90,7 @@ namespace SabreTools.Serialization.Readers
                         // ZIP64 End of Central Directory Locator
                         case EndOfCentralDirectoryLocator64Signature:
                             var eocdl64 = ParseEndOfCentralDirectoryLocator64(data);
-                            if (eocdl64 == null)
+                            if (eocdl64 is null)
                                 return null;
 
                             // Assign the ZIP64 end of central directory record
@@ -101,7 +101,7 @@ namespace SabreTools.Serialization.Readers
                         // Archive Extra Data Record
                         case ArchiveExtraDataRecordSignature:
                             var aedr = ParseArchiveExtraDataRecord(data);
-                            if (aedr == null)
+                            if (aedr is null)
                                 return null;
 
                             // Assign the archive extra data record
@@ -411,7 +411,7 @@ namespace SabreTools.Serialization.Readers
 
             // Try to read the header
             var localFileHeader = ParseLocalFileHeader(data);
-            if (localFileHeader == null)
+            if (localFileHeader is null)
                 return null;
 
             // Assign the header
@@ -424,7 +424,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     if (field is not Zip64ExtendedInformationExtraField infoField)
                         continue;
-                    if (infoField.CompressedSize == null)
+                    if (infoField.CompressedSize is null)
                         continue;
 
                     compressedSize = infoField.CompressedSize.Value;
@@ -505,14 +505,14 @@ namespace SabreTools.Serialization.Readers
             {
                 obj.DataDescriptor = new DataDescriptor();
                 obj.ZIP64DataDescriptor = ParseDataDescriptor64(data);
-                if (obj.ZIP64DataDescriptor == null)
+                if (obj.ZIP64DataDescriptor is null)
                     return null;
             }
             else
             {
                 obj.DataDescriptor = ParseDataDescriptor(data);
                 obj.ZIP64DataDescriptor = new DataDescriptor64();
-                if (obj.DataDescriptor == null)
+                if (obj.DataDescriptor is null)
                     return null;
             }
 
@@ -583,7 +583,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Array of data fields on success, null otherwise</returns>
         public static ExtensibleDataField[]? ParseExtraFields(CentralDirectoryFileHeader header, byte[]? data)
         {
-            if (data == null)
+            if (data is null)
                 return null;
 
             List<ExtensibleDataField> fields = [];
@@ -674,7 +674,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Array of data fields on success, null otherwise</returns>
         public static ExtensibleDataField[]? ParseExtraFields(LocalFileHeader header, byte[]? data)
         {
-            if (data == null)
+            if (data is null)
                 return null;
 
             List<ExtensibleDataField> fields = [];

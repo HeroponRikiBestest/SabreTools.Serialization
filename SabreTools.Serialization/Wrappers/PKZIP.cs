@@ -64,7 +64,7 @@ namespace SabreTools.Serialization.Wrappers
         public static PKZIP? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -84,7 +84,7 @@ namespace SabreTools.Serialization.Wrappers
         public static PKZIP? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -93,7 +93,7 @@ namespace SabreTools.Serialization.Wrappers
                 long currentOffset = data.Position;
 
                 var model = new Readers.PKZIP().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 return new PKZIP(model, data, currentOffset);

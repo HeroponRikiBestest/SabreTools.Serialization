@@ -21,7 +21,7 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, char? value, string prefixString)
         {
-            string valueString = (value == null ? "[NULL]" : value.Value.ToString());
+            string valueString = (value is null ? "[NULL]" : value.Value.ToString());
             return sb.AppendLine($"{prefixString}: {valueString}");
         }
 
@@ -256,7 +256,7 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, byte[]? value, string prefixString)
         {
-            string valueString = (value == null ? "[NULL]" : BitConverter.ToString(value).Replace('-', ' '));
+            string valueString = (value is null ? "[NULL]" : BitConverter.ToString(value).Replace('-', ' '));
             if (valueString.Length == 0)
                 return sb.AppendLine($"{prefixString}: [EMPTY]");
 
@@ -268,7 +268,7 @@ namespace SabreTools.Data.Extensions
         /// </summary>
         public static StringBuilder AppendLine(this StringBuilder sb, byte[]? value, string prefixString, Encoding encoding)
         {
-            string valueString = (value == null ? "[NULL]" : encoding.GetString(value).Replace("\0", string.Empty));
+            string valueString = (value is null ? "[NULL]" : encoding.GetString(value).Replace("\0", string.Empty));
             if (valueString.Length == 0)
                 return sb.AppendLine($"{prefixString}: [EMPTY]");
 

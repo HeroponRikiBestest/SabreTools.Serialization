@@ -72,7 +72,7 @@ namespace SabreTools.Data.Extensions
         public static int ContainingSectionIndex(this uint rva, SectionHeader[] sections)
         {
             // If we have an invalid section table, we can't do anything
-            if (sections == null || sections.Length == 0)
+            if (sections is null || sections.Length == 0)
                 return -1;
 
             // If the RVA is 0, we just return -1 because it's invalid
@@ -159,7 +159,7 @@ namespace SabreTools.Data.Extensions
         public static AcceleratorTableEntry[]? AsAcceleratorTableResource(this Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have data that's invalid for this resource type, we can't do anything
-            if (entry?.Data == null || entry.Data.Length % 8 != 0)
+            if (entry?.Data is null || entry.Data.Length % 8 != 0)
                 return null;
 
             // Get the number of entries
@@ -188,7 +188,7 @@ namespace SabreTools.Data.Extensions
         public static AssemblyManifest? AsAssemblyManifest(this Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
-            if (entry?.Data == null)
+            if (entry?.Data is null)
                 return null;
 
             try
@@ -210,7 +210,7 @@ namespace SabreTools.Data.Extensions
         public static DialogBoxResource? AsDialogBox(this Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
-            if (entry?.Data == null)
+            if (entry?.Data is null)
                 return null;
 
             // Initialize the iterator
@@ -687,7 +687,7 @@ namespace SabreTools.Data.Extensions
         public static FontGroupHeader? AsFontGroup(this Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
-            if (entry?.Data == null)
+            if (entry?.Data is null)
                 return null;
 
             // Initialize the iterator
@@ -756,7 +756,7 @@ namespace SabreTools.Data.Extensions
         public static MenuResource? AsMenu(this Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
-            if (entry?.Data == null)
+            if (entry?.Data is null)
                 return null;
 
             // Initialize the iterator
@@ -830,7 +830,7 @@ namespace SabreTools.Data.Extensions
                     // Align to the DWORD boundary if we're not at the end
                     entry.Data.AlignToBoundary(ref offset, 4);
 
-                    if (menuItem == null)
+                    if (menuItem is null)
                         return null;
 
                     menuItems.Add(menuItem);
@@ -852,7 +852,7 @@ namespace SabreTools.Data.Extensions
         public static MessageResourceData? AsMessageResourceData(this Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
-            if (entry?.Data == null)
+            if (entry?.Data is null)
                 return null;
 
             // Initialize the iterator
@@ -884,7 +884,7 @@ namespace SabreTools.Data.Extensions
                 for (int i = 0; i < messageResourceData.Blocks.Length; i++)
                 {
                     var messageResourceBlock = messageResourceData.Blocks[i];
-                    if (messageResourceBlock == null)
+                    if (messageResourceBlock is null)
                         continue;
 
                     offset = (int)messageResourceBlock.OffsetToEntries;
@@ -996,7 +996,7 @@ namespace SabreTools.Data.Extensions
         public static Dictionary<int, string?>? AsStringTable(this Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
-            if (entry?.Data == null)
+            if (entry?.Data is null)
                 return null;
 
             // Initialize the iterators
@@ -1088,7 +1088,7 @@ namespace SabreTools.Data.Extensions
         public static VersionInfo? AsVersionInfo(this Models.PortableExecutable.Resource.DataEntry? entry)
         {
             // If we have an invalid entry, just skip
-            if (entry?.Data == null)
+            if (entry?.Data is null)
                 return null;
 
             // Initialize the iterator
@@ -1346,7 +1346,7 @@ namespace SabreTools.Data.Extensions
         private static bool AlignToBoundary(this byte[]? input, ref int offset, byte alignment)
         {
             // If the array is invalid
-            if (input == null || input.Length == 0)
+            if (input is null || input.Length == 0)
                 return false;
 
             // If already at the end of the array

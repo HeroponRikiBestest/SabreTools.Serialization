@@ -160,7 +160,7 @@ namespace SabreTools.Serialization.Wrappers
                             // TODO: If not integer type, print out name
                             var resource = entry.Resources[j];
                             builder.AppendLine($"      Resource Entry {j}");
-                            if (resource == null)
+                            if (resource is null)
                             {
                                 builder.AppendLine("      [NULL]");
                                 continue;
@@ -185,7 +185,7 @@ namespace SabreTools.Serialization.Wrappers
                 foreach (var typeAndNameString in table.TypeAndNameStrings)
                 {
                     builder.AppendLine($"  Resource Type/Name Offset {typeAndNameString.Key}");
-                    if (typeAndNameString.Value == null)
+                    if (typeAndNameString.Value is null)
                     {
                         builder.AppendLine("    [NULL]");
                         continue;

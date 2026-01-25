@@ -15,7 +15,7 @@ namespace SabreTools.Data.ObjectIdentifier
         public static string? ParseOIDToDotNotation(ulong[]? values)
         {
             // If we have an invalid set of values, we can't do anything
-            if (values == null || values.Length == 0)
+            if (values is null || values.Length == 0)
                 return null;
 
             var stringValues = Array.ConvertAll(values, v => v.ToString());

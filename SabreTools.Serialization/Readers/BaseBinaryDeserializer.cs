@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Readers
         public virtual TModel? Deserialize(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return default;
 
             // If the offset is out of bounds

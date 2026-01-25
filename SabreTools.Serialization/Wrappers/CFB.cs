@@ -98,7 +98,7 @@ namespace SabreTools.Serialization.Wrappers
         public static CFB? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -118,7 +118,7 @@ namespace SabreTools.Serialization.Wrappers
         public static CFB? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -127,7 +127,7 @@ namespace SabreTools.Serialization.Wrappers
                 long currentOffset = data.Position;
 
                 var model = new Readers.CFB().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 return new CFB(model, data, currentOffset);
@@ -150,7 +150,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<SectorNumber>? GetFATSectorChain(SectorNumber? startingSector)
         {
             // If we have an invalid sector
-            if (startingSector == null || startingSector < 0 || FATSectorNumbers == null || (long)startingSector >= FATSectorNumbers.Length)
+            if (startingSector is null || startingSector < 0 || FATSectorNumbers is null || (long)startingSector >= FATSectorNumbers.Length)
                 return null;
 
             // Setup the returned list
@@ -159,7 +159,7 @@ namespace SabreTools.Serialization.Wrappers
             var lastSector = startingSector;
             while (true)
             {
-                if (lastSector == null)
+                if (lastSector is null)
                     break;
 
                 // Get the next sector from the lookup table
@@ -186,7 +186,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             // Get the sector chain first
             var sectorChain = GetFATSectorChain(startingSector);
-            if (sectorChain == null)
+            if (sectorChain is null)
                 return null;
 
             // Sequentially read the sectors
@@ -218,7 +218,7 @@ namespace SabreTools.Serialization.Wrappers
         public long FATSectorToFileOffset(SectorNumber? sector)
         {
             // If we have an invalid sector number
-            if (sector == null || sector > SectorNumber.MAXREGSECT)
+            if (sector is null || sector > SectorNumber.MAXREGSECT)
                 return -1;
 
             // Convert based on the sector shift value
@@ -237,7 +237,7 @@ namespace SabreTools.Serialization.Wrappers
         public List<SectorNumber>? GetMiniFATSectorChain(SectorNumber? startingSector)
         {
             // If we have an invalid sector
-            if (startingSector == null || startingSector < 0 || MiniFATSectorNumbers == null || (long)startingSector >= MiniFATSectorNumbers.Length)
+            if (startingSector is null || startingSector < 0 || MiniFATSectorNumbers is null || (long)startingSector >= MiniFATSectorNumbers.Length)
                 return null;
 
             // Setup the returned list
@@ -246,7 +246,7 @@ namespace SabreTools.Serialization.Wrappers
             var lastSector = startingSector;
             while (true)
             {
-                if (lastSector == null)
+                if (lastSector is null)
                     break;
 
                 // Get the next sector from the lookup table
@@ -272,12 +272,12 @@ namespace SabreTools.Serialization.Wrappers
         public byte[]? GetMiniFATSectorChainData(SectorNumber startingSector)
         {
             // Validate the mini stream data
-            if (MiniStreamData == null)
+            if (MiniStreamData is null)
                 return null;
 
             // Get the sector chain
             var sectorChain = GetMiniFATSectorChain(startingSector);
-            if (sectorChain == null)
+            if (sectorChain is null)
                 return null;
 
             // Sequentially read the sectors
@@ -291,7 +291,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Try to read the sector data
                 var sectorData = MiniStreamData.ReadBytes(ref streamDataOffset, (int)MiniSectorSize);
-                if (sectorData == null)
+                if (sectorData is null)
                     return null;
 
                 // Add the sector data to the output
@@ -310,7 +310,7 @@ namespace SabreTools.Serialization.Wrappers
         public long MiniFATSectorToMiniStreamOffset(SectorNumber? sector)
         {
             // If we have an invalid sector number
-            if (sector == null || sector > SectorNumber.MAXREGSECT)
+            if (sector is null || sector > SectorNumber.MAXREGSECT)
                 return -1;
 
             // Get the mini stream location

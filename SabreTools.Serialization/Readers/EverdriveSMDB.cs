@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Readers
         public override MetadataFile? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.Readers
                 while (!reader.EndOfStream)
                 {
                     // If we have no next line
-                    if (!reader.ReadNextLine() || reader.Line == null)
+                    if (!reader.ReadNextLine() || reader.Line is null)
                         break;
 
                     // If the next line has an invalid count

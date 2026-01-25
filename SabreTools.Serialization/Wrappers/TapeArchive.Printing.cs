@@ -80,7 +80,7 @@ namespace SabreTools.Serialization.Wrappers
             for (int i = 0; i < entries.Length; i++)
             {
                 var block = entries[i];
-                if (block.Data == null)
+                if (block.Data is null)
                     builder.AppendLine($"    Block {i} Length: 0");
                 else
                     builder.AppendLine(block.Data.Length, $"    Block {i} Length");

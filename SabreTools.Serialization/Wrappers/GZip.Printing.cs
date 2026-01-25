@@ -45,7 +45,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Extra Fields:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No extra fields");
                 builder.AppendLine();

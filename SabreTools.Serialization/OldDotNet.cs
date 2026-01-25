@@ -12,7 +12,7 @@ namespace SabreTools.Serialization
     {
         public static void CopyTo(this Stream source, Stream destination)
         {
-            if (destination == null)
+            if (destination is null)
             {
                 throw new ArgumentNullException("destination");
             }

@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Readers
         public override Executable? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -28,7 +28,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Parse the MS-DOS stub
                 var stub = new MSDOS().Deserialize(data);
-                if (stub?.Header == null || stub.Header.NewExeHeaderAddr == 0)
+                if (stub?.Header is null || stub.Header.NewExeHeaderAddr == 0)
                     return null;
 
                 // Set the MS-DOS stub
@@ -188,7 +188,7 @@ namespace SabreTools.Serialization.Readers
                             entryTable.Add(bundle);
 
                         // If we have a 0-length entry
-                        if (bundle == null || bundle.Entries == 0)
+                        if (bundle is null || bundle.Entries == 0)
                             break;
                     }
 
@@ -270,7 +270,7 @@ namespace SabreTools.Serialization.Readers
                     for (int i = 0; i < executable.FixupRecordTable.Length; i++)
                     {
                         var entry = ParseFixupRecordTableEntry(data);
-                        if (entry == null)
+                        if (entry is null)
                             return null;
 
                         executable.FixupRecordTable[i] = entry;

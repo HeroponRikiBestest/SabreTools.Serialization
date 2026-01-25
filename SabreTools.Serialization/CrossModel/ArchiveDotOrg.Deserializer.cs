@@ -9,7 +9,7 @@ namespace SabreTools.Serialization.CrossModel
         /// <inheritdoc/>
         public override Files? Deserialize(Data.Models.Metadata.MetadataFile? obj)
         {
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             var files = new Files();
@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.CrossModel
         private static File[] ConvertFromInternalModel(Data.Models.Metadata.Machine item)
         {
             var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
-            if (roms == null)
+            if (roms is null)
                 return [];
 
             return Array.ConvertAll(roms, ConvertFromInternalModel);

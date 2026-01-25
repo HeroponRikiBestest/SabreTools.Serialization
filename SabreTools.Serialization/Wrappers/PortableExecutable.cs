@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Wrappers
                         return field;
 
                     // If we have no resource table, just return
-                    if (DebugDirectoryTable == null || DebugDirectoryTable.Length == 0)
+                    if (DebugDirectoryTable is null || DebugDirectoryTable.Length == 0)
                         return field;
 
                     // Otherwise, build and return the cached dictionary
@@ -225,7 +225,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // Otherwise, it could not be found
-                    if (section == null)
+                    if (section is null)
                     {
                         _matroschkaPackageFailed = true;
                         return null;
@@ -250,7 +250,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Parse the package
                     field = SecuROMMatroschkaPackage.Create(sectionData, 0);
-                    if (field?.Entries == null)
+                    if (field?.Entries is null)
                         _matroschkaPackageFailed = true;
 
                     return field;
@@ -605,9 +605,9 @@ namespace SabreTools.Serialization.Wrappers
                         return _resourceData;
 
                     // If we have no resource table, just return
-                    if (OptionalHeader.ResourceTable == null
+                    if (OptionalHeader.ResourceTable is null
                         || OptionalHeader.ResourceTable.VirtualAddress == 0
-                        || ResourceDirectoryTable == null)
+                        || ResourceDirectoryTable is null)
                     {
                         return _resourceData;
                     }
@@ -649,7 +649,7 @@ namespace SabreTools.Serialization.Wrappers
                     }
 
                     // If the section cannot be found
-                    if (wiseSection == null)
+                    if (wiseSection is null)
                     {
                         _wiseSectionHeaderMissing = true;
                         return null;
@@ -674,7 +674,7 @@ namespace SabreTools.Serialization.Wrappers
 
                     // Parse the section header
                     field = WiseSectionHeader.Create(sectionData, 0);
-                    if (field == null)
+                    if (field is null)
                         _wiseSectionHeaderMissing = true;
 
                     return field;
@@ -1231,7 +1231,7 @@ namespace SabreTools.Serialization.Wrappers
         public static PortableExecutable? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -1251,7 +1251,7 @@ namespace SabreTools.Serialization.Wrappers
         public static PortableExecutable? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -1260,7 +1260,7 @@ namespace SabreTools.Serialization.Wrappers
                 long currentOffset = data.Position;
 
                 var model = new Readers.PortableExecutable().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 return new PortableExecutable(model, data, currentOffset);
@@ -1294,12 +1294,12 @@ namespace SabreTools.Serialization.Wrappers
                 return null;
 
             // Ensure the resource table has been parsed
-            if (ResourceData == null)
+            if (ResourceData is null)
                 return null;
 
             // If we don't have string version info in this executable
             var stringTable = _versionInfo?.StringFileInfo?.Children;
-            if (stringTable == null || stringTable.Length == 0)
+            if (stringTable is null || stringTable.Length == 0)
                 return null;
 
             // Try to find a key that matches
@@ -1356,19 +1356,19 @@ namespace SabreTools.Serialization.Wrappers
             var debugFound = new List<object?>();
             foreach (var data in debugData.Values)
             {
-                if (data == null)
+                if (data is null)
                     continue;
 
                 if (data is Data.Models.PortableExecutable.DebugData.NB10ProgramDatabase n)
                 {
-                    if (n.PdbFileName == null || !n.PdbFileName.Contains(path))
+                    if (n.PdbFileName is null || !n.PdbFileName.Contains(path))
                         continue;
 
                     debugFound.Add(n);
                 }
                 else if (data is Data.Models.PortableExecutable.DebugData.RSDSProgramDatabase r)
                 {
-                    if (r.PathAndFileName == null || !r.PathAndFileName.Contains(path))
+                    if (r.PathAndFileName is null || !r.PathAndFileName.Contains(path))
                         continue;
 
                     debugFound.Add(r);
@@ -1393,9 +1393,9 @@ namespace SabreTools.Serialization.Wrappers
             var table = new List<byte[]?>();
             foreach (var data in debugData.Values)
             {
-                if (data == null)
+                if (data is null)
                     continue;
-                if (data is not byte[] b || b == null)
+                if (data is not byte[] b || b is null)
                     continue;
 
                 try
@@ -1445,7 +1445,7 @@ namespace SabreTools.Serialization.Wrappers
         private Dictionary<int, object> ParseDebugTable()
         {
             // If there is no debug table
-            if (DebugDirectoryTable == null || DebugDirectoryTable.Length == 0)
+            if (DebugDirectoryTable is null || DebugDirectoryTable.Length == 0)
                 return [];
 
             // Create a new debug table
@@ -1531,9 +1531,9 @@ namespace SabreTools.Serialization.Wrappers
             var resources = new List<DialogBoxResource?>();
             foreach (var resource in resourceData.Values)
             {
-                if (resource == null)
+                if (resource is null)
                     continue;
-                if (resource is not DialogBoxResource dbr || dbr == null)
+                if (resource is not DialogBoxResource dbr || dbr is null)
                     continue;
 
                 if (dbr.DialogTemplate?.TitleResource?.Contains(title) ?? false)
@@ -1560,9 +1560,9 @@ namespace SabreTools.Serialization.Wrappers
             var resources = new List<DialogBoxResource?>();
             foreach (var resource in resourceData.Values)
             {
-                if (resource == null)
+                if (resource is null)
                     continue;
-                if (resource is not DialogBoxResource dbr || dbr == null)
+                if (resource is not DialogBoxResource dbr || dbr is null)
                     continue;
 
                 if (dbr.DialogItemTemplates != null)
@@ -1597,17 +1597,17 @@ namespace SabreTools.Serialization.Wrappers
             var stringTables = new List<Dictionary<int, string?>?>();
             foreach (var resource in resourceData.Values)
             {
-                if (resource == null)
+                if (resource is null)
                     continue;
-                if (resource is not Dictionary<int, string?> st || st == null)
+                if (resource is not Dictionary<int, string?> st || st is null)
                     continue;
 
                 foreach (string? s in st.Values)
                 {
 #if NETFRAMEWORK || NETSTANDARD
-                    if (s == null || !s.Contains(entry))
+                    if (s is null || !s.Contains(entry))
 #else
-                    if (s == null || !s.Contains(entry, StringComparison.OrdinalIgnoreCase))
+                    if (s is null || !s.Contains(entry, StringComparison.OrdinalIgnoreCase))
 #endif
                         continue;
 
@@ -1636,7 +1636,7 @@ namespace SabreTools.Serialization.Wrappers
             {
                 if (!kvp.Key.Contains(typeName))
                     continue;
-                if (kvp.Value == null || kvp.Value is not byte[] b || b == null)
+                if (kvp.Value is null || kvp.Value is not byte[] b || b is null)
                     continue;
 
                 resources.Add(b);
@@ -1660,9 +1660,9 @@ namespace SabreTools.Serialization.Wrappers
             var resources = new List<byte[]?>();
             foreach (var resource in resourceData.Values)
             {
-                if (resource == null)
+                if (resource is null)
                     continue;
-                if (resource is not byte[] b || b == null)
+                if (resource is not byte[] b || b is null)
                     continue;
 
                 try
@@ -1757,7 +1757,7 @@ namespace SabreTools.Serialization.Wrappers
             }
 
             // If there are no resources
-            if (OptionalHeader.ResourceTable == null)
+            if (OptionalHeader.ResourceTable is null)
                 return -1;
 
             // Cache the resource data for easier reading
@@ -1769,7 +1769,7 @@ namespace SabreTools.Serialization.Wrappers
             bool exeResources = false;
             foreach (var kvp in resourceData)
             {
-                if (kvp.Value == null || kvp.Value is not byte[] ba)
+                if (kvp.Value is null || kvp.Value is not byte[] ba)
                     continue;
                 if (!ba.StartsWith(Data.Models.MSDOS.Constants.SignatureBytes))
                     continue;
@@ -1863,7 +1863,7 @@ namespace SabreTools.Serialization.Wrappers
         private void ParseResourceDataEntry(Data.Models.PortableExecutable.Resource.DataEntry entry, List<object> types)
         {
             // Create the key and value objects
-            string key = types == null
+            string key = types is null
                 ? $"UNKNOWN_{Guid.NewGuid()}"
                 : string.Join(", ", Array.ConvertAll([.. types], t => t.ToString()));
 
@@ -1976,7 +1976,7 @@ namespace SabreTools.Serialization.Wrappers
         public bool ContainsSection(string? sectionName, bool exact = false)
         {
             // If no section name is provided
-            if (sectionName == null)
+            if (sectionName is null)
                 return false;
 
             // Get all section names first
@@ -2224,7 +2224,7 @@ namespace SabreTools.Serialization.Wrappers
 
                 // Get the section data, if possible
                 byte[]? sectionData = GetSectionData(index);
-                if (sectionData == null || sectionData.Length == 0)
+                if (sectionData is null || sectionData.Length == 0)
                 {
                     _sectionStringData[index] = [];
                     return _sectionStringData[index];
@@ -2327,7 +2327,7 @@ namespace SabreTools.Serialization.Wrappers
 
             // Get the table data, if possible
             byte[]? tableData = GetTableData(index);
-            if (tableData == null || tableData.Length == 0)
+            if (tableData is null || tableData.Length == 0)
             {
                 _tableStringData[index] = [];
                 return _tableStringData[index];

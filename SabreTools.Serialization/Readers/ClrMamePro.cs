@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Readers
         public MetadataFile? Deserialize(byte[]? data, int offset, bool quotes)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return default;
 
             // If the offset is out of bounds
@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.Readers
         public MetadataFile? Deserialize(Stream? data, bool quotes)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -410,7 +410,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Release object created from the reader context</returns>
         private static Release? CreateRelease(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var itemAdditional = new List<string>();
@@ -450,7 +450,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>BiosSet object created from the reader context</returns>
         private static BiosSet? CreateBiosSet(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var biosset = new BiosSet();
@@ -480,7 +480,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Rom object created from the reader context</returns>
         private static Rom? CreateRom(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var rom = new Rom();
@@ -582,7 +582,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Disk object created from the reader context</returns>
         private static Disk? CreateDisk(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var disk = new Disk();
@@ -621,7 +621,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Media object created from the reader context</returns>
         private static Media? CreateMedia(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var media = new Media();
@@ -657,7 +657,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Sample object created from the reader context</returns>
         private static Sample? CreateSample(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var sample = new Sample();
@@ -681,7 +681,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Archive object created from the reader context</returns>
         private static Archive? CreateArchive(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var archive = new Archive();
@@ -705,7 +705,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Chip object created from the reader context</returns>
         private static Chip? CreateChip(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var chip = new Chip();
@@ -738,7 +738,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Video object created from the reader context</returns>
         private static Video? CreateVideo(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var video = new Video();
@@ -780,7 +780,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Sound object created from the reader context</returns>
         private static Sound? CreateSound(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var sound = new Sound();
@@ -804,7 +804,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Input object created from the reader context</returns>
         private static Input? CreateInput(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var input = new Input();
@@ -843,7 +843,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>DipSwitch object created from the reader context</returns>
         private static DipSwitch? CreateDipSwitch(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var dipswitch = new DipSwitch();
@@ -875,7 +875,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Driver object created from the reader context</returns>
         private static Driver? CreateDriver(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var driver = new Driver();

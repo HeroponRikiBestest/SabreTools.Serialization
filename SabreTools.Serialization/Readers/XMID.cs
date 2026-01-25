@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>Filled XMID on success, null on error</returns>
         private static Data.Models.Xbox.XMID? ParseXMID(string? xmidString)
         {
-            if (xmidString == null || xmidString.Length != 8)
+            if (xmidString is null || xmidString.Length != 8)
                 return null;
 
             var xmid = new Data.Models.Xbox.XMID();

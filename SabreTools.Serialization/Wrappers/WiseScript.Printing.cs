@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine();
             builder.AppendLine("  Header strings");
             builder.AppendLine("  -------------------------");
-            if (header.HeaderStrings == null || header.HeaderStrings.Length == 0)
+            if (header.HeaderStrings is null || header.HeaderStrings.Length == 0)
             {
                 builder.AppendLine("  No header strings");
             }
@@ -132,7 +132,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(data.DestinationPathname, $"      Destination pathname");
             builder.AppendLine($"      File texts");
             builder.AppendLine("      -------------------------");
-            if (data.Description == null || data.Description.Length == 0)
+            if (data.Description is null || data.Description.Length == 0)
             {
                 builder.AppendLine("      No file texts");
             }
@@ -160,7 +160,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(data.Flags, $"      Flags");
             builder.AppendLine($"      Title/Text strings");
             builder.AppendLine("      -------------------------");
-            if (data.TitleText == null || data.TitleText.Length == 0)
+            if (data.TitleText is null || data.TitleText.Length == 0)
             {
                 builder.AppendLine("      No title/text strings");
             }
@@ -181,7 +181,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(data.Flags, $"      Count");
             builder.AppendLine($"      Script lines");
             builder.AppendLine("      -------------------------");
-            if (data.ScriptLines == null || data.ScriptLines.Length == 0)
+            if (data.ScriptLines is null || data.ScriptLines.Length == 0)
             {
                 builder.AppendLine("      No script lines");
             }
@@ -212,7 +212,7 @@ namespace SabreTools.Serialization.Wrappers
 
             builder.AppendLine($"      Deflate info:");
             builder.AppendLine($"      -------------------------");
-            if (data.DeflateInfo == null || data.DeflateInfo.Length == 0)
+            if (data.DeflateInfo is null || data.DeflateInfo.Length == 0)
             {
                 builder.AppendLine("  No deflate info items");
             }
@@ -257,7 +257,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(data.ReturnVariable, $"      Return variable");
             builder.AppendLine($"      Entries");
             builder.AppendLine("      -------------------------");
-            if (data.Entries == null || data.Entries.Length == 0)
+            if (data.Entries is null || data.Entries.Length == 0)
             {
                 builder.AppendLine("      No entry data");
             }
@@ -369,7 +369,7 @@ namespace SabreTools.Serialization.Wrappers
             builder.AppendLine(data.Destination, $"      Destination");
             builder.AppendLine($"      Descriptions");
             builder.AppendLine("      -------------------------");
-            if (data.Description == null || data.Description.Length == 0)
+            if (data.Description is null || data.Description.Length == 0)
             {
                 builder.AppendLine("      No descriptions");
             }
@@ -802,7 +802,7 @@ namespace SabreTools.Serialization.Wrappers
         private static void Print(StringBuilder builder, ExternalDllCall data, int i)
         {
             builder.AppendLine($"      Entry {i}: ExternalDllCall");
-            if (data.Args == null)
+            if (data.Args is null)
                 builder.AppendLine((string?)null, $"        Args");
             else
                 builder.AppendLine(string.Join(", ", data.Args), $"        Args");

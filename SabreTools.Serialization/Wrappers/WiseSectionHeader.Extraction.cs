@@ -94,7 +94,7 @@ namespace SabreTools.Serialization.Wrappers
                 status = ExtractStreamWithoutChecksum(destination, entrySize, includeDebug);
 
             // If the extracted data is invalid
-            if (status != ExtractionStatus.GOOD || destination == null)
+            if (status != ExtractionStatus.GOOD || destination is null)
                 return status;
 
             // Ensure the full output directory exists

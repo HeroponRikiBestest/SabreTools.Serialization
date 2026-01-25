@@ -14,7 +14,7 @@ namespace SabreTools.Data.Extensions
         public static bool IsCompressed(this FileDescriptor? fileDescriptor)
         {
             // Ignore invalid descriptors
-            if (fileDescriptor == null)
+            if (fileDescriptor is null)
                 return true;
 
 #if NET20 || NET35
@@ -32,7 +32,7 @@ namespace SabreTools.Data.Extensions
         public static bool IsInvalid(this FileDescriptor? fileDescriptor)
         {
             // Ignore invalid descriptors
-            if (fileDescriptor == null)
+            if (fileDescriptor is null)
                 return true;
 
 #if NET20 || NET35
@@ -50,7 +50,7 @@ namespace SabreTools.Data.Extensions
         public static bool IsObfuscated(this FileDescriptor? fileDescriptor)
         {
             // Ignore invalid descriptors
-            if (fileDescriptor == null)
+            if (fileDescriptor is null)
                 return false;
 
 #if NET20 || NET35
@@ -68,7 +68,7 @@ namespace SabreTools.Data.Extensions
         public static bool IsSplit(this FileDescriptor? fileDescriptor)
         {
             // Ignore invalid descriptors
-            if (fileDescriptor == null)
+            if (fileDescriptor is null)
                 return false;
 
 #if NET20 || NET35
@@ -90,7 +90,7 @@ namespace SabreTools.Data.Extensions
         public static int GetMajorVersion(this Cabinet? cabinet)
         {
             // Ignore invalid cabinets
-            if (cabinet == null)
+            if (cabinet is null)
                 return -1;
 
             return cabinet.CommonHeader.GetMajorVersion();
@@ -104,7 +104,7 @@ namespace SabreTools.Data.Extensions
         public static int GetMajorVersion(this CommonHeader? commonHeader)
         {
             // Ignore invalid headers
-            if (commonHeader == null)
+            if (commonHeader is null)
                 return -1;
 
             uint majorVersion = commonHeader.Version;

@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Readers
         public override Cabinet? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -27,7 +27,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the cabinet header
                 var cabinetHeader = ParseCabinetHeader(data);
-                if (cabinetHeader == null)
+                if (cabinetHeader is null)
                     return null;
 
                 // Set the cabinet header
@@ -44,7 +44,7 @@ namespace SabreTools.Serialization.Readers
                 for (int i = 0; i < cabinetHeader.FolderCount; i++)
                 {
                     var folder = ParseFolder(data, cabinetHeader);
-                    if (folder == null)
+                    if (folder is null)
                         return null;
 
                     // Set the folder
@@ -70,7 +70,7 @@ namespace SabreTools.Serialization.Readers
                 for (int i = 0; i < cabinetHeader.FileCount; i++)
                 {
                     var file = ParseFile(data);
-                    if (file == null)
+                    if (file is null)
                         return null;
 
                     // Set the file

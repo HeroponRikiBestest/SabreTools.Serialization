@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Writers
         /// <inheritdoc/>
         public string? Serialize(Data.Models.Xbox.XMID? obj)
         {
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             var sb = new StringBuilder();

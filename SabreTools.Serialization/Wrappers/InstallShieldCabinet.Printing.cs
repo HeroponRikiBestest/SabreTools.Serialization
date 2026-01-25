@@ -238,7 +238,7 @@ namespace SabreTools.Serialization.Wrappers
                 var value = kvp.Value;
 
                 builder.AppendLine($"  {name} Offset {offset}:");
-                if (value == null)
+                if (value is null)
                 {
                     builder.AppendLine($"    Unassigned {name.ToLowerInvariant()}");
                     continue;

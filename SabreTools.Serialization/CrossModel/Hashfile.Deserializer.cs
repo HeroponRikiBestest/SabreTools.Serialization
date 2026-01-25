@@ -14,11 +14,11 @@ namespace SabreTools.Serialization.CrossModel
         /// <inheritdoc/>
         public Data.Models.Hashfile.Hashfile? Deserialize(Data.Models.Metadata.MetadataFile? obj, HashType hash)
         {
-            if (obj == null)
+            if (obj is null)
                 return null;
 
             var machines = obj.Read<Data.Models.Metadata.Machine[]>(Data.Models.Metadata.MetadataFile.MachineKey);
-            if (machines == null || machines.Length == 0)
+            if (machines is null || machines.Length == 0)
                 return null;
 
             var hashfiles = Array.ConvertAll(machines,
@@ -96,7 +96,7 @@ namespace SabreTools.Serialization.CrossModel
         private static Data.Models.Hashfile.Hashfile ConvertMachineFromInternalModel(Data.Models.Metadata.Machine item, HashType hash)
         {
             var roms = item.Read<Data.Models.Metadata.Rom[]>(Data.Models.Metadata.Machine.RomKey);
-            if (roms == null)
+            if (roms is null)
                 return new Data.Models.Hashfile.Hashfile();
 
             return new Data.Models.Hashfile.Hashfile

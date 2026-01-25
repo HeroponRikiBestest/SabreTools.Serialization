@@ -38,7 +38,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Extended Header Information:");
             builder.AppendLine("  -------------------------");
-            if (header == null)
+            if (header is null)
             {
                 builder.AppendLine("  No extended header");
                 builder.AppendLine();
@@ -56,7 +56,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Archive Hashes Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No archive hashes");
                 builder.AppendLine();

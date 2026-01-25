@@ -11,7 +11,7 @@ namespace SabreTools.Serialization.Readers
         public override Header? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Readers
                 #region Header
 
                 var header = ParseHeader(data);
-                if (header == null)
+                if (header is null)
                     return null;
 
                 // Valid versions are 0x1E and 0x22-0x28.

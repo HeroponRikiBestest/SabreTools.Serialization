@@ -86,7 +86,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Directory Entries Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No directory entries");
                 builder.AppendLine();

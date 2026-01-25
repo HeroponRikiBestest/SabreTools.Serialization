@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Readers
         public override Cart? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.Readers
 
                     // Handle the normal header
                     var partition = ParseNCCHHeader(data);
-                    if (partition == null || partition.MagicID != NCCHMagicNumber)
+                    if (partition is null || partition.MagicID != NCCHMagicNumber)
                         continue;
 
                     // Set the normal header
@@ -94,7 +94,7 @@ namespace SabreTools.Serialization.Readers
                         data.SeekIfPossible(partitionOffset + offset, SeekOrigin.Begin);
 
                         var exeFsHeader = ParseExeFSHeader(data);
-                        if (exeFsHeader == null)
+                        if (exeFsHeader is null)
                             return null;
 
                         cart.ExeFSHeaders[i] = exeFsHeader;

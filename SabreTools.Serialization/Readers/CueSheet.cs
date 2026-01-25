@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Readers
         public override Data.Models.CueSheets.CueSheet? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.Readers
                     lastLine = null;
 
                     // If we have a null line, break from the loop
-                    if (line == null)
+                    if (line is null)
                         break;
 
                     // If we have an empty line, we skip
@@ -123,7 +123,7 @@ namespace SabreTools.Serialization.Readers
         private static CueFile? CreateCueFile(string fileName, string fileType, StreamReader reader, out string? lastLine)
         {
             // Check the required parameters
-            if (reader == null || reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
+            if (reader is null || reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
                 throw new ArgumentNullException(nameof(reader));
             if (reader.BaseStream.Position < 0 || reader.BaseStream.Position >= reader.BaseStream.Length)
                 throw new IndexOutOfRangeException();
@@ -138,7 +138,7 @@ namespace SabreTools.Serialization.Readers
                 lastLine = null;
 
                 // If we have a null line, break from the loop
-                if (line == null)
+                if (line is null)
                     break;
 
                 // If we have an empty line, we skip
@@ -214,7 +214,7 @@ namespace SabreTools.Serialization.Readers
         private static CueTrack? CreateCueTrack(string number, string dataType, StreamReader reader, out string? lastLine)
         {
             // Check the required parameters
-            if (reader == null || reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
+            if (reader is null || reader.BaseStream.Length == 0 || !reader.BaseStream.CanRead)
                 throw new ArgumentNullException(nameof(reader));
             if (reader.BaseStream.Position < 0 || reader.BaseStream.Position >= reader.BaseStream.Length)
                 throw new IndexOutOfRangeException();
@@ -239,7 +239,7 @@ namespace SabreTools.Serialization.Readers
                 lastLine = null;
 
                 // If we have a null line, break from the loop
-                if (line == null)
+                if (line is null)
                     break;
 
                 // If we have an empty line, we skip
@@ -532,7 +532,7 @@ namespace SabreTools.Serialization.Readers
             {
                 // Read the next line
                 string? line = reader.ReadLine();
-                if (line == null)
+                if (line is null)
                     break;
 
                 // Count the number of quotes and append
@@ -591,7 +591,7 @@ namespace SabreTools.Serialization.Readers
         private static CueTrackFlag GetFlags(string[]? flagStrings)
         {
             CueTrackFlag flag = 0;
-            if (flagStrings == null)
+            if (flagStrings is null)
                 return flag;
 
             foreach (string? flagString in flagStrings)

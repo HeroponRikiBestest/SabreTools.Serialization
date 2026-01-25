@@ -54,7 +54,7 @@ namespace SabreTools.Serialization.Wrappers
                 builder.AppendLine(body.DiscSizeClassVersion, "    Disc size class version");
                 builder.AppendLine(body.FormatDependentContents, "    Format-dependent contents");
 
-                if (entry.Trailer == null)
+                if (entry.Trailer is null)
                 {
                     builder.AppendLine("    No trailer");
                 }

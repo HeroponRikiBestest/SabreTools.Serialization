@@ -22,7 +22,7 @@ namespace SabreTools.Serialization.Readers
         public override MetadataFile? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return default;
 
             try
@@ -36,7 +36,7 @@ namespace SabreTools.Serialization.Readers
                 var dat = new MetadataFile();
 
                 // Read the header values first
-                if (!reader.ReadHeader() || reader.HeaderValues == null)
+                if (!reader.ReadHeader() || reader.HeaderValues is null)
                     return null;
 
                 dat.Header = [.. reader.HeaderValues];
@@ -46,7 +46,7 @@ namespace SabreTools.Serialization.Readers
                 while (!reader.EndOfStream)
                 {
                     // If we have no next line
-                    if (!reader.ReadNextLine() || reader.Line == null)
+                    if (!reader.ReadNextLine() || reader.Line is null)
                         break;
 
                     // Parse the line into a row

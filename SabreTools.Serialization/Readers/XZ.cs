@@ -13,7 +13,7 @@ namespace SabreTools.Serialization.Readers
         public override Archive? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -67,7 +67,7 @@ namespace SabreTools.Serialization.Readers
                 var index = ParseIndex(data);
                 if (index.IndexIndicator != 0x00)
                     return null;
-                if (index.Records == null)
+                if (index.Records is null)
                     return null;
 
                 // Set the index

@@ -19,7 +19,7 @@ namespace SabreTools.Serialization.Wrappers
         /// <inheritdoc cref="Extract(string, bool)"/>
         public bool Extract(string outputDirectory, bool lookForHeader, bool includeDebug)
         {
-            if (_dataSource == null || !_dataSource.CanRead)
+            if (_dataSource is null || !_dataSource.CanRead)
                 return false;
 
 #if NET462_OR_GREATER || NETCOREAPP || NETSTANDARD2_0_OR_GREATER
@@ -52,18 +52,18 @@ namespace SabreTools.Serialization.Wrappers
                             continue;
 
                         // If the entry has an invalid key
-                        if (entry.Key == null)
+                        if (entry.Key is null)
                             continue;
 
                         // If the entry is partial due to an incomplete multi-part archive, skip it
                         if (!entry.IsComplete)
                             continue;
-                        
+
                         // If the entry is password-protected, skip it
                         if (entry.IsEncrypted)
                         {
                             if (includeDebug) Console.WriteLine($"File {entry.Key} in zip is password-protected!");
-                            
+
                             continue;
                         }
 

@@ -172,7 +172,7 @@ namespace InfoPrint.Features
                 var wrapper = WrapperFactory.CreateWrapper(ft, stream);
 
                 // If we don't have a wrapper
-                if (wrapper == null)
+                if (wrapper is null)
                 {
                     Console.WriteLine($"Either {ft} is not supported or something went wrong during parsing!");
                     Console.WriteLine();
@@ -195,7 +195,7 @@ namespace InfoPrint.Features
 
                 // Create the output data
                 var builder = wrapper.ExportStringBuilder();
-                if (builder == null)
+                if (builder is null)
                 {
                     Console.WriteLine("No item information could be generated");
                     return;
@@ -235,7 +235,7 @@ namespace InfoPrint.Features
             {
                 // Get all file hashes for flexibility
                 var hashes = HashTool.GetFileHashes(file);
-                if (hashes == null)
+                if (hashes is null)
                 {
                     if (Debug) Console.WriteLine($"Hashes for {file} could not be retrieved");
                     return null;

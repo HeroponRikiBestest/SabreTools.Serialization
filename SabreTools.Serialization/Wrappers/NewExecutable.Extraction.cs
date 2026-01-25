@@ -237,7 +237,7 @@ namespace SabreTools.Serialization.Wrappers
             // Seek to the overlay and parse
             source.SeekIfPossible(offset, SeekOrigin.Begin);
             var header = WiseOverlayHeader.Create(source);
-            if (header == null)
+            if (header is null)
             {
                 if (includeDebug) Console.Error.WriteLine("Could not parse the overlay header");
                 return false;
@@ -254,7 +254,7 @@ namespace SabreTools.Serialization.Wrappers
             // Open the script file from the output directory
             var scriptStream = File.OpenRead(Path.Combine(outputDirectory, "WiseScript.bin"));
             var script = WiseScript.Create(scriptStream);
-            if (script == null)
+            if (script is null)
             {
                 if (includeDebug) Console.Error.WriteLine("Could not parse WiseScript.bin");
                 return false;

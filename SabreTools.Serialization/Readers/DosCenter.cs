@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Readers
         public override MetadataFile? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -155,7 +155,7 @@ namespace SabreTools.Serialization.Readers
         /// <returns>File object created from the reader context</returns>
         private static Data.Models.DosCenter.File? CreateFile(ClrMameProReader reader)
         {
-            if (reader.Internal == null)
+            if (reader.Internal is null)
                 return null;
 
             var file = new Data.Models.DosCenter.File();

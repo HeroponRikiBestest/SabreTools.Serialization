@@ -10,13 +10,13 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public byte[] ExeFSIV(int index)
         {
-            if (Partitions == null)
+            if (Partitions is null)
                 return [];
             if (index < 0 || index >= Partitions.Length)
                 return [];
 
             var header = Partitions[index];
-            if (header == null || header.MagicID != NCCHMagicNumber)
+            if (header is null || header.MagicID != NCCHMagicNumber)
                 return [];
 
             byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
@@ -29,13 +29,13 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public byte[] PlainIV(int index)
         {
-            if (Partitions == null)
+            if (Partitions is null)
                 return [];
             if (index < 0 || index >= Partitions.Length)
                 return [];
 
             var header = Partitions[index];
-            if (header == null || header.MagicID != NCCHMagicNumber)
+            if (header is null || header.MagicID != NCCHMagicNumber)
                 return [];
 
             byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);
@@ -48,13 +48,13 @@ namespace SabreTools.Serialization.Wrappers
         /// </summary>
         public byte[] RomFSIV(int index)
         {
-            if (Partitions == null)
+            if (Partitions is null)
                 return [];
             if (index < 0 || index >= Partitions.Length)
                 return [];
 
             var header = Partitions[index];
-            if (header == null || header.MagicID != NCCHMagicNumber)
+            if (header is null || header.MagicID != NCCHMagicNumber)
                 return [];
 
             byte[] partitionIdBytes = BitConverter.GetBytes(header.PartitionId);

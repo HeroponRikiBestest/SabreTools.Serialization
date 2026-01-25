@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Readers
         public override Cabinet? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -211,7 +211,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     // Get the offset
                     OffsetList? list = kvp.Value;
-                    if (list == null)
+                    if (list is null)
                     {
                         fileGroupId++;
                         continue;
@@ -288,7 +288,7 @@ namespace SabreTools.Serialization.Readers
                 {
                     // Get the offset
                     OffsetList? list = kvp.Value;
-                    if (list == null)
+                    if (list is null)
                     {
                         componentId++;
                         continue;

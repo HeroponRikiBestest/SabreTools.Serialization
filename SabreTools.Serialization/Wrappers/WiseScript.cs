@@ -92,7 +92,7 @@ namespace SabreTools.Serialization.Wrappers
         public static WiseScript? Create(byte[]? data, int offset)
         {
             // If the data is invalid
-            if (data == null || data.Length == 0)
+            if (data is null || data.Length == 0)
                 return null;
 
             // If the offset is out of bounds
@@ -112,7 +112,7 @@ namespace SabreTools.Serialization.Wrappers
         public static WiseScript? Create(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -121,7 +121,7 @@ namespace SabreTools.Serialization.Wrappers
                 long currentOffset = data.Position;
 
                 var model = new Readers.WiseScript().Deserialize(data);
-                if (model == null)
+                if (model is null)
                     return null;
 
                 return new WiseScript(model, data, currentOffset);
@@ -198,7 +198,7 @@ namespace SabreTools.Serialization.Wrappers
                     case OperationCode.CreateDirectory:
                         if (state.Data is not CreateDirectory createDirectory)
                             return false;
-                        if (createDirectory.Pathname == null)
+                        if (createDirectory.Pathname is null)
                             return false;
 
                         try
@@ -239,9 +239,9 @@ namespace SabreTools.Serialization.Wrappers
                     case OperationCode.CopyLocalFile:
                         if (state.Data is not CopyLocalFile copyLocalFile)
                             return false;
-                        if (copyLocalFile.Source == null)
+                        if (copyLocalFile.Source is null)
                             return false;
-                        if (copyLocalFile.Destination == null)
+                        if (copyLocalFile.Destination is null)
                             return false;
 
                         try

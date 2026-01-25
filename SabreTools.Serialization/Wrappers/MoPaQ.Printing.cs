@@ -31,7 +31,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  User Data Information:");
             builder.AppendLine("  -------------------------");
-            if (userData == null)
+            if (userData is null)
             {
                 builder.AppendLine("  No user data");
                 builder.AppendLine();
@@ -83,7 +83,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  HET Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table == null)
+            if (table is null)
             {
                 builder.AppendLine("  No HET table");
                 builder.AppendLine();
@@ -124,7 +124,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  BET Table Information:");
             builder.AppendLine("  -------------------------");
-            if (table == null)
+            if (table is null)
             {
                 builder.AppendLine("  No BET table");
                 builder.AppendLine();
@@ -161,7 +161,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Hash Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No hash table items");
                 builder.AppendLine();
@@ -187,7 +187,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Block Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No block table items");
                 builder.AppendLine();
@@ -212,7 +212,7 @@ namespace SabreTools.Serialization.Wrappers
         {
             builder.AppendLine("  Hi-block Table Information:");
             builder.AppendLine("  -------------------------");
-            if (entries == null || entries.Length == 0)
+            if (entries is null || entries.Length == 0)
             {
                 builder.AppendLine("  No hi-block table items");
                 builder.AppendLine();

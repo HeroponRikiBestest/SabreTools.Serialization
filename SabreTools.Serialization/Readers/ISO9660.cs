@@ -17,7 +17,7 @@ namespace SabreTools.Serialization.Readers
         public Volume? Deserialize(Stream? data, short sectorLength)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             // Ensure the logical sector size is valid (2^n where n>=11)
@@ -45,14 +45,14 @@ namespace SabreTools.Serialization.Readers
 
                 // Parse the path table group(s) for each base volume descriptor
                 var ptgs = ParsePathTableGroups(data, sectorLength, volume.VolumeDescriptorSet);
-                if (ptgs == null || ptgs.Length == 0)
+                if (ptgs is null || ptgs.Length == 0)
                     return null;
 
                 volume.PathTableGroups = ptgs;
 
                 // Parse the root directory descriptor(s) for each base volume descriptor
                 var dirs = ParseDirectoryDescriptors(data, sectorLength, volume.VolumeDescriptorSet);
-                if (dirs == null || dirs.Count == 0)
+                if (dirs is null || dirs.Count == 0)
                     return null;
 
                 volume.DirectoryDescriptors = dirs;
@@ -84,7 +84,7 @@ namespace SabreTools.Serialization.Readers
                 var volumeDescriptor = ParseVolumeDescriptor(data, sectorLength);
 
                 // If no valid volume descriptor could be read, return the current set
-                if (volumeDescriptor == null)
+                if (volumeDescriptor is null)
                     return [.. obj];
 
                 // If the set has already been terminated and the returned volume descriptor is not another terminator,
@@ -601,7 +601,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Parse the root directory pointed to from the base volume descriptor
                 var descriptors = ParseDirectory(data, sectorLength, blockLength, rootDirectoryRecord, false);
-                if (descriptors == null || descriptors.Count == 0)
+                if (descriptors is null || descriptors.Count == 0)
                     continue;
 
                 // Merge dictionaries
@@ -703,7 +703,7 @@ namespace SabreTools.Serialization.Readers
                     var directoryRecord = ParseDirectoryRecord(data, false);
 
                     // Compare recordLength with number of bytes in directoryRecord and return null if mismatch
-                    var readLength = 33 + directoryRecord.FileIdentifier.Length + (directoryRecord.PaddingField == null ? 0 : 1) + directoryRecord.SystemUse.Length;
+                    var readLength = 33 + directoryRecord.FileIdentifier.Length + (directoryRecord.PaddingField is null ? 0 : 1) + directoryRecord.SystemUse.Length;
                     if (readLength != recordLength)
                         return null;
 
@@ -725,7 +725,7 @@ namespace SabreTools.Serialization.Readers
                     // Recursively parse child directory
                     int sectorNum = record.ExtentLocation * blocksPerSector;
                     var dir = ParseDirectory(data, sectorLength, blockLength, record, false);
-                    if (dir == null)
+                    if (dir is null)
                         continue;
 
                     // Add new directories to dictionary

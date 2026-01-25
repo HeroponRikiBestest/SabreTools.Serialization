@@ -13,7 +13,7 @@ namespace SabreTools.Data.Extensions
         public static string? DecodeStreamName(this byte[]? input)
         {
             // Ignore invalid inputs
-            if (input == null)
+            if (input is null)
                 return null;
             else if (input.Length == 0)
                 return string.Empty;
@@ -69,7 +69,7 @@ namespace SabreTools.Data.Extensions
         public static string? DecodeStreamName(this string? input)
         {
             // Ignore invalid inputs
-            if (input == null)
+            if (input is null)
                 return null;
             else if (input.Length == 0)
                 return string.Empty;

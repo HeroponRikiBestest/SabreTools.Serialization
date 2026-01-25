@@ -12,7 +12,7 @@ namespace SabreTools.Serialization.Readers
         public override SFX? Deserialize(Stream? data)
         {
             // If the data is invalid
-            if (data == null || !data.CanRead)
+            if (data is null || !data.CanRead)
                 return null;
 
             try
@@ -25,7 +25,7 @@ namespace SabreTools.Serialization.Readers
 
                 // Try to parse the footer from the data end
                 var footer = ParseFooter(data, initialOffset);
-                if (footer == null)
+                if (footer is null)
                     return null;
                 if (footer.Signature != SignatureString)
                     return null;
