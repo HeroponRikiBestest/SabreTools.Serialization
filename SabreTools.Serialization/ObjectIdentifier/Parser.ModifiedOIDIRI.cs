@@ -1,9 +1,6 @@
 using System;
 using System.Text;
 
-#pragma warning disable CS0162 // Unreachable code detected
-#pragma warning disable CS0164 // This label has not been referenced
-
 namespace SabreTools.Data.ObjectIdentifier
 {
     /// <summary>
@@ -117,7 +114,6 @@ namespace SabreTools.Data.ObjectIdentifier
                 case 9: goto oid_0_9;
                 default: return $"{oidPath}/{values[index - 1]}";
             }
-            ;
 
         // recommendation
         #region 0.0.*
@@ -4584,7 +4580,6 @@ namespace SabreTools.Data.ObjectIdentifier
                 //TODO: case 12: goto oid_0_0_9_751_0_12;
                 default: return $"{oidPath}/{values[index - 1]}";
             }
-            ;
 
         #endregion
 
@@ -12635,7 +12630,6 @@ namespace SabreTools.Data.ObjectIdentifier
                 case 31: return $"{oidPath}/[onion-EV]";
                 default: return $"{oidPath}/{values[index - 1]}";
             }
-
 
         // baseline-requirements
         #region 2.23.140.1.2.*
