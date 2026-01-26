@@ -16,6 +16,9 @@ namespace SabreTools.Serialization.Readers
         IFileReader<TModel>,
         IStreamReader<TModel>
     {
+        /// <inheritdoc/>
+        public bool Debug { get; set; } = false;
+
         #region IByteReader
 
         /// <inheritdoc/>

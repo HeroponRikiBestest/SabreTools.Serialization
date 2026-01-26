@@ -6,6 +6,11 @@ namespace SabreTools.Serialization.Interfaces
     public interface IStringReader<TModel>
     {
         /// <summary>
+        /// Enable outputting debug information
+        /// </summary>
+        public bool Debug { get; set; }
+
+        /// <summary>
         /// Deserialize a string into <typeparamref name="TModel"/>
         /// </summary>
         /// <typeparam name="T">Type of object to deserialize to</typeparam>

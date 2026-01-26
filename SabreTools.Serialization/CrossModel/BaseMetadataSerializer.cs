@@ -10,6 +10,9 @@ namespace SabreTools.Serialization.CrossModel
     public abstract class BaseMetadataSerializer<TModel> : ICrossModel<TModel, MetadataFile>
     {
         /// <inheritdoc/>
+        public bool Debug { get; set; } = false;
+
+        /// <inheritdoc/>
         public abstract TModel? Deserialize(MetadataFile? obj);
 
         /// <inheritdoc/>

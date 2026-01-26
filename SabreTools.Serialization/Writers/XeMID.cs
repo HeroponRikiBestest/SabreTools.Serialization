@@ -5,6 +5,9 @@ namespace SabreTools.Serialization.Writers
 {
     public partial class XeMID : IStringWriter<Data.Models.Xbox.XeMID>
     {
+        /// <inheritdoc/>
+        public bool Debug { get; set; } = false;
+
         /// <inheritdoc cref="IStringWriter.Serialize(T?)"/>
         public static string? SerializeString(Data.Models.Xbox.XeMID? obj)
         {

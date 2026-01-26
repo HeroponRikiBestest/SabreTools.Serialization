@@ -4,6 +4,9 @@ namespace SabreTools.Serialization.Readers
 {
     public partial class XMID : IStringReader<Data.Models.Xbox.XMID>
     {
+        /// <inheritdoc/>
+        public bool Debug { get; set; } = false;
+
         /// <inheritdoc cref="IStringReader.Deserialize(string?)"/>
         public static Data.Models.Xbox.XMID? DeserializeString(string? str)
         {
