@@ -571,6 +571,7 @@ namespace SabreTools.Serialization.Wrappers
                 if (_fileStream is null)
                     return false;
 
+                _fileStream.Flush();
                 _fileStream.Close();
 
                 // reached end of folder
