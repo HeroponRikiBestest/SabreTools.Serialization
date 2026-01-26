@@ -16,6 +16,9 @@ namespace SabreTools.Serialization.Writers
         IFileWriter<TModel>,
         IStreamWriter<TModel>
     {
+        /// <inheritdoc/>
+        public bool Debug { get; set; } = false;
+
         #region IByteWriter
 
         /// <inheritdoc/>

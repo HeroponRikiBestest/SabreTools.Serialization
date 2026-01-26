@@ -6,6 +6,11 @@ namespace SabreTools.Serialization.Interfaces
     public interface ICrossModel<TSource, TDest>
     {
         /// <summary>
+        /// Enable outputting debug information
+        /// </summary>
+        public bool Debug { get; set; }
+
+        /// <summary>
         /// Deserialize a <typeparamref name="TDest"/> into <typeparamref name="TSource"/>
         /// </summary>
         /// <typeparam name="T">Type of object to deserialize to</typeparam>

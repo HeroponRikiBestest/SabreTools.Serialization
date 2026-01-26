@@ -6,6 +6,11 @@ namespace SabreTools.Serialization.Interfaces
     public interface IStringWriter<TModel>
     {
         /// <summary>
+        /// Enable outputting debug information
+        /// </summary>
+        public bool Debug { get; set; }
+
+        /// <summary>
         /// Serialize a <typeparamref name="TModel"/> into a string
         /// </summary>
         /// <typeparam name="T">Type of object to serialize from</typeparam>
