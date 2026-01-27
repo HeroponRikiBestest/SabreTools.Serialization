@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 namespace SabreTools.Serialization.Readers
 {
     /// <remarks>
-    /// The VDF file format was used for a very wide scope of functions on steam. At the moment, VDF file support is 
+    /// The VDF file format was used for a very wide scope of functions on steam. At the moment, VDF file support is
     /// only needed when it comes to parsing retail sku sis files, so the current parser is only aimed at supporting
     /// these files, as they're overall very consistent, and trying to test every usage of VDF files would be extremely
     /// time-consuming for little benefit. If parsing other usages of VDF files ever becomes necessary, this should be
@@ -35,18 +35,15 @@ namespace SabreTools.Serialization.Readers
                 if (!signatureBytes.EqualsExactly(SteamSimSidSisSignatureBytes)
                     && !signatureBytes.EqualsExactly(SteamCsmCsdSisSignatureBytes))
                     return null;
-                
+
                 data.SeekIfPossible(initialOffset, SeekOrigin.Begin);
 
                 var skuSis = ParseSkuSis(data);
-                if (skuSis == null)
-                    return null;
-
-                if (skuSis.VDFObject == null)
+                if (skuSis?.VDFObject == null)
                     return null;
 
                 skuSis.Signature = signatureBytes;
-                
+
                 return skuSis;
             }
             catch
@@ -66,16 +63,15 @@ namespace SabreTools.Serialization.Readers
             var obj = new File();
 
             string json = "{\n"; // Sku sis files have no surrounding curly braces, which json doesn't allow
-            string delimiter = "\"\t\t\""; // KVPs are always quoted, and are delimited by two tabs
-            string? line;
+            const string delimiter = "\"\t\t\""; // KVPs are always quoted, and are delimited by two tabs
             var reader = new StreamReader(data, Encoding.ASCII);
 
             while (!reader.EndOfStream)
             {
-                line = reader.ReadLine();
+                string? line = reader.ReadLine();
                 if (line == null)
                     continue;
-                
+
                 // Curly braces are always on their own lines
                 if (line.Contains("{"))
                 {
@@ -88,12 +84,12 @@ namespace SabreTools.Serialization.Readers
                     json += ",\n";
                     continue;
                 }
-    
+
                 int index = line.IndexOf(delimiter, StringComparison.Ordinal);
-                
-                // If the delimiter isn't found, this is the start of an object with multiple KVPs and the next line 
+
+                // If the delimiter isn't found, this is the start of an object with multiple KVPs and the next line
                 // will be an opening curly brace line.
-                if (index <= -1) 
+                if (index <= -1)
                 {
                     json += line;
                     json += ": ";
@@ -104,7 +100,7 @@ namespace SabreTools.Serialization.Readers
                     json += ",\n";
                 }
             }
-            
+
             json += "\n}";
             obj.VDFObject = JObject.Parse(json);
 

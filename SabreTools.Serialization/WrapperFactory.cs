@@ -26,7 +26,7 @@ namespace SabreTools.Serialization
                 WrapperType.Executable => CreateExecutableWrapper(data),
                 WrapperType.GCF => GCF.Create(data),
                 WrapperType.GZip => GZip.Create(data),
-                WrapperType.IniFile => null,// TODO: Implement wrapper
+                WrapperType.IniFile => null, // TODO: Implement wrapper
                 WrapperType.InstallShieldArchiveV3 => InstallShieldArchiveV3.Create(data),
                 WrapperType.InstallShieldCAB => InstallShieldCabinet.Create(data),
                 WrapperType.IRD => IRD.Create(data),
@@ -57,7 +57,7 @@ namespace SabreTools.Serialization
                 WrapperType.SFFS => SFFS.Create(data),
                 WrapperType.SGA => SGA.Create(data),
                 WrapperType.TapeArchive => TapeArchive.Create(data),
-                WrapperType.Textfile => null,// TODO: Implement wrapper
+                WrapperType.Textfile => null, // TODO: Implement wrapper
                 WrapperType.VBSP => VBSP.Create(data),
                 WrapperType.VPK => VPK.Create(data),
                 WrapperType.WAD => WAD3.Create(data),
@@ -115,7 +115,7 @@ namespace SabreTools.Serialization
 
             // Linear Executable
             else if (magic.StartsWith(Data.Models.LinearExecutable.Constants.LESignatureBytes)
-                || magic.StartsWith(Data.Models.LinearExecutable.Constants.LXSignatureBytes))
+                     || magic.StartsWith(Data.Models.LinearExecutable.Constants.LXSignatureBytes))
             {
                 stream.SeekIfPossible(initialOffset, SeekOrigin.Begin);
                 return LinearExecutable.Create(stream);
@@ -146,6 +146,7 @@ namespace SabreTools.Serialization
             extension = extension.TrimStart('.').Trim();
 
             // TODO: Use constants from Models here
+
             #region AACSMediaKeyBlock
 
             // Block starting with verify media key record
@@ -185,16 +186,19 @@ namespace SabreTools.Serialization
             #endregion
 
             // TODO: Use constants from Models here
+
             #region BSP
 
             // Shares a first 4 bytes with some .mc files
             // Shares an extension with VBSP
-            if (magic.StartsWith([0x1d, 0x00, 0x00, 0x00]) && extension.Equals("bsp", StringComparison.OrdinalIgnoreCase))
+            if (magic.StartsWith([0x1d, 0x00, 0x00, 0x00]) &&
+                extension.Equals("bsp", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.BSP;
 
             // Shares a first 4 bytes with some .mc files
             // Shares an extension with VBSP
-            if (magic.StartsWith([0x1e, 0x00, 0x00, 0x00]) && extension.Equals("bsp", StringComparison.OrdinalIgnoreCase))
+            if (magic.StartsWith([0x1e, 0x00, 0x00, 0x00]) &&
+                extension.Equals("bsp", StringComparison.OrdinalIgnoreCase))
                 return WrapperType.BSP;
 
             #endregion
@@ -305,6 +309,7 @@ namespace SabreTools.Serialization
             #endregion
 
             // TODO: Use constants from Models here
+
             #region GCF
 
             if (magic.StartsWith([0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00]))
@@ -426,6 +431,7 @@ namespace SabreTools.Serialization
             #endregion
 
             // TODO: Use constants from Models here
+
             #region NCF
 
             if (magic.StartsWith([0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00]))
@@ -468,6 +474,7 @@ namespace SabreTools.Serialization
             #endregion
 
             // TODO: Use constants from Models here
+
             #region PFF
 
             // Version 0
@@ -492,6 +499,7 @@ namespace SabreTools.Serialization
             #endregion
 
             // TODO: Use constants from Models here
+
             #region PKZIP
 
             // PKZIP (Unknown)
@@ -677,13 +685,15 @@ namespace SabreTools.Serialization
                 return WrapperType.SFFS;
 
             #endregion
-            
+
             #region SkuSis
 
             // TODO: add description
-            if (magic.StartsWith(Data.Models.VDF.Constants.SteamSimSidSisSignatureBytes) 
+            if (magic.StartsWith(Data.Models.VDF.Constants.SteamSimSidSisSignatureBytes)
                 || magic.StartsWith(Data.Models.VDF.Constants.SteamCsmCsdSisSignatureBytes))
+            {
                 return WrapperType.SkuSis;
+            }
 
             #endregion
 
@@ -705,6 +715,7 @@ namespace SabreTools.Serialization
             #endregion
 
             // TODO: Use constants from Models here
+
             #region TapeArchive
 
             if (magic.StartsWith([0x75, 0x73, 0x74, 0x61, 0x72, 0x00, 0x30, 0x30]))
@@ -719,6 +730,7 @@ namespace SabreTools.Serialization
             #endregion
 
             // TODO: Use constants from Models here
+
             #region Textfile
 
             // Not all textfiles can be determined through magic number
