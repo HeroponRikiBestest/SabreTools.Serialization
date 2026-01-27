@@ -680,12 +680,11 @@ namespace SabreTools.Serialization
 
             #region SkuSis
 
-            // TODO: add description
-            if (magic.StartsWith(Data.Models.VDF.Constants.SteamSimSidSisSignatureBytes)
-                || magic.StartsWith(Data.Models.VDF.Constants.SteamCsmCsdSisSignatureBytes))
-            {
+            if (magic.StartsWith(Data.Models.VDF.Constants.SteamSimSidSisSignatureBytes))
                 return WrapperType.SkuSis;
-            }
+
+            if (magic.StartsWith(Data.Models.VDF.Constants.SteamCsmCsdSisSignatureBytes))
+                return WrapperType.SkuSis;
 
             #endregion
 
