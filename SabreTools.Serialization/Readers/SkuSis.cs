@@ -1,10 +1,10 @@
 using System;
 using System.IO;
-using SabreTools.IO.Extensions;
-using File = SabreTools.Data.Models.VDF.File;
-using static SabreTools.Data.Models.VDF.Constants;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using SabreTools.IO.Extensions;
+using static SabreTools.Data.Models.VDF.Constants;
+using File = SabreTools.Data.Models.VDF.File;
 
 namespace SabreTools.Serialization.Readers
 {
