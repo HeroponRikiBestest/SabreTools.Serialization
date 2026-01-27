@@ -5,6 +5,8 @@ using SabreTools.Data.Models.SecuROM;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.SecuROM.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
+#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'
 namespace SabreTools.Serialization.Readers
 {
     public class SecuROMAddD : BaseBinaryReader<AddD>

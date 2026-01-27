@@ -1,4 +1,5 @@
-﻿namespace SabreTools.Data.Models.N3DS
+﻿#pragma warning disable CA2211 // Non-constant fields should not be visible
+namespace SabreTools.Data.Models.N3DS
 {
     public static class Constants
     {

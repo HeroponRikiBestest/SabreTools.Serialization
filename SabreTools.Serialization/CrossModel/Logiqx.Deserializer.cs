@@ -1,6 +1,7 @@
 using System;
 using SabreTools.Data.Models.Logiqx;
 
+#pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.CrossModel
 {
     public partial class Logiqx : BaseMetadataSerializer<Datafile>

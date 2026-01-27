@@ -3,6 +3,8 @@ using System.IO;
 using SabreTools.Data.Models.ASN1;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable CA1822 // Mark members as static
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class AbstractSyntaxNotationOne : BaseBinaryReader<TypeLengthValue[]>

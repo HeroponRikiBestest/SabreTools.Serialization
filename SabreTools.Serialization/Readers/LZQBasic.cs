@@ -4,6 +4,7 @@ using SabreTools.Data.Models.LZ;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.LZ.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class LZQBasic : BaseBinaryReader<QBasicFile>

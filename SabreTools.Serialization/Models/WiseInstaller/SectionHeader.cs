@@ -159,7 +159,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// Unknown. May also refer to a non-value for pre-78-offset executables and only a value for 78-offset-onwards
         /// ones.
         /// </summary>
-        public byte[] PreFontValue {get; set;} = [];
+        public byte[] PreFontValue { get; set; } = [];
 
         /// <summary>
         /// Font size

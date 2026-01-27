@@ -4,6 +4,7 @@ using SabreTools.Data.Models.InstallShieldExecutable;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.InstallShieldExecutable.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class InstallShieldExecutable : BaseBinaryReader<SFX>

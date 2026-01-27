@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Test.CrossModel
             Data.Models.ArchiveDotOrg.Files files = Build();
 
             // Serialize to generic model
-            SabreTools.Data.Models.Metadata.MetadataFile? metadata = serializer.Serialize(files);
+            Data.Models.Metadata.MetadataFile? metadata = serializer.Serialize(files);
             Assert.NotNull(metadata);
 
             // Serialize back to original model

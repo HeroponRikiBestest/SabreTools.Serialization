@@ -1,5 +1,6 @@
 using SabreTools.Data.Attributes;
 
+#pragma warning disable IDE1006 // Naming Styles
 namespace SabreTools.Data.Models.ClrMamePro
 {
     /// <remarks>rom</remarks>

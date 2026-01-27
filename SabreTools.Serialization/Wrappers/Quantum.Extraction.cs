@@ -1,5 +1,7 @@
 using System;
 
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
+#pragma warning disable IDE0060 // Remove unused parameter
 namespace SabreTools.Serialization.Wrappers
 {
     public partial class Quantum : IExtractable

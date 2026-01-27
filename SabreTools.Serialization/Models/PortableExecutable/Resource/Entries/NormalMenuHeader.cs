@@ -8,7 +8,7 @@ namespace SabreTools.Data.Models.PortableExecutable.Resource.Entries
     /// </summary>
     /// <see href="https://learn.microsoft.com/en-us/windows/win32/menurc/menuheader"/>
     [StructLayout(LayoutKind.Sequential)]
-    public sealed class NormalMenuHeader: MenuHeader
+    public sealed class NormalMenuHeader : MenuHeader
     {
         /// <summary>
         /// The version number of the menu template. This member must be equal to zero to indicate

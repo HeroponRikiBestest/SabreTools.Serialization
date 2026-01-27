@@ -4,6 +4,13 @@ using System.ComponentModel;
 using System.IO;
 using StormLibSharp.Native;
 
+#pragma warning disable CA1507 // Use nameof to express symbol names
+#pragma warning disable CA1510 // Use ArgumentNullException throw helper
+#pragma warning disable CA1513 // Use ObjectDisposedException throw helper
+#pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
+#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable IDE1006 // Naming Styles
 namespace StormLibSharp
 {
     public class MpqArchive : IDisposable

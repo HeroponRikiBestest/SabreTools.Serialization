@@ -5,6 +5,7 @@ using SabreTools.Data.Models.SGA;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.SGA.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class SGA : BaseBinaryReader<Archive>

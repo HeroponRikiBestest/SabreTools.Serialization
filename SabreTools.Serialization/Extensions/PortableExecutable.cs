@@ -8,6 +8,7 @@ using SabreTools.Data.Models.PortableExecutable;
 using SabreTools.Data.Models.PortableExecutable.Resource.Entries;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Data.Extensions
 {
     public static class PortableExecutable

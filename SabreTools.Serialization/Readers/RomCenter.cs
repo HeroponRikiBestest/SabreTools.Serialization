@@ -4,6 +4,7 @@ using System.Text;
 using SabreTools.Data.Models.RomCenter;
 using SabreTools.IO.Readers;
 
+#pragma warning disable CA1847 // Use char literal for a single character lookup
 namespace SabreTools.Serialization.Readers
 {
     public class RomCenter : BaseBinaryReader<MetadataFile>

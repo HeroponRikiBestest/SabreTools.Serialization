@@ -4,6 +4,7 @@ using SabreTools.Data.Models.WAD3;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.WAD3.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class WAD3 : BaseBinaryReader<Data.Models.WAD3.File>

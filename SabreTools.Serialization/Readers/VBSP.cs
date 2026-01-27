@@ -7,6 +7,8 @@ using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.BSP.Constants;
 
 // TODO: Finish replacing ReadType
+#pragma warning disable IDE0017 // Simplify object initialization
+#pragma warning disable IDE0060 // Remove unused parameter
 namespace SabreTools.Serialization.Readers
 {
     public class VBSP : BaseBinaryReader<VbspFile>

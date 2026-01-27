@@ -76,7 +76,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new SeparatedValue();
-            var serializer = new SabreTools.Serialization.Writers.SeparatedValue();
+            var serializer = new Serialization.Writers.SeparatedValue();
 
             // Build the data
             Data.Models.SeparatedValue.MetadataFile mf = Build();
@@ -104,7 +104,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new SeparatedValue();
-            var serializer = new SabreTools.Serialization.Writers.SeparatedValue();
+            var serializer = new Serialization.Writers.SeparatedValue();
 
             // Build the data
             Data.Models.SeparatedValue.MetadataFile mf = Build();
@@ -197,9 +197,9 @@ namespace SabreTools.Serialization.Test.Readers
         {
             Assert.NotNull(header);
             if (longHeader)
-                Assert.True(SabreTools.Serialization.Writers.SeparatedValue.HeaderArrayExtended.SequenceEqual(header));
+                Assert.True(Serialization.Writers.SeparatedValue.HeaderArrayExtended.SequenceEqual(header));
             else
-                Assert.True(SabreTools.Serialization.Writers.SeparatedValue.HeaderArrayStandard.SequenceEqual(header));
+                Assert.True(Serialization.Writers.SeparatedValue.HeaderArrayStandard.SequenceEqual(header));
         }
 
         /// <summary>
@@ -233,6 +233,7 @@ namespace SabreTools.Serialization.Test.Readers
                 Assert.Null(row.SHA512);
                 Assert.Null(row.SpamSum);
             }
+
             Assert.Equal("XXXXXX", row.Status);
         }
 
@@ -267,6 +268,7 @@ namespace SabreTools.Serialization.Test.Readers
                 Assert.Null(row.SHA512);
                 Assert.Null(row.SpamSum);
             }
+
             Assert.NotNull(row.Status); Assert.Empty(row.Status);
         }
 
@@ -302,6 +304,7 @@ namespace SabreTools.Serialization.Test.Readers
                 Assert.Null(row.SHA512);
                 Assert.Null(row.SpamSum);
             }
+
             Assert.Equal("XXXXXX", row.Status);
         }
     }

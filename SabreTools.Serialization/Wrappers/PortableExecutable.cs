@@ -8,6 +8,7 @@ using SabreTools.Data.Models.PortableExecutable;
 using SabreTools.Data.Models.PortableExecutable.Resource.Entries;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable IDE0330 // Use 'System.Threading.Lock'
 namespace SabreTools.Serialization.Wrappers
 {
     public partial class PortableExecutable : WrapperBase<Executable>

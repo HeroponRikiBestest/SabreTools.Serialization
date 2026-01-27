@@ -4,6 +4,7 @@ using System.IO;
 using SabreTools.Data.Models.NewExecutable;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable IDE0330 // Use 'System.Threading.Lock'
 namespace SabreTools.Serialization.Wrappers
 {
     public partial class NewExecutable : WrapperBase<Executable>

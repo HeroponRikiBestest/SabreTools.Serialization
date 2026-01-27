@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using SabreTools.Data.Models.Listrom;
 
+#pragma warning disable IDE0057 // Use range operator
 namespace SabreTools.Serialization.Readers
 {
     public class Listrom : BaseBinaryReader<MetadataFile>

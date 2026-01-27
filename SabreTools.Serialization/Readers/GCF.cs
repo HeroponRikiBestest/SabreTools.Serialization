@@ -3,6 +3,7 @@ using System.Text;
 using SabreTools.Data.Models.GCF;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class GCF : BaseBinaryReader<Data.Models.GCF.File>

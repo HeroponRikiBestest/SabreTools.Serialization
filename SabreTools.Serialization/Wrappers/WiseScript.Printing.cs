@@ -3,6 +3,7 @@ using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.WiseInstaller;
 using SabreTools.Data.Models.WiseInstaller.Actions;
 
+#pragma warning disable IDE0060 // Remove unused parameter
 namespace SabreTools.Serialization.Wrappers
 {
     public partial class WiseScript : IPrintable

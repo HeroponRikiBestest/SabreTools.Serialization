@@ -1,5 +1,6 @@
 using SabreTools.Serialization.Interfaces;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public partial class XeMID : IStringReader<Data.Models.Xbox.XeMID>

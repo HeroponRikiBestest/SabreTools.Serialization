@@ -4,6 +4,8 @@ using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ISO9660;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable CA1822 // Mark members as static
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class ISO9660 : BaseBinaryReader<Volume>
@@ -756,8 +758,12 @@ namespace SabreTools.Serialization.Readers
                     // Do not parse file data into file extent, too large
 
                     // Put the file extent is the dictionary
+#if NETCOREAPP
+                    directories.TryAdd(extentLocation, fileExtent);
+#else
                     if (!directories.ContainsKey(extentLocation))
                         directories.Add(extentLocation, fileExtent);
+#endif
                 }
             }
 

@@ -3,6 +3,7 @@ using SabreTools.Data.Extensions;
 using SabreTools.Data.Models.ASN1;
 using Xunit;
 
+#pragma warning disable IDE0230 // Use UTF-8 string literal
 namespace SabreTools.Serialization.Test.Extensions
 {
     public class TypeLengthValueTests
@@ -31,7 +32,7 @@ namespace SabreTools.Serialization.Test.Extensions
         public void Format_InvalidConstructed()
         {
             string expected = "Type: V_ASN1_OBJECT, V_ASN1_CONSTRUCTED, Length: 1, Value: [INVALID DATA TYPE]";
-            var tlv = new Data.Models.ASN1.TypeLengthValue { Type = ASN1Type.V_ASN1_OBJECT | ASN1Type.V_ASN1_CONSTRUCTED, Length = 1, Value = (object?)false };
+            var tlv = new Data.Models.ASN1.TypeLengthValue { Type = ASN1Type.V_ASN1_OBJECT | ASN1Type.V_ASN1_CONSTRUCTED, Length = 1, Value = false };
             string actual = tlv.Format();
             Assert.Equal(expected, actual);
         }
@@ -50,7 +51,7 @@ namespace SabreTools.Serialization.Test.Extensions
         public void Format_InvalidDataType()
         {
             string expected = "Type: V_ASN1_OBJECT, Length: 1, Value: [INVALID DATA TYPE]";
-            var tlv = new Data.Models.ASN1.TypeLengthValue { Type = ASN1Type.V_ASN1_OBJECT, Length = 1, Value = (object?)false };
+            var tlv = new Data.Models.ASN1.TypeLengthValue { Type = ASN1Type.V_ASN1_OBJECT, Length = 1, Value = false };
             string actual = tlv.Format();
             Assert.Equal(expected, actual);
         }

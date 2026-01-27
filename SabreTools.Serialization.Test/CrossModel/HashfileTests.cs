@@ -219,6 +219,7 @@ namespace SabreTools.Serialization.Test.CrossModel
         /// </summary>
         private static Data.Models.Hashfile.Hashfile Build(HashType hashType)
         {
+#pragma warning disable IDE0072
             return hashType switch
             {
                 HashType.CRC32 => new Data.Models.Hashfile.Hashfile { SFV = [new Data.Models.Hashfile.SFV { File = "XXXXXX", Hash = "XXXXXX" }] },
@@ -230,8 +231,9 @@ namespace SabreTools.Serialization.Test.CrossModel
                 HashType.SHA384 => new Data.Models.Hashfile.Hashfile { SHA384 = [new Data.Models.Hashfile.SHA384 { Hash = "XXXXXX", File = "XXXXXX" }] },
                 HashType.SHA512 => new Data.Models.Hashfile.Hashfile { SHA512 = [new Data.Models.Hashfile.SHA512 { Hash = "XXXXXX", File = "XXXXXX" }] },
                 HashType.SpamSum => new Data.Models.Hashfile.Hashfile { SpamSum = [new Data.Models.Hashfile.SpamSum { Hash = "XXXXXX", File = "XXXXXX" }] },
-                _ => throw new ArgumentOutOfRangeException(),
+                _ => throw new ArgumentOutOfRangeException(nameof(hashType)),
             };
+#pragma warning restore IDE0072
         }
 
         /// <summary>

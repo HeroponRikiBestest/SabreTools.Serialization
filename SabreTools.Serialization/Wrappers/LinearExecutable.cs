@@ -3,6 +3,7 @@ using System.IO;
 using SabreTools.Data.Models.LinearExecutable;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable IDE0330 // Use 'System.Threading.Lock'
 namespace SabreTools.Serialization.Wrappers
 {
     public partial class LinearExecutable : WrapperBase<Executable>

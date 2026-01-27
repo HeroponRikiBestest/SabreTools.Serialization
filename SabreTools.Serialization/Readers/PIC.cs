@@ -5,6 +5,7 @@ using SabreTools.Data.Models.PIC;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.PIC.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class PIC : BaseBinaryReader<DiscInformation>

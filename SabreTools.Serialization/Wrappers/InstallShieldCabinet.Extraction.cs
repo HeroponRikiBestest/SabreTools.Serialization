@@ -7,6 +7,7 @@ using SabreTools.IO.Compression.zlib;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.InstallShieldCabinet.Constants;
 
+#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'
 namespace SabreTools.Serialization.Wrappers
 {
     public partial class InstallShieldCabinet : IExtractable

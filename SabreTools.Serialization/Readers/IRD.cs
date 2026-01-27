@@ -2,6 +2,7 @@ using System.IO;
 using System.Text;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class IRD : BaseBinaryReader<Data.Models.IRD.File>

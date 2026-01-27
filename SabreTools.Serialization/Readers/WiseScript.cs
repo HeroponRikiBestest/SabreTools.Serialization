@@ -5,6 +5,9 @@ using SabreTools.Data.Models.WiseInstaller;
 using SabreTools.Data.Models.WiseInstaller.Actions;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable CA1866 // Use char overload
+#pragma warning disable IDE0017 // Simplify object initialization
+#pragma warning disable IDE0060 // Remove unused parameter
 namespace SabreTools.Serialization.Readers
 {
     public class WiseScript : BaseBinaryReader<ScriptFile>

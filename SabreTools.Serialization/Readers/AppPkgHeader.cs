@@ -3,6 +3,7 @@ using System.Text;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.PlayStation4.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class AppPkgHeader : BaseBinaryReader<Data.Models.PlayStation4.AppPkgHeader>

@@ -4,6 +4,7 @@ using System.Text;
 using SabreTools.Data.Models.InstallShieldArchiveV3;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class InstallShieldArchiveV3 : BaseBinaryReader<Archive>

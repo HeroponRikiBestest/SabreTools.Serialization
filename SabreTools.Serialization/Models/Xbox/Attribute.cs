@@ -27,6 +27,5 @@ namespace SabreTools.Data.Models.Xbox
         /// </summary>
         [JsonProperty("isXboxOneXEnhanced", NullValueHandling = NullValueHandling.Ignore)]
         public bool? IsXboxOneXEnhanced { get; set; }
-
     }
 }

@@ -8,7 +8,6 @@ namespace SabreTools.Data.Models.CFB
 
         public const ulong SignatureUInt64 = 0xE11AB1A1E011CFD0;
 
-
         /// <see href="https://devblogs.microsoft.com/setup/identifying-windows-installer-file-types/"/>
         #region Class IDs
 

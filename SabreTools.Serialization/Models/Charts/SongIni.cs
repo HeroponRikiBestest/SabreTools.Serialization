@@ -2,7 +2,7 @@ using System;
 
 namespace SabreTools.Data.Models.Charts
 {
-    /// <see href="https://github.com/TheNathannator/GuitarGame_ChartFormats/tree/main/doc/FileFormats/song.ini"/> 
+    /// <see href="https://github.com/TheNathannator/GuitarGame_ChartFormats/tree/main/doc/FileFormats/song.ini"/>
     /// <remarks>[song]/[Song]</remarks>
     public class SongIni
     {
@@ -123,7 +123,7 @@ namespace SabreTools.Data.Models.Charts
         public string? Playlist { get; set; }
 
         /// <summary>
-        /// (CH) Sub-playlist that the song should show up in. 	
+        /// (CH) Sub-playlist that the song should show up in.
         /// </summary>
         /// <remarks>sub_playlist</remarks>
         public string? SubPlaylist { get; set; }
@@ -341,28 +341,28 @@ namespace SabreTools.Data.Models.Charts
         /// Higher = later notes. Can be negative.
         /// </summary>
         /// <remarks>delay</remarks>
-        [Obsolete]
+        [Obsolete("Only used in older versions")]
         public long? Delay { get; set; }
 
         /// <summary>
         /// Overrides the default sustain cutoff threshold with a specified value in ticks.
         /// </summary>
         /// <remarks>sustain_cutoff_threshold</remarks>
-        [Obsolete]
+        [Obsolete("Only used in older versions")]
         public long? SustainCutoffThreshold { get; set; }
 
         /// <summary>
         /// Overrides the default HOPO threshold with a specified value in ticks.
         /// </summary>
         /// <remarks>hopo_frequency</remarks>
-        [Obsolete]
+        [Obsolete("Only used in older versions")]
         public long? HopoFrequency { get; set; }
 
         /// <summary>
         /// Sets the HOPO threshold to be a 1/8th step.
         /// </summary>
         /// <remarks>eighthnote_hopo</remarks>
-        [Obsolete]
+        [Obsolete("Only used in older versions")]
         public bool? EighthNoteHopo { get; set; }
 
         /// <summary>
@@ -370,7 +370,7 @@ namespace SabreTools.Data.Models.Charts
         /// Valid values are 103 and 116.
         /// </summary>
         /// <remarks>multiplier_note, star_power_note (PS)</remarks>
-        [Obsolete]
+        [Obsolete("Only used in older versions")]
         public long? MultiplierNote { get; set; }
 
         #endregion
@@ -399,7 +399,7 @@ namespace SabreTools.Data.Models.Charts
         /// (FoFiX) Overrides the natural HOPO threshold using numbers from 0 to 5.
         /// </summary>
         /// <remarks>hopofreq</remarks>
-        [Obsolete]
+        [Obsolete("Only used in FoFiX")]
         public long? HopoFreq { get; set; }
 
         /// <summary>
