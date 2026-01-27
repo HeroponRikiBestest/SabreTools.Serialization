@@ -4,6 +4,7 @@ using System.Text;
 using SabreTools.Data.Models.CueSheets;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable CA1510 // Use ArgumentNullException throw helper
 namespace SabreTools.Serialization.Writers
 {
     public class CueSheet : BaseBinaryWriter<Data.Models.CueSheets.CueSheet>

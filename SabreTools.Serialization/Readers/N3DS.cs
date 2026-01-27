@@ -5,6 +5,7 @@ using SabreTools.Data.Models.N3DS;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.N3DS.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class N3DS : BaseBinaryReader<Cart>

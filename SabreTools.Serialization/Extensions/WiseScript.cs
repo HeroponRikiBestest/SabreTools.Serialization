@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 
+#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'
 namespace SabreTools.Data.Extensions
 {
     public static class WiseScript

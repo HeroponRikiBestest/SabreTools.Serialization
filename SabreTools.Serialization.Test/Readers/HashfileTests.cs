@@ -77,7 +77,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Writers.Hashfile();
+            var serializer = new Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.CRC32);
@@ -101,7 +101,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Writers.Hashfile();
+            var serializer = new Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.MD2);
@@ -125,7 +125,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Writers.Hashfile();
+            var serializer = new Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.MD4);
@@ -149,7 +149,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Writers.Hashfile();
+            var serializer = new Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.MD5);
@@ -173,7 +173,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Writers.Hashfile();
+            var serializer = new Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SHA1);
@@ -197,7 +197,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Writers.Hashfile();
+            var serializer = new Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SHA256);
@@ -221,7 +221,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Writers.Hashfile();
+            var serializer = new Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SHA384);
@@ -245,7 +245,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Writers.Hashfile();
+            var serializer = new Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SHA512);
@@ -269,7 +269,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new Hashfile();
-            var serializer = new SabreTools.Serialization.Writers.Hashfile();
+            var serializer = new Serialization.Writers.Hashfile();
 
             // Build the data
             Data.Models.Hashfile.Hashfile hf = Build(HashType.SpamSum);
@@ -293,6 +293,7 @@ namespace SabreTools.Serialization.Test.Readers
         /// </summary>
         private static Data.Models.Hashfile.Hashfile Build(HashType hashType)
         {
+#pragma warning disable IDE0072
             return hashType switch
             {
                 HashType.CRC32 => new Data.Models.Hashfile.Hashfile { SFV = [new Data.Models.Hashfile.SFV { File = "XXXXXX", Hash = "XXXXXX" }] },
@@ -304,8 +305,9 @@ namespace SabreTools.Serialization.Test.Readers
                 HashType.SHA384 => new Data.Models.Hashfile.Hashfile { SHA384 = [new Data.Models.Hashfile.SHA384 { Hash = "XXXXXX", File = "XXXXXX" }] },
                 HashType.SHA512 => new Data.Models.Hashfile.Hashfile { SHA512 = [new Data.Models.Hashfile.SHA512 { Hash = "XXXXXX", File = "XXXXXX" }] },
                 HashType.SpamSum => new Data.Models.Hashfile.Hashfile { SpamSum = [new Data.Models.Hashfile.SpamSum { Hash = "XXXXXX", File = "XXXXXX" }] },
-                _ => throw new ArgumentOutOfRangeException(),
+                _ => throw new ArgumentOutOfRangeException(nameof(hashType)),
             };
+#pragma warning restore IDE0072
         }
 
         /// <summary>

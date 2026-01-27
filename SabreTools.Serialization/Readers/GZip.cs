@@ -4,6 +4,7 @@ using SabreTools.Data.Models.GZIP;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.GZIP.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class GZip : BaseBinaryReader<Archive>

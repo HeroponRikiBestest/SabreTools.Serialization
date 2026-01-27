@@ -4,6 +4,7 @@ using SabreTools.Data.Models.Quantum;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.Quantum.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class Quantum : BaseBinaryReader<Archive>

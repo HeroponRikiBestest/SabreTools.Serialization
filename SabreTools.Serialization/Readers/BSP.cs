@@ -5,6 +5,8 @@ using SabreTools.Data.Models.BSP;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.BSP.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
+#pragma warning disable IDE0060 // Remove unused parameter
 namespace SabreTools.Serialization.Readers
 {
     public class BSP : BaseBinaryReader<BspFile>

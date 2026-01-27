@@ -3,6 +3,7 @@ using System.Text;
 using SabreTools.Data.Models.N3DS;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class CIA : BaseBinaryReader<Data.Models.N3DS.CIA>

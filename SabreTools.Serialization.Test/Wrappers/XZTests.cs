@@ -3,6 +3,7 @@ using System.Linq;
 using SabreTools.Serialization.Wrappers;
 using Xunit;
 
+#pragma warning disable xUnit1004 // Test methods should not be skipped
 namespace SabreTools.Serialization.Test.Wrappers
 {
     public class XZTests

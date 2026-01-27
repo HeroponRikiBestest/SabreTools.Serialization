@@ -1,5 +1,6 @@
 ﻿using System;
 
+#pragma warning disable CA1069 // Enums values should not be duplicated
 namespace SabreTools.Data.Models.PortableExecutable
 {
     [Flags]
@@ -1134,9 +1135,9 @@ namespace SabreTools.Data.Models.PortableExecutable
         /// </summary>
         RT_MANIFEST = 24,
 
-        RT_NEWBITMAP = (RT_BITMAP | RT_NEWRESOURCE),
-        RT_NEWMENU = (RT_MENU | RT_NEWRESOURCE),
-        RT_NEWDIALOG = (RT_DIALOG | RT_NEWRESOURCE),
+        RT_NEWBITMAP = RT_BITMAP | RT_NEWRESOURCE,
+        RT_NEWMENU = RT_MENU | RT_NEWRESOURCE,
+        RT_NEWDIALOG = RT_DIALOG | RT_NEWRESOURCE,
     }
 
     public enum SymbolDerivedType : byte

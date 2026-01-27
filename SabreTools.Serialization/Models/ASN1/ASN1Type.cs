@@ -1,5 +1,6 @@
 ﻿using System;
 
+#pragma warning disable CA1069 // Enums values should not be duplicated
 namespace SabreTools.Data.Models.ASN1
 {
     /// <summary>

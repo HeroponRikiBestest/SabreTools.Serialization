@@ -75,7 +75,7 @@ namespace SabreTools.Serialization.Test.Readers
         {
             // Get the serializer and deserializer
             var deserializer = new RomCenter();
-            var serializer = new SabreTools.Serialization.Writers.RomCenter();
+            var serializer = new Serialization.Writers.RomCenter();
 
             // Build the data
             Data.Models.RomCenter.MetadataFile mf = Build();

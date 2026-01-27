@@ -4,6 +4,10 @@ using System.IO;
 using System.Threading;
 using StormLibSharp.Native;
 
+#pragma warning disable CA1510 // Use ArgumentNullException throw helper
+#pragma warning disable CA1512 // Use ArgumentOutOfRangeException throw helper
+#pragma warning disable CA1513 // Use ObjectDisposedException throw helper
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
 namespace StormLibSharp
 {
     public class MpqFileStream : Stream

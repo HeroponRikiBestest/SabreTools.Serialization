@@ -37,10 +37,11 @@ namespace SabreTools.Serialization.Wrappers
         protected readonly ViewStream _dataSource;
 
 #if NETCOREAPP
+#pragma warning disable IDE1006 // Naming Styles
         /// <summary>
         /// JSON serializer options for output printing
         /// </summary>
-        protected System.Text.Json.JsonSerializerOptions _jsonSerializerOptions
+        protected static System.Text.Json.JsonSerializerOptions _jsonSerializerOptions
         {
             get
             {
@@ -55,6 +56,7 @@ namespace SabreTools.Serialization.Wrappers
                 return serializer;
             }
         }
+#pragma warning restore IDE1006
 #endif
 
         /// <summary>

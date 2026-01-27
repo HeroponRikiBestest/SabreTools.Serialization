@@ -6,6 +6,7 @@ using SabreTools.Hashing;
 using SabreTools.IO.Extensions;
 using SabreTools.IO.Writers;
 
+#pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.Writers
 {
     public class Hashfile : BaseBinaryWriter<Data.Models.Hashfile.Hashfile>

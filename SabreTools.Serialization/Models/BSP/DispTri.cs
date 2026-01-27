@@ -7,7 +7,7 @@ namespace SabreTools.Data.Models.BSP
     /// related to the properties of a particular triangle in the
     /// displacement mesh.
     /// </summary>
-    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/> 
+    /// <see href="https://developer.valvesoftware.com/wiki/BSP_(Source)"/>
     [StructLayout(LayoutKind.Sequential)]
     public sealed class DispTri
     {

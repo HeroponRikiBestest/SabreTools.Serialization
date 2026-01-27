@@ -4,6 +4,8 @@ using SabreTools.Data.Models.PlayJ;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.PlayJ.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
+#pragma warning disable IDE0060 // Remove unused parameter
 namespace SabreTools.Serialization.Readers
 {
     public class PlayJAudio : BaseBinaryReader<AudioFile>

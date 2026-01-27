@@ -2,6 +2,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using SabreTools.Data.Attributes;
 
+#pragma warning disable IDE1006 // Naming Styles
 namespace SabreTools.Data.Models.Logiqx
 {
     [XmlRoot("rom")]

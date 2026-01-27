@@ -7,6 +7,7 @@ using SabreTools.Data.Models.CFB;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.CFB.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class CFB : BaseBinaryReader<Binary>

@@ -4,6 +4,7 @@ using SabreTools.Data.Models.ClrMamePro;
 using SabreTools.IO.Extensions;
 using SabreTools.IO.Writers;
 
+#pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.Writers
 {
     public class ClrMamePro : BaseBinaryWriter<MetadataFile>

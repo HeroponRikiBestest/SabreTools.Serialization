@@ -1,3 +1,4 @@
+#pragma warning disable IDE0060 // Remove unused parameter
 namespace SabreTools.Data.ObjectIdentifier
 {
     /// <summary>

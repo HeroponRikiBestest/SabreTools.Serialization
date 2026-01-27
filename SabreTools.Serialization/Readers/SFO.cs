@@ -3,6 +3,7 @@ using SabreTools.Data.Models.PlayStation3;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.PlayStation3.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class SFO : BaseBinaryReader<Data.Models.PlayStation3.SFO>

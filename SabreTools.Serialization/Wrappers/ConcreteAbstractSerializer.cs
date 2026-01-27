@@ -15,7 +15,7 @@ namespace SabreTools.Serialization.Wrappers
     {
         public override bool CanConvert(Type typeToConvert) => typeToConvert.IsAbstract;
 
-        class ConcreteAbstractSerializerOfType<TAbstract> : JsonConverter<TAbstract>
+        private class ConcreteAbstractSerializerOfType<TAbstract> : JsonConverter<TAbstract>
         {
             static ConcreteAbstractSerializerOfType()
             {
@@ -24,19 +24,19 @@ namespace SabreTools.Serialization.Wrappers
             }
 
 #if NETCOREAPP3_1
-            public override TAbstract Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
-                throw new NotImplementedException();
+            public override TAbstract Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+                => throw new NotImplementedException();
 #else
-            public override TAbstract? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
-                throw new NotImplementedException();
+            public override TAbstract? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+                => throw new NotImplementedException();
 #endif
 
-            public override void Write(Utf8JsonWriter writer, TAbstract value, JsonSerializerOptions options) =>
-                JsonSerializer.Serialize<object>(writer, value!, options);
+            public override void Write(Utf8JsonWriter writer, TAbstract value, JsonSerializerOptions options)
+                => JsonSerializer.Serialize<object>(writer, value!, options);
         }
 
-        public override JsonConverter CreateConverter(Type type, JsonSerializerOptions options) =>
-            (JsonConverter)Activator.CreateInstance(
+        public override JsonConverter CreateConverter(Type type, JsonSerializerOptions options)
+            => (JsonConverter)Activator.CreateInstance(
                 typeof(ConcreteAbstractSerializerOfType<>).MakeGenericType([type]),
                 BindingFlags.Instance | BindingFlags.Public,
                 binder: null,

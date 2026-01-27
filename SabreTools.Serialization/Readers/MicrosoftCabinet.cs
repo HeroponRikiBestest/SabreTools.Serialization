@@ -4,6 +4,7 @@ using SabreTools.Data.Models.MicrosoftCabinet;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.MicrosoftCabinet.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class MicrosoftCabinet : BaseBinaryReader<Cabinet>

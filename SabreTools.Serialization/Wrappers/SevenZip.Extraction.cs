@@ -8,6 +8,7 @@ using SharpCompress.Archives.SevenZip;
 using SharpCompress.Readers;
 #endif
 
+#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'
 namespace SabreTools.Serialization.Wrappers
 {
     /// <summary>

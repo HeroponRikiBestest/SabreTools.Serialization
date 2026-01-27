@@ -1,3 +1,4 @@
+#pragma warning disable IDE1006 // Naming Styles
 namespace SabreTools.Data.Models.N3DS
 {
     /// <summary>

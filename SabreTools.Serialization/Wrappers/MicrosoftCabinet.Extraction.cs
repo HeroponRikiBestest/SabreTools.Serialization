@@ -5,6 +5,7 @@ using SabreTools.Data.Models.MicrosoftCabinet;
 using SabreTools.IO.Compression.MSZIP;
 using SabreTools.IO.Extensions;
 
+#pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.Wrappers
 {
     public partial class MicrosoftCabinet : IExtractable

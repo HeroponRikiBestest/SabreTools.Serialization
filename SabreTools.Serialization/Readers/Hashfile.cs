@@ -4,6 +4,7 @@ using System.IO;
 using SabreTools.Data.Models.Hashfile;
 using SabreTools.Hashing;
 
+#pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.Readers
 {
     public class Hashfile : BaseBinaryReader<Data.Models.Hashfile.Hashfile>

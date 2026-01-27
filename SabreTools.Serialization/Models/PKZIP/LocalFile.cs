@@ -35,6 +35,5 @@ namespace SabreTools.Data.Models.PKZIP
         /// </summary>
         /// <remarks>Cannot exist if <see cref="DataDescriptor"/> is populated</remarks>
         public DataDescriptor64? ZIP64DataDescriptor { get; set; }
-
     }
 }

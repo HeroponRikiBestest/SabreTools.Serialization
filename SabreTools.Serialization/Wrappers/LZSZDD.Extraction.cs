@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using SabreTools.IO.Compression.SZDD;
 
+#pragma warning disable CA1866 // Use char overload
 namespace SabreTools.Serialization.Wrappers
 {
     public partial class LZSZDD : IExtractable

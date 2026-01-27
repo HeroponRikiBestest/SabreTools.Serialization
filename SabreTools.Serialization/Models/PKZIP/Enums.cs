@@ -1,5 +1,6 @@
 using System;
 
+#pragma warning disable CA1069 // Enums values should not be duplicated
 /// <see href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"/>
 /// <see href="https://github.com/adamhathcock/sharpcompress/blob/master/src/SharpCompress/Common/Zip/Headers/LocalEntryHeaderExtraFactory.cs"/>
 namespace SabreTools.Data.Models.PKZIP
@@ -394,7 +395,7 @@ namespace SabreTools.Data.Models.PKZIP
         /// <summary>
         /// deprecated (use method 93 for zstd)
         /// </summary>
-        [Obsolete]
+        [Obsolete("Use method 93 for Zstandard")]
         OldZstandard = 20,
 
         /// <summary>

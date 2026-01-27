@@ -10,6 +10,7 @@ using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.COFF.Constants;
 using static SabreTools.Data.Models.PortableExecutable.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class PortableExecutable : BaseBinaryReader<Executable>

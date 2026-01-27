@@ -6,6 +6,7 @@ using SabreTools.IO.Encryption;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.MoPaQ.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class MoPaQ : BaseBinaryReader<Archive>

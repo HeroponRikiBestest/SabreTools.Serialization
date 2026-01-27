@@ -4,6 +4,7 @@ using SabreTools.Data.Models.XZP;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.XZP.Constants;
 
+#pragma warning disable IDE0017 // Simplify object initialization
 namespace SabreTools.Serialization.Readers
 {
     public class XZP : BaseBinaryReader<Data.Models.XZP.File>

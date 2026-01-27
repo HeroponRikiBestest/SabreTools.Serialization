@@ -5,6 +5,7 @@ using System.Text;
 using SabreTools.Data.Models.ClrMamePro;
 using SabreTools.IO.Readers;
 
+#pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.Readers
 {
     public class ClrMamePro : BaseBinaryReader<MetadataFile>

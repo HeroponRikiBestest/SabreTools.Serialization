@@ -25,7 +25,7 @@ namespace SabreTools.Data.Models.BSP
         public const int MAX_MAP_MODELS = 400;
         public const int MAX_MAP_BRUSHES = 4096;
         public const int MAX_MAP_ENTITIES = 1024;
-        public const int MAX_MAP_ENTSTRING = (128 * 1024);
+        public const int MAX_MAP_ENTSTRING = 128 * 1024;
 
         public const int MAX_MAP_PLANES = 32767;
         public const int MAX_MAP_NODES = 32767;

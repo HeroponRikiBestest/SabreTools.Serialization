@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SabreTools.Data.Models.Hashfile;
 using SabreTools.Hashing;
 
+#pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.CrossModel
 {
     public partial class Hashfile : BaseMetadataSerializer<Data.Models.Hashfile.Hashfile>

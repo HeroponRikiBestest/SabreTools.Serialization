@@ -1,6 +1,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
+#pragma warning disable IDE1006 // Naming Styles
 namespace SabreTools.Data.Models.ArchiveDotOrg
 {
     [XmlRoot("file")]

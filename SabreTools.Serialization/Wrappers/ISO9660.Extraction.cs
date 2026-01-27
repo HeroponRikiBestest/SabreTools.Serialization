@@ -84,11 +84,11 @@ namespace SabreTools.Serialization.Wrappers
         private bool ExtractExtent(int extentLocation, Encoding encoding, int blockLength, string outputDirectory, bool includeDebug)
         {
             // Check that directory exists in model
-            if (!DirectoryDescriptors.ContainsKey(extentLocation))
+            if (!DirectoryDescriptors.TryGetValue(extentLocation, out FileExtent? value))
                 return false;
 
             bool succeeded = true;
-            if (DirectoryDescriptors[extentLocation] is not DirectoryExtent dir)
+            if (value is not DirectoryExtent dir)
                 return succeeded;
 
             foreach (var dr in dir.DirectoryRecords)

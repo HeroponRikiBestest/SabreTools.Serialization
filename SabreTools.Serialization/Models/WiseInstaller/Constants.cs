@@ -67,7 +67,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <summary>
         /// Size of the header for a WiseSection
         /// </summary>
-        public static readonly Dictionary<int, int> WiseSectionHeaderLengthDictionary = new Dictionary<int, int>()
+        public static readonly Dictionary<int, int> WiseSectionHeaderLengthDictionary = new()
         {
             {32, 6},
             {33, 6},
@@ -80,7 +80,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <summary>
         /// Offset from "WIS" string to be used as length of version field.
         /// </summary>
-        public static readonly Dictionary<int, int> WiseSectionVersionOffsetDictionary = new Dictionary<int, int>()
+        public static readonly Dictionary<int, int> WiseSectionVersionOffsetDictionary = new()
         {
             {32, 4},
             {33, 5},
@@ -93,7 +93,7 @@ namespace SabreTools.Data.Models.WiseInstaller
         /// <summary>
         /// Size of pre-string byte array, guessed to be correlated with "WIS" string offset.
         /// </summary>
-        public static readonly Dictionary<int, int> WiseSectionPreStringBytesSize = new Dictionary<int, int>()
+        public static readonly Dictionary<int, int> WiseSectionPreStringBytesSize = new()
         {
             {32, 8},
             {33, 16},

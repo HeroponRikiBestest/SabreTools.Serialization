@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using SabreTools.Data.Models.CueSheets;
 
+#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'
 namespace SabreTools.Serialization.Readers
 {
     public class CueSheet : BaseBinaryReader<Data.Models.CueSheets.CueSheet>

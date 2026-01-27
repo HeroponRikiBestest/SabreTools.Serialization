@@ -4,6 +4,7 @@ using System.Text;
 using SabreTools.Data.Models.SeparatedValue;
 using SabreTools.IO.Readers;
 
+#pragma warning disable CA1822 // Mark members as static
 namespace SabreTools.Serialization.Readers
 {
     public class SeparatedValue : BaseBinaryReader<MetadataFile>

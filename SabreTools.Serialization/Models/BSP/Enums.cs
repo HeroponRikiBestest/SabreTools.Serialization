@@ -1,5 +1,6 @@
 using System;
 
+#pragma warning disable CA1069 // Enums values should not be duplicated
 namespace SabreTools.Data.Models.BSP
 {
     /// <see href="https://developer.valvesoftware.com/wiki/BSP_(GoldSrc)"/>
