@@ -1,10 +1,8 @@
 using System;
 using System.IO;
 using System.Text;
-using Newtonsoft.Json.Linq;
 using SabreTools.IO.Extensions;
 using static SabreTools.Data.Models.VDF.Constants;
-using File = SabreTools.Data.Models.VDF.File;
 
 namespace SabreTools.Serialization.Readers
 {
@@ -16,10 +14,10 @@ namespace SabreTools.Serialization.Readers
     /// replaced with a general-purpose VDF parser.
     /// Most observations about sku sis files described here probably also apply to VDF files.
     /// </remarks>
-    public class SkuSis : BaseBinaryReader<File>
+    public class SkuSis : BaseBinaryReader<Data.Models.VDF.SkuSis>
     {
         /// <inheritdoc/>
-        public override File? Deserialize(Stream? data)
+        public override Data.Models.VDF.SkuSis? Deserialize(Stream? data)
         {
             // If the data is invalid
             if (data == null || !data.CanRead)
@@ -34,17 +32,22 @@ namespace SabreTools.Serialization.Readers
                 var signatureBytes = data.ReadBytes(5);
                 if (!signatureBytes.EqualsExactly(SteamSimSidSisSignatureBytes)
                     && !signatureBytes.EqualsExactly(SteamCsmCsdSisSignatureBytes))
+                {
                     return null;
+                }
 
                 data.SeekIfPossible(initialOffset, SeekOrigin.Begin);
 
-                var skuSis = ParseSkuSis(data);
-                if (skuSis?.VDFObject == null)
+                var jsonBytes = ParseSkuSis(data);
+                if (jsonBytes == null)
                     return null;
 
-                skuSis.Signature = signatureBytes;
+                var deserializer = new SkuSisJson();
+                var skuSisJson = deserializer.Deserialize(jsonBytes, 0);
+                if (skuSisJson == null)
+                    return null;
 
-                return skuSis;
+                return skuSisJson;
             }
             catch
             {
@@ -53,15 +56,41 @@ namespace SabreTools.Serialization.Readers
             }
         }
 
+        private class SkuSisJson : JsonFile<Data.Models.VDF.SkuSis>
+        {
+            #region IByteReader
+
+            /// <remarks>All known sku sis files are observed to be ASCII</remarks>
+            public override Data.Models.VDF.SkuSis? Deserialize(byte[]? data, int offset)
+                => Deserialize(data, offset, new ASCIIEncoding());
+
+            #endregion
+
+            #region IFileReader
+
+            /// <remarks>All known sku sis files are observed to be ASCII</remarks>
+            public override Data.Models.VDF.SkuSis? Deserialize(string? path)
+                => Deserialize(path, new ASCIIEncoding());
+
+            #endregion
+
+            #region IStreamReader
+
+            /// <remarks>All known sku sis files are observed to be ASCII</remarks>
+            public override Data.Models.VDF.SkuSis? Deserialize(Stream? data)
+                => Deserialize(data, new ASCIIEncoding());
+
+            #endregion
+        }
+
         /// <summary>
         /// Parse a Stream into a Header
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Header on success, null on error</returns>
-        public static File? ParseSkuSis(Stream data)
+        // TODO: error handling?
+        public static byte[]? ParseSkuSis(Stream data)
         {
-            var obj = new File();
-
             string json = "{\n"; // Sku sis files have no surrounding curly braces, which json doesn't allow
             const string delimiter = "\"\t\t\""; // KVPs are always quoted, and are delimited by two tabs
             var reader = new StreamReader(data, Encoding.ASCII);
@@ -102,9 +131,8 @@ namespace SabreTools.Serialization.Readers
             }
 
             json += "\n}";
-            obj.VDFObject = JObject.Parse(json);
-
-            return obj;
+            byte[] jsonBytes = Encoding.ASCII.GetBytes(json);
+            return jsonBytes;
         }
     }
 }

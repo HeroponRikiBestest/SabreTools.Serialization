@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using SabreTools.Data.Models.VDF;
 
 namespace SabreTools.Serialization.Wrappers
 {
-    public partial class SkuSis : WrapperBase<Data.Models.VDF.File>
+    public partial class SkuSis : WrapperBase<Data.Models.VDF.SkuSis>
     {
         #region Descriptive Properties
 
@@ -11,35 +13,74 @@ namespace SabreTools.Serialization.Wrappers
         public override string DescriptionString => "Valve Data File";
 
         #endregion
-        
+
         #region Extension Properties
-        
-        /// <inheritdoc cref="Models.VDF.File.Signature"/>
-        public byte[]? Signature => Model.Signature;
-        
-        /// <inheritdoc cref="Models.VDF.File.VDFObject"/>
-        public JObject? VDFObject => Model.VDFObject;
+
+        /// <inheritdoc cref="Models.VDF.SkuSis.Sku"/>
+        public Sku? Sku => Model.Sku;
+
+        /// <inheritdoc cref="Models.VDF.Sku.Name"/>
+        public string? Name => Model?.Sku?.Name;
+
+        /// <inheritdoc cref="Models.VDF.Sku.ProductName"/>
+        public string? ProductName => Model?.Sku?.ProductName;
+
+        /// <inheritdoc cref="Models.VDF.Sku.SubscriptionId"/>
+        public long? SubscriptionId => Model?.Sku?.SubscriptionId;
+
+        /// <inheritdoc cref="Models.VDF.Sku.AppId"/>
+        public long? AppId => Model?.Sku?.AppId;
+
+        /// <inheritdoc cref="Models.VDF.Sku.Disks"/>
+        public uint? Disks => Model?.Sku?.Disks;
+
+        /// <inheritdoc cref="Models.VDF.Sku.Language"/>
+        public string? Language => Model?.Sku?.Language;
+
+        /// <inheritdoc cref="Models.VDF.Sku.Disk"/>
+        public uint? Disk => Model?.Sku?.Disk;
+
+        /// <inheritdoc cref="Models.VDF.Sku.Backup"/>
+        public uint? Backup => Model?.Sku?.Backup;
+
+        /// <inheritdoc cref="Models.VDF.Sku.contenttype"/>
+        public uint? ContentType => Model?.Sku?.ContentType;
+
+        /// <inheritdoc cref="Models.VDF.Sku.Apps"/>
+        public Dictionary<long, long>? Apps => Model?.Sku?.Apps;
+
+        /// <inheritdoc cref="Models.VDF.Sku.Depots"/>
+        public Dictionary<long, long>? Depots => Model?.Sku?.Depots;
+
+        /// <inheritdoc cref="Models.VDF.Sku.Manifests"/>
+        public Dictionary<long, long>? Manifests => Model?.Sku?.Manifests;
+
+        /// <inheritdoc cref="Models.VDF.Sku.Chunkstores"/>
+        public Dictionary<long, Dictionary<long, long>?>? Chunkstores => Model?.Sku?.Chunkstores;
+
+        /// <inheritdoc cref="Models.VDF.Sku.EverythingElse"/>
+        public IDictionary<string, JToken>? EverythingElse => Model?.Sku?.EverythingElse;
 
         #endregion
 
         #region Constructors
 
-        public SkuSis(Data.Models.VDF.File model, byte[] data) : base(model, data) { }
+        public SkuSis(Data.Models.VDF.SkuSis model, byte[] data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public SkuSis(Data.Models.VDF.File model, byte[] data, int offset) : base(model, data, offset) { }
+        public SkuSis(Data.Models.VDF.SkuSis model, byte[] data, int offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public SkuSis(Data.Models.VDF.File model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
+        public SkuSis(Data.Models.VDF.SkuSis model, byte[] data, int offset, int length) : base(model, data, offset, length) { }
 
         /// <inheritdoc/>
-        public SkuSis(Data.Models.VDF.File model, Stream data) : base(model, data) { }
+        public SkuSis(Data.Models.VDF.SkuSis model, Stream data) : base(model, data) { }
 
         /// <inheritdoc/>
-        public SkuSis(Data.Models.VDF.File model, Stream data, long offset) : base(model, data, offset) { }
+        public SkuSis(Data.Models.VDF.SkuSis model, Stream data, long offset) : base(model, data, offset) { }
 
         /// <inheritdoc/>
-        public SkuSis(Data.Models.VDF.File model, Stream data, long offset, long length) : base(model, data, offset, length) { }
+        public SkuSis(Data.Models.VDF.SkuSis model, Stream data, long offset, long length) : base(model, data, offset, length) { }
 
         #endregion
 
