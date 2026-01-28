@@ -66,7 +66,7 @@ namespace SabreTools.Serialization.CrossModel
             {
                 [Data.Models.Metadata.Machine.NameKey] = item.Name,
                 [Data.Models.Metadata.Machine.DescriptionKey] = item.Description,
-                // [Data.Models.Metadata.Machine.DriverKey] = item.DriverStatus,
+                // [Data.Models.Metadata.Machine.DriverKey] = item.DriverStatus, // TODO: Needs metadata mapping
                 [Data.Models.Metadata.Machine.YearKey] = item.Year,
                 [Data.Models.Metadata.Machine.ManufacturerKey] = item.Manufacturer,
                 [Data.Models.Metadata.Machine.CategoryKey] = item.Category,

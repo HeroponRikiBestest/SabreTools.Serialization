@@ -71,7 +71,7 @@ namespace SabreTools.Serialization.CrossModel
 
             gameBase.Name = item.ReadString(Data.Models.Metadata.Machine.NameKey);
             gameBase.Description = item.ReadString(Data.Models.Metadata.Machine.DescriptionKey);
-            // gameBase.DriverStatus = item.ReadString(Data.Models.Metadata.Machine.DriverKey);
+            // gameBase.DriverStatus = item.ReadString(Data.Models.Metadata.Machine.DriverKey); // TODO: Needs metadata mapping
             gameBase.Year = item.ReadString(Data.Models.Metadata.Machine.YearKey);
             gameBase.Manufacturer = item.ReadString(Data.Models.Metadata.Machine.ManufacturerKey);
             gameBase.Category = item.ReadString(Data.Models.Metadata.Machine.CategoryKey);

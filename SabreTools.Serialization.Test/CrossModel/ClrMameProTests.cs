@@ -276,7 +276,7 @@ namespace SabreTools.Serialization.Test.CrossModel
             Assert.NotNull(gb);
             Assert.Equal("XXXXXX", gb.Name);
             Assert.Equal("XXXXXX", gb.Description);
-            // Assert.Equal("XXXXXX", gb.DriverStatus);
+            // Assert.Equal("XXXXXX", gb.DriverStatus); // TODO: Needs metadata mapping
             Assert.Equal("XXXXXX", gb.Year);
             Assert.Equal("XXXXXX", gb.Manufacturer);
             Assert.Equal("XXXXXX", gb.Category);
