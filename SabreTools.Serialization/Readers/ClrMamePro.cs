@@ -283,6 +283,9 @@ namespace SabreTools.Serialization.Readers
                             case "description":
                                 game.Description = reader.Standalone?.Value;
                                 break;
+                            case "driverstatus":
+                                game.DriverStatus = reader.Standalone?.Value;
+                                break;
                             case "year":
                                 game.Year = reader.Standalone?.Value;
                                 break;

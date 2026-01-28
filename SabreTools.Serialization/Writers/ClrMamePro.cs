@@ -173,6 +173,7 @@ namespace SabreTools.Serialization.Writers
             // Write the standalone values
             writer.WriteRequiredStandalone("name", game.Name, throwOnError: true);
             writer.WriteOptionalStandalone("description", game.Description);
+            writer.WriteOptionalStandalone("driverstatus", game.DriverStatus);
             writer.WriteOptionalStandalone("year", game.Year);
             writer.WriteOptionalStandalone("manufacturer", game.Manufacturer);
             writer.WriteOptionalStandalone("category", game.Category);

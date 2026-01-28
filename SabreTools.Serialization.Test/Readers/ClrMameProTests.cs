@@ -328,6 +328,7 @@ namespace SabreTools.Serialization.Test.Readers
                 : new Data.Models.ClrMamePro.Machine();
             gameBase.Name = "XXXXXX";
             gameBase.Description = "XXXXXX";
+            gameBase.DriverStatus = "XXXXXX";
             gameBase.Year = "XXXXXX";
             gameBase.Manufacturer = "XXXXXX";
             gameBase.Category = "XXXXXX";
@@ -392,6 +393,7 @@ namespace SabreTools.Serialization.Test.Readers
             Assert.NotNull(gb);
             Assert.Equal("XXXXXX", gb.Name);
             Assert.Equal("XXXXXX", gb.Description);
+            // Assert.Equal("XXXXXX", gb.DriverStatus);
             Assert.Equal("XXXXXX", gb.Year);
             Assert.Equal("XXXXXX", gb.Manufacturer);
             Assert.Equal("XXXXXX", gb.Category);

@@ -59,6 +59,9 @@ namespace SabreTools.Data.Models.ClrMamePro
 
         #region MAME Extensions
 
+        /// <remarks>status, (good|imperfect|preliminary), Appears after Description</remarks>
+        public string? DriverStatus { get; set; }
+
         /// <remarks>chip, Appears after Archive</remarks>
         public Chip[]? Chip { get; set; }
 
