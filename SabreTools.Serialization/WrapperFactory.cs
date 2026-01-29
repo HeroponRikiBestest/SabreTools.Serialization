@@ -53,6 +53,7 @@ namespace SabreTools.Serialization
                 WrapperType.SecuROMDFA => SecuROMDFA.Create(data),
                 WrapperType.SevenZip => SevenZip.Create(data),
                 WrapperType.Skeleton => Skeleton.Create(data),
+                WrapperType.SkuSis => SkuSis.Create(data),
                 WrapperType.SFFS => SFFS.Create(data),
                 WrapperType.SGA => SGA.Create(data),
                 WrapperType.TapeArchive => TapeArchive.Create(data),
@@ -674,6 +675,16 @@ namespace SabreTools.Serialization
             // Found in Redump entry 81756, confirmed to be "StarForce Filesystem" by PiD.
             if (magic.StartsWith(Data.Models.StarForce.Constants.SignatureBytes))
                 return WrapperType.SFFS;
+
+            #endregion
+
+            #region SkuSis
+
+            if (magic.StartsWith(Data.Models.VDF.Constants.SteamSimSidSisSignatureBytes))
+                return WrapperType.SkuSis;
+
+            if (magic.StartsWith(Data.Models.VDF.Constants.SteamCsmCsdSisSignatureBytes))
+                return WrapperType.SkuSis;
 
             #endregion
 

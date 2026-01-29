@@ -218,6 +218,11 @@ namespace SabreTools.Serialization.Wrappers
         Skeleton,
 
         /// <summary>
+        /// Steam SKU sis file
+        /// </summary>
+        SkuSis,
+
+        /// <summary>
         /// Tape archive
         /// </summary>
         TapeArchive,
