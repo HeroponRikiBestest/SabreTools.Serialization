@@ -56,6 +56,10 @@ namespace SabreTools.Serialization.Readers
             }
         }
 
+        /// <summary>
+        ///  Handles deserialization of the json-modified VDF string into a json.
+        /// </summary>
+        /// <remarks>Requires VDF-to-JSON conversion, should not be public.</remarks>
         private class SkuSisJson : JsonFile<Data.Models.VDF.SkuSis>
         {
             #region IByteReader
@@ -88,7 +92,6 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Stream to parse</param>
         /// <returns>Filled Header on success, null on error</returns>
-        // TODO: error handling?
         public static byte[]? ParseSkuSis(Stream data)
         {
             string json = "{\n"; // Sku sis files have no surrounding curly braces, which json doesn't allow

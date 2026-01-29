@@ -20,46 +20,46 @@ namespace SabreTools.Serialization.Wrappers
         public Sku? Sku => Model.Sku;
 
         /// <inheritdoc cref="Models.VDF.Sku.Name"/>
-        public string? Name => Model?.Sku?.Name;
+        public string? Name => Sku?.Name;
 
         /// <inheritdoc cref="Models.VDF.Sku.ProductName"/>
-        public string? ProductName => Model?.Sku?.ProductName;
+        public string? ProductName => Sku?.ProductName;
 
         /// <inheritdoc cref="Models.VDF.Sku.SubscriptionId"/>
-        public long? SubscriptionId => Model?.Sku?.SubscriptionId;
+        public long? SubscriptionId => Sku?.SubscriptionId;
 
         /// <inheritdoc cref="Models.VDF.Sku.AppId"/>
-        public long? AppId => Model?.Sku?.AppId;
+        public long? AppId => Sku?.AppId;
 
         /// <inheritdoc cref="Models.VDF.Sku.Disks"/>
-        public uint? Disks => Model?.Sku?.Disks;
+        public uint? Disks => Sku?.Disks;
 
         /// <inheritdoc cref="Models.VDF.Sku.Language"/>
-        public string? Language => Model?.Sku?.Language;
+        public string? Language => Sku?.Language;
 
         /// <inheritdoc cref="Models.VDF.Sku.Disk"/>
-        public uint? Disk => Model?.Sku?.Disk;
+        public uint? Disk => Sku?.Disk;
 
         /// <inheritdoc cref="Models.VDF.Sku.Backup"/>
-        public uint? Backup => Model?.Sku?.Backup;
+        public uint? Backup => Sku?.Backup;
 
         /// <inheritdoc cref="Models.VDF.Sku.contenttype"/>
-        public uint? ContentType => Model?.Sku?.ContentType;
+        public uint? ContentType => Sku?.ContentType;
 
         /// <inheritdoc cref="Models.VDF.Sku.Apps"/>
-        public Dictionary<long, long>? Apps => Model?.Sku?.Apps;
+        public Dictionary<long, long>? Apps => Sku?.Apps;
 
         /// <inheritdoc cref="Models.VDF.Sku.Depots"/>
-        public Dictionary<long, long>? Depots => Model?.Sku?.Depots;
+        public Dictionary<long, long>? Depots => Sku?.Depots;
 
         /// <inheritdoc cref="Models.VDF.Sku.Manifests"/>
-        public Dictionary<long, long>? Manifests => Model?.Sku?.Manifests;
+        public Dictionary<long, long>? Manifests => Sku?.Manifests;
 
         /// <inheritdoc cref="Models.VDF.Sku.Chunkstores"/>
-        public Dictionary<long, Dictionary<long, long>?>? Chunkstores => Model?.Sku?.Chunkstores;
+        public Dictionary<long, Dictionary<long, long>?>? Chunkstores => Sku?.Chunkstores;
 
         /// <inheritdoc cref="Models.VDF.Sku.EverythingElse"/>
-        public IDictionary<string, JToken>? EverythingElse => Model?.Sku?.EverythingElse;
+        public IDictionary<string, JToken>? EverythingElse => Sku?.EverythingElse;
 
         #endregion
 
