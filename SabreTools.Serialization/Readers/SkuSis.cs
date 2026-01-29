@@ -102,7 +102,6 @@ namespace SabreTools.Serialization.Readers
             var reader = new StreamReader(data, Encoding.ASCII);
 #else
             var reader = new StreamReader(data, Encoding.ASCII, false, -1, true);
-
 #endif
             while (!reader.EndOfStream)
             {
