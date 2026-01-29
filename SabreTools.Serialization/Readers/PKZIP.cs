@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -42,7 +43,7 @@ namespace SabreTools.Serialization.Readers
                     {
                         // Central Directory File Header
                         case CentralDirectoryFileHeaderSignature:
-                            var cdr = ParseCentralDirectoryFileHeader(data);
+                            var cdr = ParseCentralDirectoryFileHeader(data, Debug);
                             if (cdr is null)
                                 return null;
 
@@ -53,7 +54,7 @@ namespace SabreTools.Serialization.Readers
 
                         // Local File
                         case LocalFileHeaderSignature:
-                            var lf = ParseLocalFile(data);
+                            var lf = ParseLocalFile(data, Debug);
                             if (lf is null)
                                 return null;
 
@@ -170,8 +171,9 @@ namespace SabreTools.Serialization.Readers
         /// Parse a Stream into a central directory file header
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Filled central directory file header on success, null on error</returns>
-        public static CentralDirectoryFileHeader? ParseCentralDirectoryFileHeader(Stream data)
+        public static CentralDirectoryFileHeader? ParseCentralDirectoryFileHeader(Stream data, bool includeDebug = false)
         {
             var obj = new CentralDirectoryFileHeader();
 
@@ -221,7 +223,7 @@ namespace SabreTools.Serialization.Readers
                 if (extraBytes.Length != obj.ExtraFieldLength)
                     return null;
 
-                obj.ExtraFields = ParseExtraFields(obj, extraBytes);
+                obj.ExtraFields = ParseExtraFields(obj, extraBytes, includeDebug);
             }
 
             if (obj.FileCommentLength > 0 && data.Position + obj.FileCommentLength <= data.Length)
@@ -409,15 +411,16 @@ namespace SabreTools.Serialization.Readers
         /// Parse a Stream into a local file
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Filled local file on success, null on error</returns>
-        public static LocalFile? ParseLocalFile(Stream data)
+        public static LocalFile? ParseLocalFile(Stream data, bool includeDebug = false)
         {
             var obj = new LocalFile();
 
             #region Local File Header
 
             // Try to read the header
-            var localFileHeader = ParseLocalFileHeader(data);
+            var localFileHeader = ParseLocalFileHeader(data, includeDebug);
             if (localFileHeader is null)
                 return null;
 
@@ -532,8 +535,9 @@ namespace SabreTools.Serialization.Readers
         /// Parse a Stream into a local file header
         /// </summary>
         /// <param name="data">Stream to parse</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Filled local file header on success, null on error</returns>
-        public static LocalFileHeader? ParseLocalFileHeader(Stream data)
+        public static LocalFileHeader? ParseLocalFileHeader(Stream data, bool includeDebug = false)
         {
             var obj = new LocalFileHeader();
 
@@ -576,7 +580,7 @@ namespace SabreTools.Serialization.Readers
                 if (extraBytes.Length != obj.ExtraFieldLength)
                     return null;
 
-                obj.ExtraFields = ParseExtraFields(obj, extraBytes);
+                obj.ExtraFields = ParseExtraFields(obj, extraBytes, includeDebug);
             }
 
             return obj;
@@ -587,9 +591,11 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Process all extensible data fields in a central directory file extras block
         /// </summary>
+        /// <param name="header">Central directory file header</param>
         /// <param name="data">Byte array to parse</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Array of data fields on success, null otherwise</returns>
-        public static ExtensibleDataField[]? ParseExtraFields(CentralDirectoryFileHeader header, byte[]? data)
+        public static ExtensibleDataField[]? ParseExtraFields(CentralDirectoryFileHeader header, byte[]? data, bool includeDebug = false)
         {
             if (data is null)
                 return null;
@@ -607,13 +613,13 @@ namespace SabreTools.Serialization.Readers
                 ExtensibleDataField? field = id switch
                 {
                     HeaderID.Zip64ExtendedInformation => ParseZip64ExtendedInformationExtraField(data, ref offset, header),
-                    HeaderID.AVInfo => ParseUnknownExtraField(data, ref offset), // TODO: Implement model
-                    HeaderID.ExtendedLanguageEncodingData => ParseUnknownExtraField(data, ref offset), // TODO: Implement model
+                    HeaderID.AVInfo => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement model
+                    HeaderID.ExtendedLanguageEncodingData => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement model
                     HeaderID.OS2 => ParseOS2ExtraField(data, ref offset),
                     HeaderID.NTFS => ParseNTFSExtraField(data, ref offset),
                     HeaderID.OpenVMS => ParseOpenVMSExtraField(data, ref offset),
                     HeaderID.UNIX => ParseUnixExtraField(data, ref offset),
-                    HeaderID.FileStreamFork => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.FileStreamFork => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.PatchDescriptor => ParsePatchDescriptorExtraField(data, ref offset),
                     HeaderID.PKCSStore => ParsePKCS7Store(data, ref offset),
                     HeaderID.X509IndividualFile => ParseX509IndividualFile(data, ref offset),
@@ -621,51 +627,51 @@ namespace SabreTools.Serialization.Readers
                     HeaderID.StrongEncryptionHeader => ParseStrongEncryptionHeader(data, ref offset),
                     HeaderID.RecordManagementControls => ParseRecordManagementControls(data, ref offset),
                     HeaderID.PKCSCertificateList => ParsePKCS7EncryptionRecipientCertificateList(data, ref offset),
-                    HeaderID.Timestamp => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.Timestamp => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.PolicyDecryptionKey => ParsePolicyDecryptionKeyRecordExtraField(data, ref offset),
                     HeaderID.SmartcryptKeyProvider => ParseKeyProviderRecordExtraField(data, ref offset),
                     HeaderID.SmartcryptPolicyKeyData => ParsePolicyKeyDataRecordRecordExtraField(data, ref offset),
                     HeaderID.IBMS390AttributesUncompressed => ParseAS400ExtraFieldAttribute(data, ref offset),
-                    HeaderID.IBMS390AttributesCompressed => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.POSZIP4690 => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.Macintosh => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.PixarUSD => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.IBMS390AttributesCompressed => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.POSZIP4690 => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.Macintosh => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.PixarUSD => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.ZipItMacintosh => ParseZipItMacintoshExtraField(data, ref offset),
                     HeaderID.ZipItMacintosh135Plus => ParseZipItMacintoshShortFileExtraField(data, ref offset),
                     HeaderID.ZipItMacintosh135PlusAlt => ParseZipItMacintoshShortDirectoryExtraField(data, ref offset),
-                    HeaderID.InfoZIPMacintosh => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.AcornSparkFS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.WindowsNTSecurityDescriptor => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.VMCMS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.MVS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.THEOSold => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.InfoZIPMacintosh => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.AcornSparkFS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.WindowsNTSecurityDescriptor => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.VMCMS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.MVS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.THEOSold => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.FWKCSMD5 => ParseFWKCSMD5ExtraField(data, ref offset),
-                    HeaderID.OS2AccessControlList => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.InfoZIPOpenVMS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.MacintoshSmartzip => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.XceedOriginalLocation => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.ADSVS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.ExtendedTimestamp => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.XceedUnicode => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.InfoZIPUNIX => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.OS2AccessControlList => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.InfoZIPOpenVMS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.MacintoshSmartzip => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.XceedOriginalLocation => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.ADSVS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.ExtendedTimestamp => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.XceedUnicode => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.InfoZIPUNIX => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.InfoZIPUnicodeComment => ParseInfoZIPUnicodeCommentExtraField(data, ref offset),
-                    HeaderID.BeOSBeBox => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.THEOS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.BeOSBeBox => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.THEOS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.InfoZIPUnicodePath => ParseInfoZIPUnicodePathExtraField(data, ref offset),
-                    HeaderID.AtheOSSyllable => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.ASiUNIX => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.InfoZIPUNIXNew => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.InfoZIPUNIXNewer => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.AtheOSSyllable => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.ASiUNIX => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.InfoZIPUNIXNew => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.InfoZIPUNIXNewer => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.DataStreamAlignment => ParseDataStreamAlignment(data, ref offset),
                     HeaderID.MicrosoftOpenPackagingGrowthHint => ParseMicrosoftOpenPackagingGrowthHint(data, ref offset),
-                    HeaderID.JavaJAR => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.AndroidZIPAlignment => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.KoreanZIPCodePage => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.SMSQDOS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.AExEncryptionStructure => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.Unknown => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.JavaJAR => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.AndroidZIPAlignment => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.KoreanZIPCodePage => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.SMSQDOS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.AExEncryptionStructure => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.Unknown => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
 
-                    _ => ParseUnknownExtraField(data, ref offset),
+                    _ => ParseUnknownExtraField(data, ref offset, includeDebug),
                 };
 
                 if (field is not null)
@@ -678,9 +684,11 @@ namespace SabreTools.Serialization.Readers
         /// <summary>
         /// Process all extensible data fields in a local file extras block
         /// </summary>
+        /// <param name="header">Local file header</param>
         /// <param name="data">Byte array to parse</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Array of data fields on success, null otherwise</returns>
-        public static ExtensibleDataField[]? ParseExtraFields(LocalFileHeader header, byte[]? data)
+        public static ExtensibleDataField[]? ParseExtraFields(LocalFileHeader header, byte[]? data, bool includeDebug = false)
         {
             if (data is null)
                 return null;
@@ -698,13 +706,13 @@ namespace SabreTools.Serialization.Readers
                 ExtensibleDataField? field = id switch
                 {
                     HeaderID.Zip64ExtendedInformation => ParseZip64ExtendedInformationExtraField(data, ref offset, header),
-                    HeaderID.AVInfo => ParseUnknownExtraField(data, ref offset), // TODO: Implement model
-                    HeaderID.ExtendedLanguageEncodingData => ParseUnknownExtraField(data, ref offset), // TODO: Implement model
+                    HeaderID.AVInfo => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement model
+                    HeaderID.ExtendedLanguageEncodingData => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement model
                     HeaderID.OS2 => ParseOS2ExtraField(data, ref offset),
                     HeaderID.NTFS => ParseNTFSExtraField(data, ref offset),
                     HeaderID.OpenVMS => ParseOpenVMSExtraField(data, ref offset),
                     HeaderID.UNIX => ParseUnixExtraField(data, ref offset),
-                    HeaderID.FileStreamFork => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.FileStreamFork => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.PatchDescriptor => ParsePatchDescriptorExtraField(data, ref offset),
                     HeaderID.PKCSStore => ParsePKCS7Store(data, ref offset),
                     HeaderID.X509IndividualFile => ParseX509IndividualFile(data, ref offset),
@@ -712,51 +720,51 @@ namespace SabreTools.Serialization.Readers
                     HeaderID.StrongEncryptionHeader => ParseStrongEncryptionHeader(data, ref offset),
                     HeaderID.RecordManagementControls => ParseRecordManagementControls(data, ref offset),
                     HeaderID.PKCSCertificateList => ParsePKCS7EncryptionRecipientCertificateList(data, ref offset),
-                    HeaderID.Timestamp => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.Timestamp => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.PolicyDecryptionKey => ParsePolicyDecryptionKeyRecordExtraField(data, ref offset),
                     HeaderID.SmartcryptKeyProvider => ParseKeyProviderRecordExtraField(data, ref offset),
                     HeaderID.SmartcryptPolicyKeyData => ParsePolicyKeyDataRecordRecordExtraField(data, ref offset),
                     HeaderID.IBMS390AttributesUncompressed => ParseAS400ExtraFieldAttribute(data, ref offset),
-                    HeaderID.IBMS390AttributesCompressed => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.POSZIP4690 => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.Macintosh => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.PixarUSD => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.IBMS390AttributesCompressed => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.POSZIP4690 => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.Macintosh => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.PixarUSD => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.ZipItMacintosh => ParseZipItMacintoshExtraField(data, ref offset),
                     HeaderID.ZipItMacintosh135Plus => ParseZipItMacintoshShortFileExtraField(data, ref offset),
                     HeaderID.ZipItMacintosh135PlusAlt => ParseZipItMacintoshShortDirectoryExtraField(data, ref offset),
-                    HeaderID.InfoZIPMacintosh => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.AcornSparkFS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.WindowsNTSecurityDescriptor => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.VMCMS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.MVS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.THEOSold => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.InfoZIPMacintosh => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.AcornSparkFS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.WindowsNTSecurityDescriptor => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.VMCMS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.MVS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.THEOSold => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.FWKCSMD5 => ParseFWKCSMD5ExtraField(data, ref offset),
-                    HeaderID.OS2AccessControlList => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.InfoZIPOpenVMS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.MacintoshSmartzip => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.XceedOriginalLocation => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.ADSVS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.ExtendedTimestamp => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.XceedUnicode => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.InfoZIPUNIX => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.OS2AccessControlList => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.InfoZIPOpenVMS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.MacintoshSmartzip => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.XceedOriginalLocation => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.ADSVS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.ExtendedTimestamp => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.XceedUnicode => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.InfoZIPUNIX => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.InfoZIPUnicodeComment => ParseInfoZIPUnicodeCommentExtraField(data, ref offset),
-                    HeaderID.BeOSBeBox => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.THEOS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.BeOSBeBox => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.THEOS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.InfoZIPUnicodePath => ParseInfoZIPUnicodePathExtraField(data, ref offset),
-                    HeaderID.AtheOSSyllable => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.ASiUNIX => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.InfoZIPUNIXNew => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.InfoZIPUNIXNewer => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.AtheOSSyllable => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.ASiUNIX => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.InfoZIPUNIXNew => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.InfoZIPUNIXNewer => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
                     HeaderID.DataStreamAlignment => ParseDataStreamAlignment(data, ref offset),
                     HeaderID.MicrosoftOpenPackagingGrowthHint => ParseMicrosoftOpenPackagingGrowthHint(data, ref offset),
-                    HeaderID.JavaJAR => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.AndroidZIPAlignment => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.KoreanZIPCodePage => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.SMSQDOS => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.AExEncryptionStructure => ParseUnknownExtraField(data, ref offset), // TODO: Implement
-                    HeaderID.Unknown => ParseUnknownExtraField(data, ref offset), // TODO: Implement
+                    HeaderID.JavaJAR => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.AndroidZIPAlignment => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.KoreanZIPCodePage => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.SMSQDOS => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.AExEncryptionStructure => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
+                    HeaderID.Unknown => ParseUnknownExtraField(data, ref offset, includeDebug), // TODO: Implement
 
-                    _ => ParseUnknownExtraField(data, ref offset),
+                    _ => ParseUnknownExtraField(data, ref offset, includeDebug),
                 };
 
                 if (field is not null)
@@ -771,13 +779,21 @@ namespace SabreTools.Serialization.Readers
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <param name="offset">Offset into the byte array</param>
+        /// <param name="includeDebug">True to include debug data, false otherwise</param>
         /// <returns>Filled unknown extras field on success, null on error</returns>
-        private static UnknownExtraField? ParseUnknownExtraField(byte[] data, ref int offset)
+        private static UnknownExtraField? ParseUnknownExtraField(byte[] data, ref int offset, bool includeDebug)
         {
             var obj = new UnknownExtraField();
 
             obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
             obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            if (obj.DataSize > data.Length - offset)
+            {
+                ushort remainingSize = (ushort)(data.Length - offset);
+                if (includeDebug) Console.WriteLine($"Extra field of type '{obj.HeaderID}' requested {obj.DataSize} bytes, but only {remainingSize} remain");
+                obj.DataSize = remainingSize;
+            }
+
             if (obj.DataSize > 0)
                 obj.Data = data.ReadBytes(ref offset, obj.DataSize);
 
