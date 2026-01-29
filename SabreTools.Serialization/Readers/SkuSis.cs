@@ -96,8 +96,14 @@ namespace SabreTools.Serialization.Readers
         {
             string json = "{\n"; // Sku sis files have no surrounding curly braces, which json doesn't allow
             const string delimiter = "\"\t\t\""; // KVPs are always quoted, and are delimited by two tabs
-            var reader = new StreamReader(data, Encoding.ASCII);
 
+            // This closes the stream, but can't be easily avoided on earlier versions of dotnet
+#if NET20 || NET35 || NET40
+            var reader = new StreamReader(data, Encoding.ASCII);
+#else
+            var reader = new StreamReader(data, Encoding.ASCII, false, -1, true);
+
+#endif
             while (!reader.EndOfStream)
             {
                 string? line = reader.ReadLine();
