@@ -576,8 +576,15 @@ namespace SabreTools.Serialization.Readers
                 if (extraBytes.Length != obj.ExtraFieldLength)
                     return null;
 
-                obj.ExtraFields = ParseExtraFields(obj, extraBytes);
-            }
+                try
+                {
+                    obj.ExtraFields = ParseExtraFields(obj, extraBytes);
+                }
+                catch
+                {
+                    obj.ExtraFields = null;
+                }
+                }
 
             return obj;
         }
@@ -778,8 +785,14 @@ namespace SabreTools.Serialization.Readers
 
             obj.HeaderID = (HeaderID)data.ReadUInt16LittleEndian(ref offset);
             obj.DataSize = data.ReadUInt16LittleEndian(ref offset);
+            var readDataSize =  obj.DataSize;
+            if (obj.DataSize >= data.Length - offset)
+            {
+                //debug goes here
+                readDataSize = (ushort)(data.Length - offset);
+            }
             if (obj.DataSize > 0)
-                obj.Data = data.ReadBytes(ref offset, obj.DataSize);
+                obj.Data = data.ReadBytes(ref offset, readDataSize);
 
             return obj;
         }
