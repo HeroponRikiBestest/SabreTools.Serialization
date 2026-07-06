@@ -25,6 +25,8 @@ namespace SabreTools.Wrappers
 
                 // Ensure directory separators are consistent
                 string filename = Guid.NewGuid().ToString();
+                filename = filename.TrimStart(['\\', '/']);
+                filename = filename.TrimStart(['\\', '/']);
                 if (Path.DirectorySeparatorChar == '\\')
                     filename = filename.Replace('/', '\\');
                 else if (Path.DirectorySeparatorChar == '/')

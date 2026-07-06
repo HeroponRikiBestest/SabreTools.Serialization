@@ -30,6 +30,7 @@ namespace SabreTools.Wrappers
 
             // Ensure directory separators are consistent
             string filename = "tempfile.bin";
+            filename = filename.TrimStart(['\\', '/']);
             if (Path.DirectorySeparatorChar == '\\')
                 filename = filename.Replace('/', '\\');
             else if (Path.DirectorySeparatorChar == '/')

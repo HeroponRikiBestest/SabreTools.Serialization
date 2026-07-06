@@ -40,6 +40,7 @@ namespace SabreTools.Wrappers
                     ?? (Filename is not null ? Path.GetFileName(Filename).Replace(".gz", string.Empty) : null)
                     ?? $"extracted_file";
 
+                filename = filename.TrimStart(['\\', '/']);
                 if (Path.DirectorySeparatorChar == '\\')
                     filename = filename.Replace('/', '\\');
                 else if (Path.DirectorySeparatorChar == '/')

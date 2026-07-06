@@ -32,6 +32,7 @@ namespace SabreTools.Wrappers
             {
                 // Ensure directory separators are consistent
                 string filename = string.IsNullOrEmpty(Filename) ? "filename" : Path.GetFileNameWithoutExtension(Filename);
+                filename = filename.TrimStart(['\\', '/']);
                 if (Path.DirectorySeparatorChar == '\\')
                     filename = filename.Replace('/', '\\');
                 else if (Path.DirectorySeparatorChar == '/')

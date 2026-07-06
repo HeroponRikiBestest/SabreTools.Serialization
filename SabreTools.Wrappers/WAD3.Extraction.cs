@@ -52,6 +52,7 @@ namespace SabreTools.Wrappers
 
             // Ensure directory separators are consistent
             string filename = $"{lump.Name}.lmp";
+            filename = filename.TrimStart(['\\', '/']);
             if (Path.DirectorySeparatorChar == '\\')
                 filename = filename.Replace('/', '\\');
             else if (Path.DirectorySeparatorChar == '/')

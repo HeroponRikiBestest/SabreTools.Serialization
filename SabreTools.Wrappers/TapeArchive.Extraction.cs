@@ -77,6 +77,7 @@ namespace SabreTools.Wrappers
 
                             // Ensure directory separators are consistent
                             entryDirectory = Path.Combine(outputDirectory, entryDirectory);
+                            entryDirectory = entryDirectory.TrimStart(['\\', '/']);
                             if (Path.DirectorySeparatorChar == '\\')
                                 entryDirectory = entryDirectory.Replace('/', '\\');
                             else if (Path.DirectorySeparatorChar == '/')
@@ -136,6 +137,7 @@ namespace SabreTools.Wrappers
 
                     // Ensure directory separators are consistent
                     string filename = header.FileName?.TrimEnd('\0') ?? $"entry_{i}";
+                    filename = filename.TrimStart(['\\', '/']);
                     if (Path.DirectorySeparatorChar == '\\')
                         filename = filename.Replace('/', '\\');
                     else if (Path.DirectorySeparatorChar == '/')

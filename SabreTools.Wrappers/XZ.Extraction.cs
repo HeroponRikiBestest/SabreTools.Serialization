@@ -30,6 +30,7 @@ namespace SabreTools.Wrappers
                 string filename = Filename is not null
                     ? Path.GetFileNameWithoutExtension(Filename)
                     : Guid.NewGuid().ToString();
+                filename = filename.TrimStart(['\\', '/']);
                 if (Path.DirectorySeparatorChar == '\\')
                     filename = filename.Replace('/', '\\');
                 else if (Path.DirectorySeparatorChar == '/')

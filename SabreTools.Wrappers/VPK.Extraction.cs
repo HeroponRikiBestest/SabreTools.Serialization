@@ -111,6 +111,7 @@ namespace SabreTools.Wrappers
 
             // Ensure directory separators are consistent
             string filename = $"{directoryItem.Name}.{directoryItem.Extension}";
+            filename = filename.TrimStart(['\\', '/']);
             if (!string.IsNullOrEmpty(directoryItem.Path))
                 filename = Path.Combine(directoryItem.Path, filename);
             if (Path.DirectorySeparatorChar == '\\')
